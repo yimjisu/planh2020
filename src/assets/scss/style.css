@@ -13450,3 +13450,8 @@ use profile section
     width: 180px;
     margin: 0 auto;
 }
+
+.brightness { filter: brightness(0.25); }
+.rating{
+    float: right;
+}
