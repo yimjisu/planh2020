@@ -19,7 +19,7 @@ import Home from '../views/starter/home.jsx';
 import Write from '../views/ui-components/write.jsx';
 import Reviews from '../views/ui-components/review.jsx';
 import Level from '../views/ui-components/level.jsx';
-
+ 
 var ThemeRoutes = [
   {
     path: '/starter/starter',

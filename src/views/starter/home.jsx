@@ -13,7 +13,7 @@ const Starter = () => {
                 <Col sm={6} lg={4}>
                     <Feeds />
                 </Col>
-                <Col sm={6} lg={8}>
+                <Col sm={6} lg={4}>
                     <Projects />
                 </Col>
             </Row>
