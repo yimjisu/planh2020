@@ -18,7 +18,17 @@ const Starter = () => {
                 </Col>
             </Row>
             <h5 className="mb-3">Explore routines</h5>
-            <SocialCards />
+            <Row>
+                <Col sm={6} lg={4}>
+                    <Projects />
+                </Col>
+                <Col sm={6} lg={4}>
+                    <Projects />
+                </Col>
+                <Col sm={6} lg={4}>
+                    <Projects />
+                </Col>
+            </Row>
         </div>
     );
 }
