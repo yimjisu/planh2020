@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------------------------*/
 /*                                  starter                                    */
 /*--------------------------------------------------------------------------------*/
-import FirstDashboard from '../views/starter/starter.jsx';
+import FirstDashboard from '../views/starter/home.jsx';
 /*--------------------------------------------------------------------------------*/
 /*                           Ui-components Dropdown                               */
 /*--------------------------------------------------------------------------------*/
@@ -15,7 +15,7 @@ import PopoverComponent from '../views/ui-components/popover.jsx';
 import TooltipComponent from '../views/ui-components/tooltip.jsx';
 
 
-import Home from '../views/starter/home.jsx';
+import Starter from '../views/starter/starter.jsx';
 import Write from '../views/ui-components/write.jsx';
 import Reviews from '../views/ui-components/review.jsx';
 import Level from '../views/ui-components/level.jsx';
@@ -25,9 +25,8 @@ var ThemeRoutes = [
     path: '/starter/starter',
     name: 'Home',
     icon: 'mdi mdi-home',
-    component: Home
-  },
-  {
+    component: Starter
+  },{
     path: '/ui-components/level',
     name: 'Check My Level',
     icon: 'mdi mdi-help',
