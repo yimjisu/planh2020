@@ -8,16 +8,19 @@ import { SalesSummary, Projects, Feeds, SocialCards } from 'components/dashboard
 const Starter = () => {
     return (
         <div>
-             <h5 className="mb-3">My Page</h5>
             <Row>
+                <Col sm={6} lg={8}>
+                    <SalesSummary />
+                </Col>
                 <Col sm={6} lg={4}>
                     <Feeds />
                 </Col>
-                <Col sm={6} lg={4}>
+            </Row>
+            <Row>
+                <Col sm={12}>
                     <Projects />
                 </Col>
             </Row>
-            <h5 className="mb-3">Explore routines</h5>
             <SocialCards />
         </div>
     );

@@ -11067,6 +11067,14 @@ a {
     white-space: nowrap;
 }
 
+.hidden td,
+.hidden th {
+    max-width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .clear {
     clear: both;
 }
