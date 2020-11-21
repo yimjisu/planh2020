@@ -5,7 +5,13 @@ import {
     UncontrolledAlert,
     Card,
     CardBody,
-    CardTitle
+    CardTitle,
+    Form,
+    Button,
+    FormGroup,
+    Label,
+    Input,
+    FormText
 } from 'reactstrap';
 
 const Alerts = () => {
@@ -17,198 +23,80 @@ const Alerts = () => {
     }
 
     return (
-        <div>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Start Inner Div*/}
-            {/* --------------------------------------------------------------------------------*/}
+        <div>  
+            <Form>
+                <FormGroup>
+                    <Label for="exampleEmail">Email</Label>
+                    <Input type="email" name="email" id="exampleEmail" placeholder="with a placeholder" />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="examplePassword">Password</Label>
+                    <Input type="password" name="password" id="examplePassword" placeholder="password placeholder" />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="exampleSelect">Select</Label>
+                    <Input type="select" name="select" id="exampleSelect">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    </Input>
+                </FormGroup>
+                <FormGroup>
+                    <Label for="exampleSelectMulti">Select Multiple</Label>
+                    <Input type="select" name="selectMulti" id="exampleSelectMulti" multiple>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    </Input>
+                </FormGroup>
+                <FormGroup>
+                    <Label for="exampleText">Text Area</Label>
+                    <Input type="textarea" name="text" id="exampleText" />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="exampleFile">File</Label>
+                    <Input type="file" name="file" id="exampleFile" />
+                    <FormText color="muted">
+                    This is some placeholder block-level help text for the above input.
+                    It's a bit lighter and easily wraps to a new line.
+                    </FormText>
+                </FormGroup>
+                <FormGroup tag="fieldset">
+                    <legend>Radio Buttons</legend>
+                    <FormGroup check>
+                    <Label check>
+                        <Input type="radio" name="radio1" />{' '}
+                        Option one is this and that—be sure to include why it's great
+                    </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                    <Label check>
+                        <Input type="radio" name="radio1" />{' '}
+                        Option two can be something else and selecting it will deselect option one
+                    </Label>
+                    </FormGroup>
+                    <FormGroup check disabled>
+                    <Label check>
+                        <Input type="radio" name="radio1" disabled />{' '}
+                        Option three is disabled
+                    </Label>
+                    </FormGroup>
+                </FormGroup>
+                <FormGroup check>
+                    <Label check>
+                    <Input type="checkbox" />{' '}
+                    Check me out
+                    </Label>
+                </FormGroup>
+                <Button>Submit</Button>
+                </Form>
 
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-1*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2"> </i>
-            Alert
-          </CardTitle>
-                <CardBody className="">
-                    <div className="mt-3">
-                        <Alert color="primary">
-                            This is a primary alert— check it out!
-              </Alert>
-                        <Alert color="secondary">
-                            This is a secondary alert— check it out!
-              </Alert>
-                        <Alert color="success">
-                            This is a success alert— check it out!
-              </Alert>
-                        <Alert color="danger">
-                            This is a danger alert— check it out!
-              </Alert>
-                        <Alert color="warning">
-                            This is a warning alert— check it out!
-              </Alert>
-                        <Alert color="info">This is a info alert— check it out!</Alert>
-                        <Alert color="light">This is a light alert— check it out!</Alert>
-                        <Alert color="dark">This is a dark alert</Alert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-2*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alert with Links
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <Alert color="primary">
-                            This is a primary alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="secondary">
-                            This is a secondary alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="success">
-                            This is a success alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="danger">
-                            This is a danger alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="warning">
-                            This is a warning alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="info">
-                            This is a info alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="light">
-                            This is a light alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="dark">
-                            This is a dark alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-3*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alert with Additional content
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <Alert color="success">
-                            <h4 className="alert-heading">Well done!</h4>
-                            <p>
-                                Aww yeah, you successfully read this important alert message.
-                                This example text is going to run a bit longer so that you can
-                                see how spacing within an alert works with this kind of
-                                content.
-                </p>
-                            <hr />
-                            <p className="mb-0">
-                                Whenever you need to, be sure to use margin utilities to keep
-                                things nice and tidy.
-                </p>
-                        </Alert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-4*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alert with Dissmissing
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <Alert
-                            color="info"
-                            isOpen={visible}
-                            toggle={onDismiss.bind(null)}
-                        >
-                            I am an alert and I can be dismissed!
-              </Alert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-5*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alert with Uncontrolled [disable] Alerts
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <UncontrolledAlert color="info">
-                            I am an alert and I can be dismissed!
-              </UncontrolledAlert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-6*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alerts without fade
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <Alert
-                            color="primary"
-                            isOpen={visible}
-                            toggle={onDismiss.bind(null)}
-                            fade={false}
-                        >
-                            I am a primary alert and I can be dismissed without animating!
-              </Alert>
-                        <UncontrolledAlert color="warning" fade={false}>
-                            I am an alert and I can be dismissed without animating!
-              </UncontrolledAlert>
-                    </div>
-                </CardBody>
-            </Card>
+     
+           ``
 
             {/* --------------------------------------------------------------------------------*/}
             {/* End Inner Div*/}
