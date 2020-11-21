@@ -1,4 +1,3 @@
-
 import React from "react";
 
 import firebase from 'firebase'; 
@@ -89,7 +88,7 @@ class Projects extends React.Component {
         /*--------------------------------------------------------------------------------*/
         /* Used In Dashboard-4 [General]                                                  */
         /*--------------------------------------------------------------------------------*/
-        <Card>
+                <Card>
                         <CardBody>
                         <div className="d-flex align-items-center">
                 <div className="d-flex no-block align-items-center">
