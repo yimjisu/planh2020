@@ -1,5 +1,6 @@
 import React from 'react';
 import firebase from 'firebase';
+import ThemeRoutes from '../../routes/routing.jsx';
 import {
     Card,
     CardImg,
@@ -19,7 +20,7 @@ import {
     Col
 } from 'reactstrap';
 var STATE = {LOGIN: 0, LOGOUT: 1, CREATE: 2};
-
+var n = 4; //login number
 class Session extends React.Component{
     constructor(props){
 		super(props);
@@ -42,7 +43,8 @@ class Session extends React.Component{
         var state;
         firebase.auth().onAuthStateChanged(user => {
             if(user){
-                if(document.getElementById("login-menu")) document.getElementById("login-menu").innerHTML = 'Logout';
+                ThemeRoutes[n]['name'] = 'Logout';
+                ThemeRoutes[n]['icon'] = 'mdi mdi-logout';
                 if(this._isMounted){
                     this.setState({
                         state: STATE.LOGOUT
@@ -65,6 +67,8 @@ class Session extends React.Component{
                 if(this._isMounted) {this.setState({
                     state: STATE.LOGIN
                 })}
+                ThemeRoutes[n]['name'] = 'LogIn';
+                ThemeRoutes[n]['icon'] = 'mdi mdi-login';
                 if(document.getElementById("login-menu")) document.getElementById("login-menu").innerHTML = 'Login';
             }
           });
