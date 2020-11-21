@@ -126,26 +126,15 @@ class Session extends React.Component{
 
     loginBtn(){
         return(
-            <Row>
-                <Col>
             <Card>
                 <CardBody>
-                <CardTitle>Login</CardTitle>
-                    <CardColumns>
-                    
-                    </CardColumns>
-                    <CardColumns>
-                    <input type="email" placeholder="email address..."/>
-                    <input type="password" placeholder="password..."/>
-                    </CardColumns>
-                    <CardColumns>
-                      <Button className="button" onClick={this.login}>Sign In</Button>
-                      <Button className="button" onClick={this.createAccount} style={{marginLeft:'10px'}}>Sign Up</Button>
-                    </CardColumns>
+                    <h2>Login</h2>
+                    <input id="email_field" type="email" placeholder="email..."/>
+                    <input id="password_field" type="password" placeholder="password..."/>
+                    <Button className="button" onClick={this.login}>Sign In</Button>
+                    <Button className="button" onClick={this.createAccount} style={{marginLeft:'20px'}}>Sign Up</Button>
                 </CardBody>
-                </Card>
-                </Col>
-            </Row>
+            </Card>
         );
     }
 
@@ -155,14 +144,13 @@ class Session extends React.Component{
             <CardBody>
 
             
-        <CardTitle>Create Account</CardTitle>
+        <h2>Create Account</h2>
         <input id="entry-displayname" type="text" placeholder="name..."/>
         <input id="entry-email" type="email" placeholder="email address..."/>
         <input id="entry-password" type="password" placeholder="password..."/>
-        <ul>
-            <Button className="button" onClick={this.turnback}>Back</Button>
-          <Button className="button" onClick={this.submitCreateAccount} style={{marginLeft:'10px'}}>Sign Up</Button>
-        </ul>
+        <Button className="button" onClick={this.turnback}>Back</Button>
+        <Button className="button" onClick={this.submitCreateAccount} style={{marginLeft:'10px'}}>Sign Up</Button>
+        
         </CardBody>
         </Card>);
     }
@@ -187,7 +175,7 @@ class Session extends React.Component{
         }else if(state == STATE.CREATE){
             btn = <this.createBtn/>
         }
-        return(<div>{btn}</div>);
+        return(<div className="main-div">{btn}</div>);
     }
 }
 
