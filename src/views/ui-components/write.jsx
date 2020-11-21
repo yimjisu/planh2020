@@ -22,6 +22,13 @@ const Alerts = () => {
         setVisible(false);
     }
 
+    state = {
+        actions: [{name:"", info:"", time:""}]
+    }
+
+    addRoute = (e) => {
+        
+    }
     return (
         <div>  
             <Form>
