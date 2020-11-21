@@ -15,95 +15,49 @@ import {
 } from 'reactstrap';
 
 const Alerts = () => {
-    // For Dismiss Button with Alert
-    const [visible, setVisible] = useState(true);
+    const blankTag = { tag: '' };
+    const [tagState, setTagState] = useState([
+        { tag: ''},
+    ]);
+    const addTag = () => {
+        setTagState ([...tagState, {...blankTag}]);
+    };
 
-    const onDismiss = () => {
-        setVisible(false);
-    }
-
-    state = {
-        actions: [{name:"", info:"", time:""}]
-    }
-
-    addRoute = (e) => {
-        
-    }
     return (
         <div>  
             <Form>
                 <FormGroup>
-                    <Label for="exampleEmail">Email</Label>
-                    <Input type="email" name="email" id="exampleEmail" placeholder="with a placeholder" />
+                    <Label for="title">Title of your Routine</Label>
+                    <Input type="text" name="title" id="routineTitle" placeholder="Write the title of your Routine" />
                 </FormGroup>
-                <FormGroup>
-                    <Label for="examplePassword">Password</Label>
-                    <Input type="password" name="password" id="examplePassword" placeholder="password placeholder" />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="exampleSelect">Select</Label>
-                    <Input type="select" name="select" id="exampleSelect">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    </Input>
-                </FormGroup>
-                <FormGroup>
-                    <Label for="exampleSelectMulti">Select Multiple</Label>
-                    <Input type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    </Input>
-                </FormGroup>
+                <Input type="button" value="Add a New Tag" onClick={addTag}/>
+                {
+                    tagState.map((val, idx) => {
+                        const tagId = `tag-${idx}`;
+                        return (
+                            <div key={`tag-${idx}`}>
+                              <Label htmlFor={tagId}>{`Tag #${idx + 1}`}</Label>
+                              <Input
+                                type="text"
+                                name={tagId}
+                                data-idx={idx}
+                                id={tagId}
+                                className="tag" 
+                              />
+                            </div>
+                          );   
+                    })
+                }
+                
                 <FormGroup>
                     <Label for="exampleText">Text Area</Label>
                     <Input type="textarea" name="text" id="exampleText" />
                 </FormGroup>
-                <FormGroup>
-                    <Label for="exampleFile">File</Label>
-                    <Input type="file" name="file" id="exampleFile" />
-                    <FormText color="muted">
-                    This is some placeholder block-level help text for the above input.
-                    It's a bit lighter and easily wraps to a new line.
-                    </FormText>
-                </FormGroup>
-                <FormGroup tag="fieldset">
-                    <legend>Radio Buttons</legend>
-                    <FormGroup check>
-                    <Label check>
-                        <Input type="radio" name="radio1" />{' '}
-                        Option one is this and that—be sure to include why it's great
-                    </Label>
-                    </FormGroup>
-                    <FormGroup check>
-                    <Label check>
-                        <Input type="radio" name="radio1" />{' '}
-                        Option two can be something else and selecting it will deselect option one
-                    </Label>
-                    </FormGroup>
-                    <FormGroup check disabled>
-                    <Label check>
-                        <Input type="radio" name="radio1" disabled />{' '}
-                        Option three is disabled
-                    </Label>
-                    </FormGroup>
-                </FormGroup>
-                <FormGroup check>
-                    <Label check>
-                    <Input type="checkbox" />{' '}
-                    Check me out
-                    </Label>
-                </FormGroup>
-                <Button>Submit</Button>
-                </Form>
+                <Input type="submit" value="Submit" />
+            </Form>
 
      
-           ``
+           
 
             {/* --------------------------------------------------------------------------------*/}
             {/* End Inner Div*/}
