@@ -1,6 +1,6 @@
 import React from "react";
 
-import firebase from 'firebase';
+import firebase from 'firebase'; 
 import img1 from 'assets/images/users/1.jpg';
 import dumbbell1 from 'assets/images/dumbbell.png';
 import dumbbell2 from 'assets/images/dumbbell (1).png';
