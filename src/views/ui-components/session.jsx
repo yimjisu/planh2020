@@ -132,10 +132,11 @@ class Session extends React.Component{
                 <CardBody>
                 <CardTitle>Login</CardTitle>
                     <CardColumns>
-                    <input id="email_field" type="email" placeholder="email address..."/>
+                    
                     </CardColumns>
                     <CardColumns>
-                    <input id="password_field" type="password" placeholder="password..."/>
+                    <input type="email" placeholder="email address..."/>
+                    <input type="password" placeholder="password..."/>
                     </CardColumns>
                     <CardColumns>
                       <Button className="button" onClick={this.login}>Sign In</Button>
@@ -173,7 +174,6 @@ class Session extends React.Component{
                     <CardTitle id="user_para">Welcome User</CardTitle>
                         <Button onClick={this.logout}>Logout</Button>
                     </CardBody>
-                        
                     </Card>
         )
     }
