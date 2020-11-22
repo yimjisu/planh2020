@@ -135,6 +135,21 @@ section {
     display: block;
 }
 
+.slider{
+    float: inline;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+.slider-text{
+    font-size: 12px;
+    margin-right: 10px;
+}
+.slider-slider{
+    float:right;
+    max-width: 100px;
+    margin-right: 10px;
+}
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
@@ -13462,4 +13477,22 @@ use profile section
 .brightness { filter: brightness(0.25); }
 .rating{
     float: right;
+}
+
+.main-div{
+    width: 90%;
+    max-width: 500px;
+    margin: 0px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+
+.main-div input{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    width: 250px;
 }

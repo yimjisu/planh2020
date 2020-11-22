@@ -19,6 +19,9 @@ import Starter from '../views/starter/starter.jsx';
 import Write from '../views/ui-components/write.jsx';
 import Reviews from '../views/ui-components/review.jsx';
 import Level from '../views/ui-components/level.jsx';
+import Session from '../views/ui-components/session.jsx';
+
+
  
 var ThemeRoutes = [
   {
@@ -42,6 +45,11 @@ var ThemeRoutes = [
     name: 'Reviews',
     icon: 'mdi mdi-comment-processing-outline',
     component: Reviews
+  },{
+    path: '/ui-components/session',
+    name: 'Login',
+    icon: 'mdi mdi-login',
+    component: Session
   },/*
   {
     path: '/ui-components/alert',
