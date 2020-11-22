@@ -118,6 +118,10 @@ const onClickHandler = () => {
     var ref = ref_root.child('review');
     var comment = document.getElementById("text_comment").value;
     var suggestion = document.getElementById("text_suggestion").value;
+    if(comment.length == 0 && suggestion.length == 0){
+        alert('Write review before submit');
+        return;
+    }
     var name = document.getElementById("input-name").value;
     //var name = user.displayName;
     var rate = document.getElementById("input-rate").value;
@@ -339,13 +343,13 @@ class ButtonToggle extends React.Component {
 const ReviewDisptab = (props) => {
     //var key = document.getElementById('input-key').value;
     console.log(props.keyval);
-    console.log(props.comment);
-    console.log(props.suggestion);
+    console.log(props.comment.length);
+    console.log(props.suggestion.length);
     console.log(props.sortop);
     return (
         <div>
             {   
-                props.sortop != 2 ? (
+                props.sortop != 2 && props.comment.length>0? (
             <div>
             <h5 className="mb-3">Comment</h5>
             <div className="input-group">
@@ -361,7 +365,7 @@ const ReviewDisptab = (props) => {
             ) : <div></div>
             }
             {
-                props.sortop != 1 ? (
+                props.sortop != 1 && props.suggestion.length>0? (
             <div>
             <h5 className="mb-3">Suggestion</h5>
             <div className="input-group">
@@ -474,8 +478,8 @@ const Reviewtab = (props) => {
         this.state = {
             name : 'user',
             rate : [1,1,1,1,1],
-            comment : 'default comment',
-            suggestion : 'default suggestion',
+            comment : '',
+            suggestion : '',
         }
         this.reference = {};
         console.log(this.state);
@@ -647,11 +651,18 @@ class Review_Card extends React.Component{
             slike : this.props.data.slike,
             sdislike : this.props.data.sdislike,
             keyval : this.props.keyval,
+        };
+        var shoulddisp = true;
+        if (this.props.sortop == 1 && this.state.comment.length==0 && !this.props.empty){
+            shoulddisp = false;
+        }
+        if (this.props.sortop == 2 && this.state.suggestion.length==0 && !this.props.empty){
+            shoulddisp = false;
         }
         return(
             <div>
                 {
-                    !this.props.empty ? (
+                    !this.props.empty&&shoulddisp? (
                     <Card>
                     <Row>
                         <Col xs="12" md="4">
@@ -686,7 +697,7 @@ class Review_Card extends React.Component{
                         </Col>
                     </Row>
                     </Card>
-                    ) : (
+                    ) : ( !shoulddisp? <div></div> : (
                     <Card>
                         <Row>
                             <Col xs="12" md="12">
@@ -695,7 +706,7 @@ class Review_Card extends React.Component{
                                 <Button>Write Review</Button>
                             </Col>
                         </Row>
-                    </Card>
+                    </Card>)
                     )
                 }
             </div>
