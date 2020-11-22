@@ -33,6 +33,16 @@ class Starter extends React.Component {
             }
         });
 
+        var user = firebase.auth().currentUser;
+        if(user){
+            ThemeRoutes[n]['name'] = 'Logout';
+            ThemeRoutes[n]['icon'] = 'mdi mdi-logout';
+            uid = user.uid;
+        }else{
+            ThemeRoutes[n]['name'] = 'LogIn';
+            ThemeRoutes[n]['icon'] = 'mdi mdi-login';
+        }
+
         ref.on('value', snap => {
             var val = snap.val();
             if(val!=null & this._isMounted){

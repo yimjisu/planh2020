@@ -105,7 +105,7 @@ class Projects extends React.Component {
     }
 
     review(){
-        let rate = this.state.rate;
+        let rate =this.state.rate;
         var reviewimg = this.state.reviewimg;
     var reviewname = this.state.reviewname;
     var reviewtext = this.state.reviewtext;
@@ -115,10 +115,10 @@ class Projects extends React.Component {
                         <div className="feed-item">
                             Review <span className="ml-3 font-12 text-muted">
                                 Rating
-                                {[...Array(rate)].map((n, index) => {
+                                {[...Array( Math.round(rate))].map((n, index) => {
                                     return(<img className="mx-sm-1" width="20px" src={dumbbell1} />
                                 )})}
-                                {[...Array(5-rate)].map((n, index) => {
+                                {[...Array( Math.round(5-rate))].map((n, index) => {
                                     return(<img className="mx-sm-1" width="20px" src={dumbbell2} />
                                 )})}
                                 {rate}
