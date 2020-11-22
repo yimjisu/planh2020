@@ -21,8 +21,8 @@ import Reviews from '../views/ui-components/review.jsx';
 import Level from '../views/ui-components/level.jsx';
 import Session from '../views/ui-components/session.jsx';
 
-import firebase from 'firebase';
 
+ 
 var ThemeRoutes = [
   {
     path: '/starter/starter',

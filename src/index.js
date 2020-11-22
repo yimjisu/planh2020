@@ -19,8 +19,8 @@ var firebaseConfig = {
     appId: "1:596466420883:web:9dcc0ef3bb814ae7fc5166",
     measurementId: "G-VP2PL0V7Y8"
   };
-firebase.initializeApp(firebaseConfig);
-
+  firebase.initializeApp(firebaseConfig);
+  
 ReactDOM.render(
 
     <HashRouter>
