@@ -31,15 +31,11 @@ import
     DropdownItem,
 } from 'reactstrap';
 import classnames from 'classnames';
-import StepRangeSlider from 'react-step-range-slider'
-import img1 from '../../assets/images/big/img1.jpg';
-import img2 from '../../assets/images/big/img2.jpg';
-import img3 from '../../assets/images/big/img3.jpg';
-import img4 from '../../assets/images/big/img4.jpg';
-import img5 from '../../assets/images/big/img5.jpg';
-import img6 from '../../assets/images/big/img6.jpg';
-import img7 from '../../assets/images/background/img5.jpg';
-
+import StepRangeSlider from 'react-step-range-slider';
+import img1 from 'assets/images/users/1.jpg';
+import img2 from 'assets/images/users/2.jpg';
+import img3 from 'assets/images/users/3.jpg';
+import img4 from 'assets/images/users/4.jpg';
 import { Radar } from "react-chartjs-2";
 
 const options = {
@@ -48,12 +44,7 @@ const options = {
         position: "bottom",
         boxWidth: 10,
         fontSize: 10,
-        fontColor: 'rgb(255, 99, 132)'
-    },
-    title: {
-        display: true,
-        text: 'Rating',
-        fontSize: 30
+        fontColor: 'rgb(255, 99, 132)',
     },
     scale: {
         reverse: false,
@@ -64,16 +55,21 @@ const options = {
             max: 5,
             min: 0,
             stepSize: 1
+        },
+        pointLabels:{
+            fontFamily: 'Poppins',
+            fontSize: 10,
+            fontColor: '#67757c'
         }
     },
     responsive: true,
-    maintainAspectRatio: false,
+    
     layout: {
         padding: {
-            top: 5,
+            top: 0,
             left: 15,
             right: 15,
-            bottom: 15
+            bottom: 0
         }
     }
 }
@@ -352,7 +348,10 @@ const Reviewtab = (props) => {
                     {/* --------------------------------------------------------------------------------*/}
                     {/* Card-1*/}
                     {/* --------------------------------------------------------------------------------*/}
+                    <CardBody>
+                    <CardTitle>Rating</CardTitle>
                     <Radar className="graph" id="radar-graph" data={data(this.state.rate)} options={options} ref={(reference) => {this.reference = reference}}/>
+                    </CardBody>
                 </Col>
                 <Col xs="12" md="2">
                     <CardBody>
@@ -367,33 +366,34 @@ const Reviewtab = (props) => {
                             return a + b;})/this.state.rate.length}
                         style={{display:'none'}}
                     />
-                    </CardBody>
+                    
                     {/*style={{border: 3, float: 'left', height: 'auto', width: 'auto'}}?*/}
-                    <div>
-                        <text style={{fontSize: 12}}>Difficulty well set?</text>
-                        <StepRangeSlider value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[0]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                    <div className='slider'>
+                        <text className='slider-text'>Difficulty well set?</text>
+                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[0]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
-                    <div>
-                        <text style={{fontSize: 12}}>Was routine new?</text>
-                        <StepRangeSlider value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[1]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                    <div className='slider'>
+                        <text className='slider-text'>Was routine new?</text>
+                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[1]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
-                    <div>
-                        <text style={{fontSize: 12}}>Was it effective?</text>
-                        <StepRangeSlider value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[2]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                    <div className='slider'>
+                        <text className='slider-text'>Was it effective?</text>
+                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[2]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
-                    <div>
-                        <text style={{fontSize: 12}}>Post well written?</text>
-                        <StepRangeSlider value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[3]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                    <div className='slider'>
+                        <text className='slider-text'>Post well written?</text>
+                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[3]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
-                    <div>
-                        <text style={{fontSize: 12}}>Suggestable?</text>
-                        <StepRangeSlider value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[4]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                    <div className='slider'>
+                        <text className='slider-text'>Suggestable?</text>
+                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[4]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
+                    </CardBody>
                 </Col>
                 <Col xs="12" md="6">
                     <CardBody>
@@ -415,6 +415,10 @@ class Review_Card extends React.Component{
     constructor(props){
         super(props);
         this._isMounted = false;
+        this.image = this.image.bind(this);
+        this.state = {
+            img: 1
+        }
         /*
         this.state = {
             name : this.props.data.name,
@@ -428,8 +432,6 @@ class Review_Card extends React.Component{
             keyval : this.props.keyval,
         }
         */
-        console.log(this.state);
-        console.log(this.props.keyval);
     }
     componentWillUnmount() {
 		this._isMounted = false;
@@ -439,8 +441,6 @@ class Review_Card extends React.Component{
         this._isMounted = true;
         //get the data from firebase
         //given prop : empty, data, review id
-        console.log(this.props.keyval);
-        console.log(this.props.empty);
         if(this.props.keyval){
             var ref = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(this.props.keyval);
             ref.on('value', snap => {
@@ -456,12 +456,18 @@ class Review_Card extends React.Component{
                     this.state.cdislike = val.comment.dislike;
                     this.state.slike = val.suggestion.like;
                     this.state.sdislike = val.suggestion.dislike;
+                
                 }
             })
         }
         console.log(this.state);
     }
-
+    image(num){
+        if(num == 1) return img1;
+        if(num == 2) return img2;
+        if(num == 3) return img3;
+        if(num == 4) return img4;
+    }
     render(){
         this.state = {
             name : this.props.data.name,
@@ -485,21 +491,28 @@ class Review_Card extends React.Component{
                             {/* Card-1*/}
                             {/* --------------------------------------------------------------------------------*/}
                             {/* does graph updates when data change occurs?*/}
+                            <CardBody>
+                            <CardTitle>
+                    <div className="d-flex no-block align-items-center">
+                        <div className="mr-2">
+                            <img src={img4} alt="user" className="rounded-circle" width="45" /></div>
+                        <div className="">
+                            <h5 className="mb-0 font-16 font-medium">{this.state.name}</h5><span>2020-11-07</span></div>
+                    </div>
+                    </CardTitle>
+                    </CardBody><CardBody>
+                            <CardTitle>Rating</CardTitle>
                             <Radar className="graph" data={data(this.state.rate)} options={options}/>
+                            </CardBody>
                         </Col>
                         <Col xs="12" md="8">
                             <CardBody>
-                                <div>
-                                    <input value={this.state.name} style={{display:"none"}}/>
-                                    <span><CardTitle>{this.state.name}</CardTitle>
                                     {   this.props.userid == this.state.name ? (
                                     <div class="pull-right">
                                         <Button>Modify</Button>                                    
                                         <Button onClick={()=>{onClickDeleteHandler(this.props.keyval)}}>Delete</Button>
                                     </div>
                                     ) : <div></div>}
-                                    </span>
-                                </div>
                             </CardBody>
                             <ReviewDisptab comment={this.state.comment} sortop={this.props.sortop} rout_key='-MMZTiR3gBd4Fwd1i2cP' keyval={this.state.keyval} clike={this.state.clike} cdislike={this.state.cdislike} suggestion={this.state.suggestion} slike={this.state.slike} sdislike={this.state.sdislike}/>
                         </Col>
@@ -706,5 +719,3 @@ class Cards extends React.Component{
 
 
 export default Cards;
-
-
