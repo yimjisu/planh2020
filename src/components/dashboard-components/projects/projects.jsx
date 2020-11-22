@@ -26,6 +26,8 @@ class Projects extends React.Component {
     constructor(props){
         super(props);
         this._isMounted = false;
+        this.review = this.review.bind(this);
+        this.noreview = this.noreview.bind(this);
         this.state = {
             title: null,
             name: null,
@@ -33,7 +35,9 @@ class Projects extends React.Component {
             time: 0,
             level: null,
             tags: [],
-            routine: []
+            routine: [],
+            img: 1,
+            reviewimg: 3
         };
     }
     componentWillUnmount() {
@@ -41,12 +45,7 @@ class Projects extends React.Component {
 	 }
     componentDidMount(){
         this._isMounted = true;
-        var ref = firebase.database().ref();
-        if(this.props.my){
-            ref = ref.child('myroutine')
-        }else{
-            ref = ref.child('routine');
-        }
+        var ref = firebase.database().ref().child('routine');
         var routineRef = ref.child(this.props.props);
         routineRef.on('value', snap=>{
             var val = snap.val();
@@ -67,23 +66,114 @@ class Projects extends React.Component {
                    time: val.tag['time'],
                    level: val.tag['level'],
                    tags: tags,
-                   routine: routine
-               })
+                   routine: routine,
+                   img: val.img
+               });
+               if(val.review != null){
+                   var review = val.review;
+                   var reviewname = '';
+                   var reviewtext = '';
+                   var score = -10000;
+                   for(var key in review){
+                    var r = review[key];
+                    var arr = ['suggestion', 'comment'];
+                    for(var i=0;i<2;i++){
+                    let text = arr[i];
+                    if(r[text]){
+                    if(score < r[text]['like'] - r[text]['dislike']){
+                        reviewname = r['name'];
+                        reviewtext = r[text]['text'];
+                        score = r[text]['like'] - r[text]['dislike'];
+                        console.log('score', score);
+                    }}
+                   }}
+                   this.setState({
+                       reviewname : reviewname,
+                       reviewtext : reviewtext
+                   });
+               }
             }
         });
 
     }
 
+    image(num){
+        if(num == 1) return img1;
+        if(num == 2) return img2;
+        if(num == 3) return img3;
+        if(num == 4) return img4;
+    }
+
+    review(){
+        let rate = this.state.rate;
+        var reviewimg = this.state.reviewimg;
+    var reviewname = this.state.reviewname;
+    var reviewtext = this.state.reviewtext;
+        return(
+            <CardFooter body inverse color="info">
+                        <CardTitle>
+                        <div className="feed-item">
+                            Review <span className="ml-3 font-12 text-muted">
+                                Rating
+                                {[...Array(rate)].map((n, index) => {
+                                    return(<img className="mx-sm-1" width="20px" src={dumbbell1} />
+                                )})}
+                                {[...Array(5-rate)].map((n, index) => {
+                                    return(<img className="mx-sm-1" width="20px" src={dumbbell2} />
+                                )})}
+                                {rate}
+                                </span>
+                        </div>
+                        </CardTitle>
+                        
+                        <CardText>
+                        
+                                
+                        <div className="d-flex no-block align-items-center">
+                                    <div className="mr-2"><img src={this.image(reviewimg)} alt="user" className="rounded-circle" width="45" /></div>
+                                    <div className="">
+                                        <h5 className="mb-0 font-16 font-medium">{reviewname}</h5><span>{reviewtext}</span></div>
+                                </div>
+                                <div className="d-flex">
+                            <div className="read mt-sm-3">
+                                <a href="/" className="link font-medium">
+                                    Read More Reviews
+                  </a>
+                            </div></div>
+                        </CardText>
+                    </CardFooter>
+        );
+    }
+
+    noreview(){
+        return(
+            <CardFooter body inverse color="info">
+                <CardTitle>
+                No Reviews
+                </CardTitle>
+            </CardFooter>
+        );
+    }
     render(){
     let title = this.state.title;
     let username = this.state.name;
-    let rate = this.state.rate;
+    
     let time = this.state.time;
     let level = this.state.level;
     let tags = this.state.tags;
     let routine = this.state.routine;
     let detail = "hidden";
     if(this.props.detail) detail = "no-wrap";
+
+    var img = this.state.img;
+    var reviewname = this.state.reviewname;
+    var review = null;
+    if(reviewname == null){
+        review = <this.noreview/>
+    }else{
+        review = <this.review/>
+    }
+    
     return (
         /*--------------------------------------------------------------------------------*/
         /* Used In Dashboard-4 [General]                                                  */
@@ -92,7 +182,7 @@ class Projects extends React.Component {
                         <CardBody>
                         <div className="d-flex align-items-center">
                 <div className="d-flex no-block align-items-center">
-                    <div className="mr-2"><img src={img1} alt="user" className="rounded-circle" width="45" /></div>
+                    <div className="mr-2"><img src={this.image(img)} alt="user" className="rounded-circle" width="45" /></div>
                     <div className="">
                     <CardTitle>{title}</CardTitle>
                         <CardSubtitle>by {username}</CardSubtitle></div>
@@ -137,44 +227,15 @@ class Projects extends React.Component {
                     </tbody>
                 </Table>
                 <div className="d-flex">
-                            <div className="read">
-                                <a className="link font-medium">
-                                    Read More Details
-                  </a>
-                            </div></div>
-                        </CardBody>
-                            <CardFooter body inverse color="info">
-                        <CardTitle>
-                        <div className="feed-item">
-                            Review <span className="ml-3 font-12 text-muted">
-                                Rating
-                                {[...Array(rate)].map((n, index) => {
-                                    return(<img className="mx-sm-1" width="20px" src={dumbbell1} />
-                                )})}
-                                {[...Array(5-rate)].map((n, index) => {
-                                    return(<img className="mx-sm-1" width="20px" src={dumbbell2} />
-                                )})}
-                                {rate}
-                                </span>
-                        </div>
-                        </CardTitle>
-                        
-                        <CardText>
-                        
-                                
-                        <div className="d-flex no-block align-items-center">
-                                    <div className="mr-2"><img src={img1} alt="user" className="rounded-circle" width="45" /></div>
-                                    <div className="">
-                                        <h5 className="mb-0 font-16 font-medium">Anonymouse Jedi</h5><span>Love the detail but too simple</span></div>
-                                </div>
-                                <div className="d-flex">
-                            <div className="read mt-sm-3">
-                                <a href="/" className="link font-medium">
-                                    Read More Reviews
-                  </a>
-                            </div></div>
-                        </CardText>
-                    </CardFooter>
+                    <div className="read">
+                        <a className="link font-medium">
+                            Read More Details
+                        </a>
+                    </div>
+                </div>
+                </CardBody>
+                {review}
+                            
             </Card>
         
         
