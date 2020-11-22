@@ -899,7 +899,7 @@ class Cards extends React.Component{
         this._isMounted = true;
         //get review informations from the firebase
         //get the review of the routine(given by routine ID).
-        var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP');
+        var ref_root = firebase.database().ref().child('routine').child(this.props.match.params.key);
         var ref = ref_root.child('review');
         ref.on('value', snap => {
             var val = snap.val();

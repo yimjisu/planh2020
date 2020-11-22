@@ -20,7 +20,7 @@ import {
     Col
 } from 'reactstrap';
 var STATE = {LOGIN: 0, LOGOUT: 1, CREATE: 2};
-var n = 4; //login number
+var n = 3; //login number
 class Session extends React.Component{
     constructor(props){
 		super(props);

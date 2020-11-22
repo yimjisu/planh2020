@@ -21,7 +21,7 @@ class Starter extends React.Component {
         this._isMounted = true;
         var ref = firebase.database().ref().child('routine');
         var uid = null;
-        var n = 4;
+        var n = 3;
         firebase.auth().onAuthStateChanged(user => {
             if(user){
                 ThemeRoutes[n]['name'] = 'Logout';

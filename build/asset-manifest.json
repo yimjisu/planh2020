@@ -1,17 +1,19 @@
 {
   "files": {
-    "main.css": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/css/main.a7bba308.chunk.css",
-    "main.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/main.e79d2902.chunk.js",
-    "main.js.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/main.e79d2902.chunk.js.map",
-    "runtime-main.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/runtime-main.3bbd23b3.js",
-    "runtime-main.js.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/runtime-main.3bbd23b3.js.map",
-    "static/js/2.6eefff66.chunk.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/2.6eefff66.chunk.js",
-    "static/js/2.6eefff66.chunk.js.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/2.6eefff66.chunk.js.map",
+    "main.css": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/css/main.a0ada874.chunk.css",
+    "main.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/main.e3b4deba.chunk.js",
+    "main.js.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/main.e3b4deba.chunk.js.map",
+    "runtime-main.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/runtime-main.b6af9ad6.js",
+    "runtime-main.js.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/runtime-main.b6af9ad6.js.map",
+    "static/css/2.a15861da.chunk.css": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/css/2.a15861da.chunk.css",
+    "static/js/2.05145065.chunk.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/2.05145065.chunk.js",
+    "static/js/2.05145065.chunk.js.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/2.05145065.chunk.js.map",
     "index.html": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/index.html",
-    "precache-manifest.5b7ceccc7467364bfd9878b68fc54bbd.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/precache-manifest.5b7ceccc7467364bfd9878b68fc54bbd.js",
+    "precache-manifest.b5f1f6d92d7bdcf824ff9c266198d9b8.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/precache-manifest.b5f1f6d92d7bdcf824ff9c266198d9b8.js",
     "service-worker.js": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/service-worker.js",
-    "static/css/main.a7bba308.chunk.css.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/css/main.a7bba308.chunk.css.map",
-    "static/js/2.6eefff66.chunk.js.LICENSE.txt": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/2.6eefff66.chunk.js.LICENSE.txt",
+    "static/css/2.a15861da.chunk.css.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/css/2.a15861da.chunk.css.map",
+    "static/css/main.a0ada874.chunk.css.map": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/css/main.a0ada874.chunk.css.map",
+    "static/js/2.05145065.chunk.js.LICENSE.txt": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/js/2.05145065.chunk.js.LICENSE.txt",
     "static/media/1.jpg": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/media/1.cb88fb01.jpg",
     "static/media/2.jpg": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/media/2.29c23ad1.jpg",
     "static/media/3.jpg": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/media/3.61d29bb1.jpg",
@@ -25,9 +27,10 @@
     "static/media/img6.jpg": "/demos/free-admin-templates/materialpro-reactadmin-lite/main/static/media/img6.5a2ca107.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.3bbd23b3.js",
-    "static/js/2.6eefff66.chunk.js",
-    "static/css/main.a7bba308.chunk.css",
-    "static/js/main.e79d2902.chunk.js"
+    "static/js/runtime-main.b6af9ad6.js",
+    "static/css/2.a15861da.chunk.css",
+    "static/js/2.05145065.chunk.js",
+    "static/css/main.a0ada874.chunk.css",
+    "static/js/main.e3b4deba.chunk.js"
   ]
 }

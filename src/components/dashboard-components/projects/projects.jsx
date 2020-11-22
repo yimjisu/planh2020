@@ -7,7 +7,7 @@ import dumbbell2 from 'assets/images/dumbbell (1).png';
 import img2 from 'assets/images/users/2.jpg';
 import img3 from 'assets/images/users/3.jpg';
 import img4 from 'assets/images/users/4.jpg';
-
+import { Route, Link } from 'react-router-dom';
 import {
     Card,
     CardBody,
@@ -47,6 +47,7 @@ class Projects extends React.Component {
         this._isMounted = true;
         var ref = firebase.database().ref().child('routine');
         var routineRef = ref.child(this.props.props);
+        console.log(routineRef);
         routineRef.on('value', snap=>{
             var val = snap.val();
             if(val!=null & this._isMounted){
@@ -121,7 +122,7 @@ class Projects extends React.Component {
                                 {[...Array( Math.round(5-rate))].map((n, index) => {
                                     return(<img className="mx-sm-1" width="20px" src={dumbbell2} />
                                 )})}
-                                {rate}
+                                {rate.toFixed(1)}
                                 </span>
                         </div>
                         </CardTitle>
@@ -136,9 +137,8 @@ class Projects extends React.Component {
                                 </div>
                                 <div className="d-flex">
                             <div className="read mt-sm-3">
-                                <a href="/" className="link font-medium">
-                                    Read More Reviews
-                  </a>
+                                <Link to={'/review/'+this.props.props} className="link font-medium">
+                                    Read More Reviews</Link>
                             </div></div>
                         </CardText>
                     </CardFooter>
@@ -228,9 +228,8 @@ class Projects extends React.Component {
                 </Table>
                 <div className="d-flex">
                     <div className="read">
-                        <a className="link font-medium">
-                            Read More Details
-                        </a>
+                    <Link to={'/detail/'+this.props.props} className="link font-medium">
+                                    Read More Details</Link>
                     </div>
                 </div>
                 </CardBody>
