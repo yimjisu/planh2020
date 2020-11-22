@@ -238,41 +238,94 @@ class ButtonToggle extends React.Component {
         }
         */
         //check like/dislike list 
+        var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(this.state.keyval);
+        var ref_like;
+        var ref_dislike;
+        if(this.state.isComment){
+            ref_like = ref_root.child('comment').child('like') 
+            ref_dislike = ref_root.child('comment').child('dislike'); 
+        }else{
+            ref_like = ref_root.child('suggestion').child('like')
+            ref_dislike = ref_root.child('suggestion').child('dislike');
+        }
+        /*var ref_pressed = firebase.database().ref().child('userinfo').child(this.state.userid).child('-MMZTiR3gBd4Fwd1i2cP').child(''); //need review key
+        if this.isComment 
+        */
         if(isLike){
             if(this.state.likePressed){
+                //-1 0
+                var val; 
+                ref_like.on('value', snap => {
+                    val = snap.val();
+                })
+                ref_like.set(val-1);
                 this.setState({likePressed : false, dislikePressed : false});
+                //remove from firebase
+                //ref_pressed.remove()
             }else{
+                if(this.state.dislikePressed){
+                    // +1 -1
+                    var val; 
+                    ref_like.on('value', snap => {
+                        val = snap.val();
+                    })
+                    ref_like.set(val+1);
+                    ref_dislike.on('value', snap => {
+                        val = snap.val();
+                    })
+                    ref_dislike.set(val-1);
+                }else{
+                    // +1 0
+                    var val; 
+                    ref_like.on('value', snap => {
+                        val = snap.val();
+                    })
+                    ref_like.set(val+1);
+                }
                 this.setState({likePressed : true, dislikePressed : false});
+                //add to firebase
+                //ref_pressed.set({likePressed : true, dislikePressed : false});
             }
         }else{
             if(this.state.dislikePressed){
+                //0 -1
+                var val; 
+                ref_dislike.on('value', snap => {
+                    val = snap.val();
+                })
+                ref_dislike.set(val-1);
                 this.setState({likePressed : false, dislikePressed : false});
+                //remove from firebase
+                //ref_pressed.remove()
             }else{
+                if(this.state.likePressed){
+                    //-1 +1
+                    var val; 
+                    ref_like.on('value', snap => {
+                        val = snap.val();
+                    })
+                    ref_like.set(val-1);
+                    ref_dislike.on('value', snap => {
+                        val = snap.val();
+                    })
+                    ref_dislike.set(val+1);
+                }else{
+                    //0 +1
+                    var val; 
+                    ref_dislike.on('value', snap => {
+                        val = snap.val();
+                    })
+                    ref_dislike.set(val+1);
+                    //add to firebase
+                    //ref_pressed.set({slikePressed : false});
+                }
                 this.setState({likePressed : false, dislikePressed : true});
             }
-        }
-        var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(this.state.keyval);
-        if(this.state.isComment){
-            let ref = isLike ? ref_root.child('comment').child('like') : ref_root.child('comment').child('dislike'); 
-            var val; 
-            ref.on('value', snap => {
-                val = snap.val();
-            })
-            console.log(val);
-            ref.set(val+1);
-        }else{
-            let ref = isLike ? ref_root.child('suggestion').child('like') : ref_root.child('suggestion').child('dislike');
-            var val;
-            ref.on('value', snap => {
-                val = snap.val();
-            })
-            console.log(val);
-            ref.set(val+1);
         }
     }
 
     render() {
-        var like_bg = this.state.likePressed ? "red" : "";
+        var like_bg = this.state.likePressed ? "blue" : "";
         var dislike_bg = this.state.dislikePressed ? "red" : "";
         return (
             <div>
@@ -299,9 +352,7 @@ const ReviewDisptab = (props) => {
                 <textarea className="form-control" id="text_comment" rows="5" style={{resize: 'none'}} value={props.comment} readOnly></textarea>
                 <div className="input-group-prepend">
                     <span className="input-group-text">
-                        <Button onClick={()=>onClickLikeHandler(true,true,props.keyval)}>like {props.clike}</Button>
                         <ButtonToggle likeval={props.clike} dislikeval={props.cdislike} keyval={props.keyval} isComment={true}/>
-                        <Button onClick={()=>onClickLikeHandler(true,false,props.keyval)}>dislike {-1*props.cdislike}</Button>
                         <Button onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>report</Button>
                     </span>
                 </div>
@@ -317,8 +368,7 @@ const ReviewDisptab = (props) => {
                 <textarea className="form-control" id="text_comment" rows="5" style={{resize: 'none'}} value={props.suggestion} readOnly></textarea>
                 <div className="input-group-prepend">
                     <span className="input-group-text">
-                        <Button onClick={()=>onClickLikeHandler(false,true, props.keyval)}>like {props.slike}</Button>
-                        <Button onClick={()=>onClickLikeHandler(false,false, props.keyval)}>dislike {-1*props.sdislike}</Button>
+                        <ButtonToggle likeval={props.slike} dislikeval={props.sdislike} keyval={props.keyval} isComment={false}/>
                         <Button onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>report</Button>
                     </span>
                 </div>
@@ -732,6 +782,21 @@ class Review_List extends React.Component{
                 this.state.datas = datas;
             }
         })
+        //pressed list
+        /*
+        var ref_pressed = firebase.database().ref().child('userinfo').child(this.props.userid).child('-MMZTiR3gBd4Fwd1i2cP');
+        ref_pressed.on('value', snap => {
+            var val = snap.val();
+            console.log(val);
+            if(val!=null & this._isMounted){
+                var pressed = [];
+                for(var key in val){
+                    pressed.push(val[key]);
+                }
+                this.state.pressed = pressed;
+            }
+        })
+        */
     }
 
     render(){
@@ -779,6 +844,20 @@ class Review_List extends React.Component{
                                 slike : temp.suggestion.like,
                                 sdislike : temp.suggestion.dislike
                             };
+                            //routine key should be provided
+                            /*
+                            let match = this.state.pressed.filter(i=>i.rev_key == key);
+                            let clikePressed = false;
+                            let cdislikePressed = false;
+                            let slikePressed = false;
+                            let sdislikePressed = false;
+                            if(match.length == 1){
+                                clikePressed = match[0].clikePressed;
+                                cdislikePressed = !match[0].clikePressed;
+                                slikePressed = match[0].slikePressed;
+                                sdislikePressed = !match[0].slikePressed;
+                            } 
+                            */
                             console.log(this.state.sort);
                             console.log(this.state.method);
                             return(<Review_Card keyval={key} data={temp2} empty={false} userid={this.props.userid} sortop={this.state.sort}/>)}) 
@@ -797,7 +876,7 @@ class Cards extends React.Component{
         this.state = {
             myreview : [],
             mydatas : [],
-            userid : 'user'
+            userid : '2YLAW71rCFbpWe2WOz9al0n1Fvh1'
         };
     }
     componentWillUnmount() {
@@ -833,6 +912,20 @@ class Cards extends React.Component{
                 this.setState({avg: temp});
             }
         })
+        /*
+        var ref_pressed = firebase.database().ref().child('userinfo').child(this.state.userid).child('-MMZTiR3gBd4Fwd1i2cP');
+        ref_pressed.on('value', snap => {
+            var val = snap.val();
+            console.log(val);
+            if(val!=null & this._isMounted){
+                var pressed = [];
+                for(var key in val){
+                    pressed.push(val[key]);
+                }
+                this.state.mypressed = pressed;
+            }
+        })
+        */
     }
 
     render(){
