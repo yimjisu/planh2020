@@ -816,7 +816,7 @@ class Review_List extends React.Component{
         console.log("list render");
         var sorted_arr=[];
         if(this.state.keys.length > 0){
-            sorted_arr = this.state.keys.map((key, index)=> [key, this.state.datas[index]]);
+            sorted_arr = this.state.keys.map((key, index)=> [key, this.state.datas[index]]).reverse();
         }
         if(this.state.method == 1 && this.state.keys.length > 1){
             if(this.state.sort == 0){
