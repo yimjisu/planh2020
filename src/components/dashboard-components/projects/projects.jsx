@@ -1,7 +1,6 @@
-
 import React from "react";
 
-import firebase from 'firebase';
+import firebase from 'firebase'; 
 import img1 from 'assets/images/users/1.jpg';
 import dumbbell1 from 'assets/images/dumbbell.png';
 import dumbbell2 from 'assets/images/dumbbell (1).png';
@@ -89,7 +88,7 @@ class Projects extends React.Component {
         /*--------------------------------------------------------------------------------*/
         /* Used In Dashboard-4 [General]                                                  */
         /*--------------------------------------------------------------------------------*/
-        <Card>
+                <Card>
                         <CardBody>
                         <div className="d-flex align-items-center">
                 <div className="d-flex no-block align-items-center">
