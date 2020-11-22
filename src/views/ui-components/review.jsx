@@ -110,12 +110,41 @@ const data = (rate) => {
 }
 
 const onClickHandler = () => {
-    var ref = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review');
+    console.log('onclickhandler');
+    /*
+    var user = firebase.auth().currentUser;
+    if(user == null){
+        alert('To leave a review, login first!');
+        return;
+    }
+    */
+    var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP');
+    var ref = ref_root.child('review');
     var comment = document.getElementById("text_comment").value;
     var suggestion = document.getElementById("text_suggestion").value;
     var name = document.getElementById("input-name").value;
+    //var name = user.displayName;
     var rate = document.getElementById("input-rate").value;
-    console.log(rate);
+    //update total average rate
+    var ref_avg = ref_root.child('rating');
+    var total_avg_rating = rate.split(',').map(i=>parseInt(i, 10)).reduce((a,v) =>  a = a + v , 0 )/5;
+    var rating_num = 1;
+    ref.on('value', snap => {
+        var val = snap.val();
+        if(val!=null){
+            var keys = [];
+            var datas = [];
+            for(var key in val){
+                rating_num+=1;
+                let temp = val[key].rate;
+                temp = temp.split(',').map(i=>parseInt(i, 10)).reduce((a,v) =>  a = a + v , 0 );
+                total_avg_rating+=temp/5;
+            }
+        }
+    })
+    console.log(total_avg_rating);
+    console.log(rating_num);
+    ref_avg.set(total_avg_rating/rating_num);
     //need to get user name somehow
     var total = {
         name : name,
@@ -137,6 +166,11 @@ const onClickHandler = () => {
 };
 
 const onClickReportHandler = (rout_key, rev_key) => {
+    var user = firebase.auth().currentUser;
+    if(user == null){
+        alert('To report, login first!');
+        return;
+    }
     console.log('reporthandler');
     var ref = firebase.database().ref().child('report');
     let temp = ref.push();
@@ -151,6 +185,17 @@ const onClickDeleteHandler = (key) => {
 
 //need toggle?
 const onClickLikeHandler = (isComment,isLike,key) => {
+    var user = firebase.auth().currentUser;
+    if(user == null){
+        if(isLike){
+            alert('To leave a dislike, login first!');
+        }
+        else{
+            alert('To leave a like, login first!');
+        }
+        return;
+    }
+    //check like/dislike list 
     var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(key);
     if(isComment){
         let ref = isLike ? ref_root.child('comment').child('like') : ref_root.child('comment').child('dislike'); 
@@ -171,6 +216,77 @@ const onClickLikeHandler = (isComment,isLike,key) => {
     }
 }
 
+class ButtonToggle extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        isComment: this.props.isComment,
+        keyval: this.props.keyval,
+        likePressed : false,
+        dislikePressed : false,
+      }
+      this.onClickLikeHandler = this.onClickLikeHandler.bind(this);
+    }
+    
+    onClickLikeHandler = (isLike) => {
+        /*
+        var user = firebase.auth().currentUser;
+        if(user == null){
+            if(isLike){
+                alert('To leave a dislike, login first!');
+            }
+            else{
+                alert('To leave a like, login first!');
+            }
+            return;
+        }
+        */
+        //check like/dislike list 
+        if(isLike){
+            if(this.state.likePressed){
+                this.setState({likePressed : false, dislikePressed : false});
+            }else{
+                this.setState({likePressed : true, dislikePressed : false});
+            }
+        }else{
+            if(this.state.dislikePressed){
+                this.setState({likePressed : false, dislikePressed : false});
+            }else{
+                this.setState({likePressed : false, dislikePressed : true});
+            }
+        }
+        var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(this.state.keyval);
+        if(this.state.isComment){
+            let ref = isLike ? ref_root.child('comment').child('like') : ref_root.child('comment').child('dislike'); 
+            var val; 
+            ref.on('value', snap => {
+                val = snap.val();
+            })
+            console.log(val);
+            ref.set(val+1);
+        }else{
+            let ref = isLike ? ref_root.child('suggestion').child('like') : ref_root.child('suggestion').child('dislike');
+            var val;
+            ref.on('value', snap => {
+                val = snap.val();
+            })
+            console.log(val);
+            ref.set(val+1);
+        }
+    }
+
+    render() {
+        var like_bg = this.state.likePressed ? "red" : "";
+        var dislike_bg = this.state.dislikePressed ? "red" : "";
+        return (
+            <div>
+                <Button style={{backgroundColor: like_bg}} onClick={()=>this.onClickLikeHandler(true)}>like {this.props.likeval}</Button>
+                <Button style={{backgroundColor: dislike_bg}} onClick={()=>this.onClickLikeHandler(false)}>dislike {-1*this.props.dislikeval}</Button>
+            </div>
+        );
+    }
+  }
+
 const ReviewDisptab = (props) => {
     //var key = document.getElementById('input-key').value;
     console.log(props.keyval);
@@ -188,6 +304,7 @@ const ReviewDisptab = (props) => {
                 <div className="input-group-prepend">
                     <span className="input-group-text">
                         <Button onClick={()=>onClickLikeHandler(true,true,props.keyval)}>like {props.clike}</Button>
+                        <ButtonToggle likeval={props.clike} dislikeval={props.cdislike} keyval={props.keyval} isComment={true}/>
                         <Button onClick={()=>onClickLikeHandler(true,false,props.keyval)}>dislike {-1*props.cdislike}</Button>
                         <Button onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>report</Button>
                     </span>
@@ -445,6 +562,7 @@ class Review_Card extends React.Component{
             var ref = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(this.props.keyval);
             ref.on('value', snap => {
                 var val = snap.val();
+                console.log(val);
                 if(val!=null & this._isMounted){
                     console.log(val.suggestion.text);
                     console.log(val.comment.text);
@@ -589,6 +707,7 @@ class Review_List extends React.Component{
         var ref = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review');
         ref.on('value', snap => {
             var val = snap.val();
+            console.log(val);
             if(val!=null & this._isMounted){
                 var keys = [];
                 var datas = [];
@@ -605,6 +724,7 @@ class Review_List extends React.Component{
     render(){
         //for reviews in the review array
         //consider case when there is no review
+        console.log("list render");
         var sorted_arr=[];
         if(this.state.keys.length > 0){
             sorted_arr = this.state.keys.map((key, index)=> [key, this.state.datas[index]]);
@@ -621,7 +741,8 @@ class Review_List extends React.Component{
         return(
             <div>
                 <span>
-                <h5 className="mb-3">Reviews of this routine 
+                <h5 className="mb-3">Reviews of this routine
+                    <text>/Average Rating : {this.props.avg}</text>
                     <div class="pull-right">
                         <SortCondition sortop={this.state.sort} method={this.state.method}/>
                     </div>
@@ -671,12 +792,15 @@ class Cards extends React.Component{
     }
     
     componentDidMount(){
+        console.log("cards didmount");
         this._isMounted = true;
         //get review informations from the firebase
         //get the review of the routine(given by routine ID).
-        var ref = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review');
+        var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP');
+        var ref = ref_root.child('review');
         ref.on('value', snap => {
             var val = snap.val();
+            console.log(val);
             if(val!=null & this._isMounted){
                 var keys = [];
                 var datas = [];
@@ -687,16 +811,26 @@ class Cards extends React.Component{
                 this.setState({myreview: keys, mydatas: datas});
             }
         })
+        var ref_avg = ref_root.child('rating');
+        ref_avg.on('value', snap => {
+            var val = snap.val();
+            if(val!=null & this._isMounted){
+                let temp = val.toFixed(2);
+                console.log(temp);
+                this.setState({avg: temp});
+            }
+        })
     }
 
     render(){
+        console.log('cards render');
         return(
             <div>
                 <div>
                 <Review_Write {...this.props}/>
                 </div>
                 <div>
-                <Review_List myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid}/>
+                <Review_List myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid} avg={this.state.avg}/>
                 </div>
             </div>
         )
