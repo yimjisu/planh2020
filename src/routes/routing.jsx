@@ -17,6 +17,7 @@ import TooltipComponent from '../views/ui-components/tooltip.jsx';
 import Starter from '../views/starter/starter.jsx';
 import Write from '../views/ui-components/write.jsx';
 import Cards from '../views/ui-components/review.jsx';
+import ReviewWrite from '../views/ui-components/reviewWrite.jsx';
 import Level from '../views/ui-components/level.jsx';
 import Session from '../views/ui-components/session.jsx';
 import Review from '../views/ui-components/review.jsx';
@@ -95,7 +96,9 @@ var ThemeRoutes = [
 
     icon: 'mdi mdi-image-filter-vintage',
     component: TooltipComponent
-  },*/{path: '/review/:key', component: Cards},
+  },*/
+  {path: '/reviewRead/:key', component: Cards},
+  {path: '/reviewWrite/:key', component: ReviewWrite},
   {path: '/detail/:key', component: Detail},
   {
     path: '/',

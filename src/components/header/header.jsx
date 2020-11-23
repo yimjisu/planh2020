@@ -118,13 +118,14 @@ const Header = (props) => {
                                     width="31"
                                 />
                             </DropdownToggle>
+{/*
                             <DropdownMenu right className="user-dd">
                                 <DropdownItem>
                                     <i className="ti-user mr-1 ml-1" /> My Account
                   </DropdownItem>
                                 <DropdownItem>
                                     <i className="ti-wallet mr-1 ml-1" /> My Balance
-                  </DropdownItem>
+                                </DropdownItem>
                                 <DropdownItem className="border-bottom">
                                     <i className="ti-email mr-1 ml-1" /> Inbox
                   </DropdownItem>
@@ -134,7 +135,7 @@ const Header = (props) => {
                                 <DropdownItem href="/pages/login">
                                     <i className="fa fa-power-off mr-1 ml-1" /> Logout
                   </DropdownItem>
-                            </DropdownMenu>
+                            </DropdownMenu>*/}
                         </UncontrolledDropdown>
                         {/*--------------------------------------------------------------------------------*/}
                         {/* End Profile Dropdown                                                           */}

@@ -136,9 +136,15 @@ class Projects extends React.Component {
                                         <h5 className="mb-0 font-16 font-medium">{reviewname}</h5><span>{reviewtext}</span></div>
                                 </div>
                                 <div className="d-flex">
-                            <div className="read mt-sm-3">
-                                <Link to={'/review/'+this.props.props} className="link font-medium">
-                                    Read More Reviews</Link>
+                            <div className="read d-flex mt-sm-3">  
+                            <div>
+                                <Link to={'/reviewRead/'+this.props.props} className="link font-medium">
+                                <i className="mdi mdi-book-open-variant mr-1"/>
+                                    Read More</Link> </div>
+                            <div className="ml-4">
+                                <Link to={'/reviewWrite/'+this.props.props} className="link font-medium">
+                                <i className="mdi mdi-pencil mr-1"/>
+                                    Write</Link></div>
                             </div></div>
                         </CardText>
                     </CardFooter>
@@ -148,9 +154,16 @@ class Projects extends React.Component {
     noreview(){
         return(
             <CardFooter body inverse color="info">
+                
                 <CardTitle>
                 No Reviews
+
+                <Link to={'/reviewWrite/'+this.props.props} 
+                className="link font-small float-right">
+                <i className="mdi mdi-pencil mr-1"/>
+                    Write</Link>
                 </CardTitle>
+                
             </CardFooter>
         );
     }
