@@ -1,12 +1,12 @@
 import React from "react";
 
 import firebase from 'firebase'; 
-import img1 from 'assets/images/users/1.jpg';
-import dumbbell1 from 'assets/images/dumbbell.png';
-import dumbbell2 from 'assets/images/dumbbell (1).png';
-import img2 from 'assets/images/users/2.jpg';
-import img3 from 'assets/images/users/3.jpg';
-import img4 from 'assets/images/users/4.jpg';
+import img1 from '../../../assets/images/users/1.jpg';
+import dumbbell1 from '../../../assets/images/dumbbell.png';
+import dumbbell2 from '../../../assets/images/dumbbell (1).png';
+import img2 from '../../../assets/images/users/2.jpg';
+import img3 from '../../../assets/images/users/3.jpg';
+import img4 from '../../../assets/images/users/4.jpg';
 import { Route, Link } from 'react-router-dom';
 import {
     Card,
@@ -110,6 +110,13 @@ class Projects extends React.Component {
         var reviewimg = this.state.reviewimg;
     var reviewname = this.state.reviewname;
     var reviewtext = this.state.reviewtext;
+    var writereview = null;
+    if(this.props.my != true){
+        writereview = <div className="ml-4">
+        <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} className="link font-medium">
+        <i className="mdi mdi-pencil mr-1"/>
+            Write</Link></div>;
+    }
         return(
             <CardFooter body inverse color="info">
                         <CardTitle>
@@ -138,13 +145,10 @@ class Projects extends React.Component {
                                 <div className="d-flex">
                             <div className="read d-flex mt-sm-3">  
                             <div>
-                                <Link to={'/reviewRead/'+this.props.props} className="link font-medium">
+                                <Link to={'/reviewRead/'+this.props.props+'/'+this.props.my} className="link font-medium">
                                 <i className="mdi mdi-book-open-variant mr-1"/>
                                     Read More</Link> </div>
-                            <div className="ml-4">
-                                <Link to={'/reviewWrite/'+this.props.props} className="link font-medium">
-                                <i className="mdi mdi-pencil mr-1"/>
-                                    Write</Link></div>
+                            {writereview}
                             </div></div>
                         </CardText>
                     </CardFooter>
@@ -176,17 +180,43 @@ class Projects extends React.Component {
     let tags = this.state.tags;
     let routine = this.state.routine;
     let detail = "hidden";
+    
     if(this.props.detail) detail = "no-wrap";
+    else{
+        routine = routine.slice(0, 2);
+    }
+    console.log(title, this.props.detail, routine);
 
     var img = this.state.img;
     var reviewname = this.state.reviewname;
     var review = null;
+    if(this.props.review != true){
     if(reviewname == null){
         review = <this.noreview/>
     }else{
         review = <this.review/>
+    }}
+    var edit = null;
+    if(this.props.my){
+        edit = <div className="ml-auto d-flex no-block align-items-center">
+        <div className="dl">
+        <Link to={'/write/'+this.props.props} 
+className="link font-small float-right">
+<i className="mdi mdi-tooltip-edit mr-1"/>
+    Edit</Link>
+         </div>
+    </div>;
     }
-    
+
+    var readdetail = null;
+    if(this.props.detail != true){
+        readdetail = <div className="d-flex">
+        <div className="read">
+        <Link to={'/detail/'+this.props.props} className="link font-medium">
+                        Read More Details</Link>
+        </div>
+    </div>;
+    }
     return (
         /*--------------------------------------------------------------------------------*/
         /* Used In Dashboard-4 [General]                                                  */
@@ -200,10 +230,7 @@ class Projects extends React.Component {
                     <CardTitle>{title}</CardTitle>
                         <CardSubtitle>by {username}</CardSubtitle></div>
                 </div>
-                    <div className="ml-auto d-flex no-block align-items-center">
-                        <div className="dl">
-                         </div>
-                    </div>
+                    {edit}
                 </div>
                 <div className="d-flex flex-sm-row">
                 <Badge className="mx-1" color="primary" pill>
@@ -227,7 +254,17 @@ class Projects extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {routine.map((r, index) => {
+                        {routine.map((r, index) => 
+                        
+                        { if(r['info'].startsWith('https:')){
+                            return(
+                                <tr>
+                                    <td>{r['action']}</td>
+                                    <td>{r['time']}</td>
+                                    <td><a href={r['info']}>Video Link</a></td>
+                                </tr>
+                                )
+                        }else{
                             return(
                             <tr>
                                 <td>{r['action']}</td>
@@ -235,16 +272,12 @@ class Projects extends React.Component {
                                 <td>{r['info']}</td>
                             </tr>
                             )
-                        })}
+                        }}
+                        )}
                         
                     </tbody>
                 </Table>
-                <div className="d-flex">
-                    <div className="read">
-                    <Link to={'/detail/'+this.props.props} className="link font-medium">
-                                    Read More Details</Link>
-                    </div>
-                </div>
+                {readdetail}
                 </CardBody>
                 {review}
                             
