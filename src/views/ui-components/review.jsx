@@ -29,6 +29,7 @@ import
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
+    Tooltip
 } from 'reactstrap';
 import classnames from 'classnames';
 import StepRangeSlider from 'react-step-range-slider';
@@ -105,16 +106,14 @@ const data = (rate) => {
     }
 }
 
-const onClickHandler = () => {
-    console.log('onclickhandler');
-    /*
+const onClickHandler = (ref_root) => {
+
     var user = firebase.auth().currentUser;
     if(user == null){
         alert('To leave a review, login first!');
         return;
     }
-    */
-    var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP');
+
     var ref = ref_root.child('review');
     var comment = document.getElementById("text_comment").value;
     var suggestion = document.getElementById("text_suggestion").value;
@@ -122,8 +121,8 @@ const onClickHandler = () => {
         alert('Write review before submit');
         return;
     }
-    var name = document.getElementById("input-name").value;
-    //var name = user.displayName;
+    //var name = document.getElementById("input-name").value;
+    var name = user.displayName;
     var rate = document.getElementById("input-rate").value;
     //update total average rate
     var ref_avg = ref_root.child('rating');
@@ -177,14 +176,14 @@ const onClickReportHandler = (rout_key, rev_key) => {
     temp.set({routine: rout_key, review: rev_key});
 }   
 
-const onClickDeleteHandler = (key) => {
-    var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(key);
+const onClickDeleteHandler = (key, rootKey) => {
+    var ref_root = firebase.database().ref().child('routine').child(rootKey).child('review').child(key);
     console.log('deletehandler');
     ref_root.remove();
 }
 
 //need toggle?
-const onClickLikeHandler = (isComment,isLike,key) => {
+const onClickLikeHandler = (isComment,isLike,key, rootKey) => {
     var user = firebase.auth().currentUser;
     if(user == null){
         if(isLike){
@@ -196,7 +195,7 @@ const onClickLikeHandler = (isComment,isLike,key) => {
         return;
     }
     //check like/dislike list 
-    var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(key);
+    var ref_root = firebase.database().ref().child('routine').child(rootKey).child('review').child(key);
     if(isComment){
         let ref = isLike ? ref_root.child('comment').child('like') : ref_root.child('comment').child('dislike'); 
         var val; 
@@ -229,7 +228,7 @@ class ButtonToggle extends React.Component {
     }
     
     onClickLikeHandler = (isLike) => {
-        /*
+        
         var user = firebase.auth().currentUser;
         if(user == null){
             if(isLike){
@@ -240,9 +239,9 @@ class ButtonToggle extends React.Component {
             }
             return;
         }
-        */
+        
         //check like/dislike list 
-        var ref_root = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(this.state.keyval);
+        var ref_root = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.state.keyval);
         var ref_like;
         var ref_dislike;
         if(this.state.isComment){
@@ -331,11 +330,32 @@ class ButtonToggle extends React.Component {
     render() {
         var like_bg = this.state.likePressed ? "blue" : "";
         var dislike_bg = this.state.dislikePressed ? "red" : "";
+
         return (
             <div>
-                <Button style={{backgroundColor: like_bg}} onClick={()=>this.onClickLikeHandler(true)}>like {this.props.likeval}</Button>
-                <Button style={{backgroundColor: dislike_bg}} onClick={()=>this.onClickLikeHandler(false)}>dislike {-1*this.props.dislikeval}</Button>
-            </div>
+                <a className="link mr-2" id="TooltipExample2"
+                onClick={()=>this.onClickLikeHandler(true, this.props.rootKey)}
+                style={{color: this.state.likePressed ? "blue" : ""}}>
+                        <i className="mdi mdi-emoticon" />{this.props.likeval}
+                    </a>
+                    <Tooltip
+                        placement="top"
+                        isOpen={this.props.tooltipOpen2}
+                        target="TooltipExample2"
+                        toggle={this.props.toggle2}
+                    >Like</Tooltip>
+                <a className="link mr-2" id="TooltipExample3"
+                    onClick={()=>this.onClickLikeHandler(false, this.props.rootKey)}
+                    style={{color: this.state.dislikePressed ? "red" : ""}}>
+                            <i className="mdi mdi-emoticon-sad" />{-1*this.props.dislikeval}
+                        </a>
+                        <Tooltip
+                            placement="top"
+                            isOpen={this.props.tooltipOpen3}
+                            target="TooltipExample3"
+                            toggle={this.props.toggle3}
+                        >DisLike</Tooltip>
+                </div>
         );
     }
   }
@@ -346,37 +366,78 @@ const ReviewDisptab = (props) => {
     console.log(props.comment.length);
     console.log(props.suggestion.length);
     console.log(props.sortop);
+    const [tooltipOpen, setTooltipOpen] = useState(false);
+    const [tooltipOpen2, setTooltipOpen2] = useState(false);
+    const [tooltipOpen3, setTooltipOpen3] = useState(false);
+    const toggle = () => {
+        setTooltipOpen(!tooltipOpen);
+    }
+
+    const toggle2 = () => {
+        setTooltipOpen2(!tooltipOpen2);
+    }
+
+    const toggle3 = () => {
+        setTooltipOpen3(!tooltipOpen3);
+    }
     return (
-        <div>
+        <div className="ml-3 mr-3 align-items-center d-flex">
             {   
                 props.sortop != 2 && props.comment.length>0? (
-            <div>
-            <h5 className="mb-3">Comment</h5>
+            
+            
             <div className="input-group">
-                <textarea className="form-control" id="text_comment" rows="5" style={{resize: 'none'}} value={props.comment} readOnly></textarea>
+            <h5 className="mb-3">Comment</h5>
+                <textarea className="form-control" id="text_comment" rows="8" style={{resize: 'none'}} value={props.comment} readOnly></textarea>
                 <div className="input-group-prepend">
                     <span className="input-group-text">
-                        <ButtonToggle likeval={props.clike} dislikeval={props.cdislike} keyval={props.keyval} isComment={true}/>
-                        <Button onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>report</Button>
+                        <ButtonToggle 
+                        tooltipOpen2={tooltipOpen2} toggle2={toggle2.bind(null)}
+                        tooltipOpen3={tooltipOpen3} toggle3={toggle3.bind(null)}
+                        likeval={props.clike} dislikeval={props.cdislike} keyval={props.keyval} isComment={true} rootKey={props.rout_key}/>
+                        <a className="link mr-2" id="TooltipExample"
+                         onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>
+                                    <i className="mdi mdi-alert-circle" />
+                                </a>
+                                <Tooltip
+                                    placement="top"
+                                    isOpen={tooltipOpen}
+                                    target="TooltipExample"
+                                    toggle={toggle.bind(null)}
+                                >
+                                    Report
+                        </Tooltip>
                     </span>
                 </div>
-            </div>
             </div>
             ) : <div></div>
             }
             {
                 props.sortop != 1 && props.suggestion.length>0? (
-            <div>
+            
+            <div className="input-group ml-5">
             <h5 className="mb-3">Suggestion</h5>
-            <div className="input-group">
-                <textarea className="form-control" id="text_comment" rows="5" style={{resize: 'none'}} value={props.suggestion} readOnly></textarea>
+                <textarea className="form-control" id="text_comment" rows="8" style={{resize: 'none'}} value={props.suggestion} readOnly></textarea>
                 <div className="input-group-prepend">
                     <span className="input-group-text">
-                        <ButtonToggle likeval={props.slike} dislikeval={props.sdislike} keyval={props.keyval} isComment={false}/>
-                        <Button onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>report</Button>
+                    <ButtonToggle 
+                        tooltipOpen2={tooltipOpen2} toggle2={toggle2.bind(null)}
+                        tooltipOpen3={tooltipOpen3} toggle3={toggle3.bind(null)}
+                        likeval={props.slike} dislikeval={props.sdislike} keyval={props.keyval} isComment={false} rootKey={props.rout_key}/>
+                        <a className="link mr-2" id="TooltipExample"
+                         onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>
+                                    <i className="mdi mdi-alert-circle" />
+                                </a>
+                                <Tooltip
+                                    placement="top"
+                                    isOpen={tooltipOpen}
+                                    target="TooltipExample"
+                                    toggle={toggle.bind(null)}
+                                >
+                                    Report
+                        </Tooltip>
                     </span>
                 </div>
-            </div>
             </div>
                 ) : <div></div>
             }
@@ -451,7 +512,7 @@ const Reviewtab = (props) => {
                             <textarea className="form-control" id="text_suggestion" rows="5" style={{resize: 'none'}} defaultValue={props.suggestion}></textarea>
                             <div className="input-group-prepend">
                                 <span className="input-group-text" id="basic-addon1">
-                                    <Button onClick={onClickHandler}>submit</Button>
+                                    <Button onClick={onClickHandler(props.refRoot)}>submit</Button>
                                 </span>
                             </div>
                         </div>
@@ -480,6 +541,7 @@ const Reviewtab = (props) => {
             rate : [1,1,1,1,1],
             comment : '',
             suggestion : '',
+            refRoot : null
         }
         this.reference = {};
         console.log(this.state);
@@ -490,6 +552,11 @@ const Reviewtab = (props) => {
     
     componentDidMount(){
         this._isMounted = true;
+        var user = firebase.auth().currentUser;
+        if(user){
+            this.state.name = user.displayName;
+        }
+        this.state.refRoot = firebase.database().ref().child('routine').child(this.props.match.params.key);
         /*
         var ref = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review');
         ref.on('value', snap => {
@@ -507,6 +574,7 @@ const Reviewtab = (props) => {
     }
     
     render(){
+        var refRoot = firebase.database().ref().child('routine').child(this.props.match.params.key);
         return (
             <div>
             {/* --------------------------------------------------------------------------------*/}
@@ -572,7 +640,7 @@ const Reviewtab = (props) => {
                             <input id="input-name" value={this.state.name} style={{display:"none"}}/>
                             <span><CardTitle id="username">{this.state.name}</CardTitle></span>
                         </div>
-                        <Reviewtab comment={this.state.comment} suggestion={this.state.suggestion} editable={true}/>
+                        <Reviewtab refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true}/>
                     </CardBody>
                 </Col>
             </Row>
@@ -613,7 +681,7 @@ class Review_Card extends React.Component{
         //get the data from firebase
         //given prop : empty, data, review id
         if(this.props.keyval){
-            var ref = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review').child(this.props.keyval);
+            var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval);
             ref.on('value', snap => {
                 var val = snap.val();
                 console.log(val);
@@ -665,7 +733,7 @@ class Review_Card extends React.Component{
                     !this.props.empty&&shoulddisp? (
                     <Card>
                     <Row>
-                        <Col xs="12" md="4">
+                        <Col xs="6" md="4">
                             {/* --------------------------------------------------------------------------------*/}
                             {/* Card-1*/}
                             {/* --------------------------------------------------------------------------------*/}
@@ -679,21 +747,23 @@ class Review_Card extends React.Component{
                             <h5 className="mb-0 font-16 font-medium">{this.state.name}</h5><span>2020-11-07</span></div>
                     </div>
                     </CardTitle>
-                    </CardBody><CardBody>
-                            <CardTitle>Rating</CardTitle>
-                            <Radar className="graph" data={data(this.state.rate)} options={options}/>
-                            </CardBody>
+                    <CardText>
+                    Rating
+                    <Radar className="graph" data={data(this.state.rate)} options={options}/>
+                    </CardText>
+                    </CardBody>               
                         </Col>
-                        <Col xs="12" md="8">
+                        <Col xs="6" md="8">
                             <CardBody>
                                     {   this.props.userid == this.state.name ? (
                                     <div class="pull-right">
                                         <Button>Modify</Button>                                    
-                                        <Button onClick={()=>{onClickDeleteHandler(this.props.keyval)}}>Delete</Button>
+                                        <Button onClick={()=>{onClickDeleteHandler(this.props.keyval, this.props.rootKey)}}>Delete</Button>
                                     </div>
                                     ) : <div></div>}
-                            </CardBody>
-                            <ReviewDisptab comment={this.state.comment} sortop={this.props.sortop} rout_key='-MMZTiR3gBd4Fwd1i2cP' keyval={this.state.keyval} clike={this.state.clike} cdislike={this.state.cdislike} suggestion={this.state.suggestion} slike={this.state.slike} sdislike={this.state.sdislike}/>
+                            
+                            <ReviewDisptab comment={this.state.comment} sortop={this.props.sortop} rout_key={this.props.rootKey} keyval={this.state.keyval} clike={this.state.clike} cdislike={this.state.cdislike} suggestion={this.state.suggestion} slike={this.state.slike} sdislike={this.state.sdislike}/>
+                                        </CardBody>
                         </Col>
                     </Row>
                     </Card>
@@ -701,9 +771,10 @@ class Review_Card extends React.Component{
                     <Card>
                         <Row>
                             <Col xs="12" md="12">
+                                <CardBody>
                                 <CardTitle>There's no review yet.</CardTitle>
-                                <CardBody>How about writing yours?</CardBody>
-                                <Button>Write Review</Button>
+                                <CardText>How about writing yours?</CardText>
+                                </CardBody>
                             </Col>
                         </Row>
                     </Card>)
@@ -778,7 +849,7 @@ class Review_List extends React.Component{
     
     componentDidMount(){
         this._isMounted = true;
-        var ref = firebase.database().ref().child('routine').child('-MMZTiR3gBd4Fwd1i2cP').child('review');
+        var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review');
         ref.on('value', snap => {
             var val = snap.val();
             console.log(val);
@@ -827,22 +898,22 @@ class Review_List extends React.Component{
                 sorted_arr.sort((a, b) => (a[1].suggestion.like-a[1].suggestion.dislike)>(b[1].suggestion.like-b[1].suggestion.dislike) ? -1 : 1);
             }   
         }
+        var rating = <h6 className="ml-3">Average Rating : {this.props.avg}</h6>;
+        if(this.props.avg == null) rating = null;
         return(
             <div>
-                <span>
-                <h5 className="mb-3">Reviews of this routine
-                    <text>/Average Rating : {this.props.avg}</text>
-                    <div class="pull-right">
-                        <SortCondition sortop={this.state.sort} method={this.state.method}/>
+                <h5 className="mb-3 d-flex">
+                    Reviews of this routine{rating}
+                    <div className="ml-auto">
+                    <SortCondition sortop={this.state.sort} method={this.state.method}/>
                     </div>
                 </h5>
-                </span>
+                
+                <div>
                 {
                     //sorting method, this.state.keys => sort with something and map with that.
                     sorted_arr.length>0 ? (
                         sorted_arr.map((data, index) => { 
-                            console.log(data[0]);
-                            console.log(data[1]);
                             let key = data[0];
                             let temp = data[1];
                             var temp2 = {
@@ -871,10 +942,11 @@ class Review_List extends React.Component{
                             */
                             console.log(this.state.sort);
                             console.log(this.state.method);
-                            return(<Review_Card keyval={key} data={temp2} empty={false} userid={this.props.userid} sortop={this.state.sort}/>)}) 
+                            return(<Review_Card keyval={key} rootKey={this.props.rootKey} data={temp2} empty={false} userid={this.props.userid} sortop={this.state.sort}/>)}) 
                         )
-                        : <Review_Card data={[]} empty={true} userid={this.props.userid}/>                   
+                        : <Review_Card data={[]} empty={true} userid={this.props.userid} rootKey={this.props.rootKey}/>                   
                 }
+                </div>
             </div>
         )
     }
@@ -942,14 +1014,7 @@ class Cards extends React.Component{
     render(){
         console.log('cards render');
         return(
-            <div>
-                <div>
-                <Review_Write {...this.props}/>
-                </div>
-                <div>
-                <Review_List myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid} avg={this.state.avg}/>
-                </div>
-            </div>
+            <Review_List myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid} avg={this.state.avg} rootKey={this.props.match.params.key}/>
         )
     }
 

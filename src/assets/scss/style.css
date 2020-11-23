@@ -139,15 +139,15 @@ section {
     float: inline;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 .slider-text{
-    font-size: 12px;
+    font-size: 13px;
     margin-right: 10px;
 }
 .slider-slider{
     float:right;
-    max-width: 100px;
+    max-width: 80px;
     margin-right: 10px;
 }
 body {
@@ -257,7 +257,7 @@ sup {
 }
 
 a {
-    color: #7460ee;
+    color: inherit;
     text-decoration: none;
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
@@ -266,6 +266,7 @@ a {
 a:hover {
     color: #381be7;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:not([href]):not([tabindex]) {
@@ -3905,13 +3906,13 @@ input[type="button"].btn-block {
 
 .input-group {
     position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
     width: 100%;
 }
 
-.input-group>.form-control,
+.input-group>.form-control{
+    position: relative;
+    margin-bottom: 0;
+}
 .input-group>.custom-select,
 .input-group>.custom-file {
     position: relative;
@@ -3970,7 +3971,9 @@ input[type="button"].btn-block {
     border-bottom-left-radius: 0;
 }
 
-.input-group-prepend,
+.input-group-prepend{
+    display: block;
+}
 .input-group-append {
     display: flex;
 }
@@ -13495,4 +13498,8 @@ use profile section
     margin-top: 25px;
     margin-bottom: 25px;
     width: 250px;
+}
+
+.icon-hover:hover{
+    color: #381be7;
 }

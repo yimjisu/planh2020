@@ -68,7 +68,7 @@ class Starter extends React.Component {
             <Row>
                 {this.state.myroutine.map((key, index) => {
                     return(
-                        <Col sm={6} lg={4}><Projects props={key} detail={true} my={true}/></Col>)
+                        <Col sm={6} lg={4}><Projects props={key} detail={false} my={true}/></Col>)
                 })}
             </Row>
             </div>
