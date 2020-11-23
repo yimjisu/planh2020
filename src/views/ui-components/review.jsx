@@ -1017,7 +1017,7 @@ class Cards extends React.Component{
         return(
             <Row>
                 <Col sm={12} lg={12}>
-                <Projects props={this.props.match.params.key} detail={true} my={false}/>
+                <Projects props={this.props.match.params.key} detail={true} my={this.props.match.params.my}/>
                 </Col>
                 <Col sm={12} lg={12}>
                 <Review_List myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid} avg={this.state.avg} rootKey={this.props.match.params.key}/>

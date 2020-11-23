@@ -110,6 +110,13 @@ class Projects extends React.Component {
         var reviewimg = this.state.reviewimg;
     var reviewname = this.state.reviewname;
     var reviewtext = this.state.reviewtext;
+    var writereview = null;
+    if(this.props.my != true){
+        writereview = <div className="ml-4">
+        <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} className="link font-medium">
+        <i className="mdi mdi-pencil mr-1"/>
+            Write</Link></div>;
+    }
         return(
             <CardFooter body inverse color="info">
                         <CardTitle>
@@ -138,13 +145,10 @@ class Projects extends React.Component {
                                 <div className="d-flex">
                             <div className="read d-flex mt-sm-3">  
                             <div>
-                                <Link to={'/reviewRead/'+this.props.props} className="link font-medium">
+                                <Link to={'/reviewRead/'+this.props.props+'/'+this.props.my} className="link font-medium">
                                 <i className="mdi mdi-book-open-variant mr-1"/>
                                     Read More</Link> </div>
-                            <div className="ml-4">
-                                <Link to={'/reviewWrite/'+this.props.props} className="link font-medium">
-                                <i className="mdi mdi-pencil mr-1"/>
-                                    Write</Link></div>
+                            {writereview}
                             </div></div>
                         </CardText>
                     </CardFooter>
@@ -176,7 +180,12 @@ class Projects extends React.Component {
     let tags = this.state.tags;
     let routine = this.state.routine;
     let detail = "hidden";
+    
     if(this.props.detail) detail = "no-wrap";
+    else{
+        routine = routine.slice(0, 2);
+    }
+    console.log(title, this.props.detail, routine);
 
     var img = this.state.img;
     var reviewname = this.state.reviewname;
@@ -245,7 +254,17 @@ className="link font-small float-right">
                         </tr>
                     </thead>
                     <tbody>
-                        {routine.map((r, index) => {
+                        {routine.map((r, index) => 
+                        
+                        { if(r['info'].startsWith('https:')){
+                            return(
+                                <tr>
+                                    <td>{r['action']}</td>
+                                    <td>{r['time']}</td>
+                                    <td><a href={r['info']}>Video Link</a></td>
+                                </tr>
+                                )
+                        }else{
                             return(
                             <tr>
                                 <td>{r['action']}</td>
@@ -253,7 +272,8 @@ className="link font-small float-right">
                                 <td>{r['info']}</td>
                             </tr>
                             )
-                        })}
+                        }}
+                        )}
                         
                     </tbody>
                 </Table>

@@ -37,7 +37,7 @@ const Alerts = () => {
 
     const handleTagChange = (e) => {
         const updatedTags = [...tagState];
-        updatedTags[e.target.dataset.idx]["tag"] = e.target.value;
+        updatedTags[e.target.dataset.idx] = e.target.value;
         setTagState(updatedTags);
     };
     
@@ -59,14 +59,32 @@ const Alerts = () => {
 
     const handleWrite = (e) => {
         e.preventDefault();
-        var firebase_root = firebase.database().ref().child('routineTest');
+        var firebase_root = firebase.database().ref().child('routine');
         var pushed = firebase_root.push();
         var pushRef = firebase_root.child(pushed.key);
+        var currentUid = firebase.auth().currentUser.uid;
+        var tagRef = firebase.database().ref().child('tag');
+        
+        console.log(tagState);
+        for(var i = 0; i < tagState.length; i++){
+            tagRef.child(tagState[i]).push(pushed.key);
+        }
+        var commonValues = ['level', 'time', 'title'].map(el => commonState[el]);
+        pushRef.child('tag').set({
+            level: commonValues[0][0],
+            time: commonValues[1][0],
+            tag: tagState
+        });
 
-        pushed.set(commonState);
+
+        console.log(commonState["level"]);
+        pushRef.child('img').set(1);
+        pushRef.child('uid').set(currentUid);
+        pushRef.child('title').set(commonValues[2][0]);
         pushRef.child('routine').set(actionState);
-        pushRef.child('tag').set(tagState);
+        pushRef.child('name').set("Exercise Noob");
         console.log("Pushed");
+        window.open("/");
     };
    
     

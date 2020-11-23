@@ -46,60 +46,9 @@ var ThemeRoutes = [
     name: 'Login',
     icon: 'mdi mdi-login',
     component: Session
-  },/*
-  {
-    path: '/ui-components/alert',
-    name: 'Alerts',
-    icon: 'mdi mdi-comment-processing-outline',
-    component: Alerts
   },
-  {
-    path: '/ui-components/badge',
-    name: 'Badges',
-    icon: 'mdi mdi-arrange-send-backward',
-    component: Badges
-  },
-  {
-    path: '/ui-components/button',
-    name: 'Buttons',
-    icon: 'mdi mdi-toggle-switch',
-    component: Buttons
-  },
-  {
-    path: '/ui-components/card',
-    name: 'Cards',
-    icon: 'mdi mdi-credit-card-multiple',
-    component: Cards
-  },
-  {
-    path: '/ui-components/layout',
-    name: 'Layout',
-    icon: 'mdi mdi-apps',
-    component: LayoutComponent
-  },
-  {
-    path: '/ui-components/pagination',
-    name: 'Pagination',
-
-    icon: 'mdi mdi-priority-high',
-    component: PaginationComponent
-  },
-  {
-    path: '/ui-components/popover',
-    name: 'Popover',
-
-    icon: 'mdi mdi-pencil-circle',
-    component: PopoverComponent
-  },
-  {
-    path: '/ui-components/tooltip',
-    name: 'Toltips',
-
-    icon: 'mdi mdi-image-filter-vintage',
-    component: TooltipComponent
-  },*/
-  {path: '/reviewRead/:key', component: Cards},
-  {path: '/reviewWrite/:key', component: ReviewWrite},
+  {path: '/reviewRead/:key/:my', component: Cards},
+  {path: '/reviewWrite/:key/:my', component: ReviewWrite},
   {path: '/detail/:key', component: Detail},
   {path: '/write/:key', component: Alert},
   {
