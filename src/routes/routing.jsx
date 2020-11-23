@@ -22,6 +22,7 @@ import Level from '../views/ui-components/level.jsx';
 import Session from '../views/ui-components/session.jsx';
 import Review from '../views/ui-components/review.jsx';
 import Detail from '../views/ui-components/detail.jsx';
+import Alert from '../views/ui-components/write.jsx';
 
  
 var ThemeRoutes = [
@@ -100,6 +101,7 @@ var ThemeRoutes = [
   {path: '/reviewRead/:key', component: Cards},
   {path: '/reviewWrite/:key', component: ReviewWrite},
   {path: '/detail/:key', component: Detail},
+  {path: '/write/:key', component: Alert},
   {
     path: '/',
     pathTo: '/starter/starter',

@@ -4,7 +4,7 @@ import {
     Row,
     Col
 } from 'reactstrap';
-import { SalesSummary, Projects, Feeds, SocialCards } from 'components/dashboard-components';
+import { SalesSummary, Projects, Feeds, SocialCards } from '../../components/dashboard-components';
 
 class Detail extends React.Component {
     constructor(props){

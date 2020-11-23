@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import ReactDOM, { render } from 'react-dom'
 import firebase from 'firebase';
+import { SalesSummary, Projects, Feeds, SocialCards } from '../../components/dashboard-components';
+
 import
  {
     Card,
@@ -32,12 +34,8 @@ import
 } from 'reactstrap';import { Route, Link } from 'react-router-dom';
 import classnames from 'classnames';
 import StepRangeSlider from 'react-step-range-slider';
-import img1 from 'assets/images/users/1.jpg';
-import img2 from 'assets/images/users/2.jpg';
-import img3 from 'assets/images/users/3.jpg';
-import img4 from 'assets/images/users/4.jpg';
 import { Radar } from "react-chartjs-2";
-import Cards from './review.jsx';
+import Review_List from './review.jsx';
 
 const options = {
     legend: {
@@ -515,7 +513,13 @@ const Reviewtab = (props) => {
     render(){
         var refRoot = firebase.database().ref().child('routine').child(this.props.match.params.key);
         return (
-            <div><div>
+        <div>
+            <Row>
+                <Col xs='12' md='12'>
+                    <Projects props={this.props.match.params.key} detail={true} my={false}/>
+                </Col>
+            
+            <Col xs='12' md='12'>
             {/* --------------------------------------------------------------------------------*/}
             {/* Row*/}
             {/* --------------------------------------------------------------------------------*/}
@@ -584,8 +588,8 @@ const Reviewtab = (props) => {
                 </Col>
             </Row>
             </Card>
-        </div>
-        <Cards {...this.props}/>
+            </Col>
+            </Row>
         </div>
     );
 }}

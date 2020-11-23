@@ -3,7 +3,7 @@ import {
     Row,
     Col
 } from 'reactstrap';
-import { SalesSummary, Projects, Feeds, SocialCards } from 'components/dashboard-components';
+import { SalesSummary, Projects, Feeds, SocialCards } from '../../components/dashboard-components';
 import firebase from 'firebase';
 import ThemeRoutes from '../../routes/routing.jsx';
 class Starter extends React.Component {

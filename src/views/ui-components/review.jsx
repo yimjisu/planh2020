@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ReactDOM, { render } from 'react-dom'
 import firebase from 'firebase';
+import { SalesSummary, Projects, Feeds, SocialCards } from '../../components/dashboard-components';
 import
  {
     Card,
@@ -33,10 +34,10 @@ import
 } from 'reactstrap';
 import classnames from 'classnames';
 import StepRangeSlider from 'react-step-range-slider';
-import img1 from 'assets/images/users/1.jpg';
-import img2 from 'assets/images/users/2.jpg';
-import img3 from 'assets/images/users/3.jpg';
-import img4 from 'assets/images/users/4.jpg';
+import img1 from '../../assets/images/users/1.jpg';
+import img2 from '../../assets/images/users/2.jpg';
+import img3 from '../../assets/images/users/3.jpg';
+import img4 from '../../assets/images/users/4.jpg';
 import { Radar } from "react-chartjs-2";
 
 const options = {
@@ -1014,8 +1015,15 @@ class Cards extends React.Component{
     render(){
         console.log('cards render');
         return(
-            <Review_List myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid} avg={this.state.avg} rootKey={this.props.match.params.key}/>
-        )
+            <Row>
+                <Col sm={12} lg={12}>
+                <Projects props={this.props.match.params.key} detail={true} my={false}/>
+                </Col>
+                <Col sm={12} lg={12}>
+                <Review_List myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid} avg={this.state.avg} rootKey={this.props.match.params.key}/>
+                </Col>
+            </Row>
+                    )
     }
 
 }

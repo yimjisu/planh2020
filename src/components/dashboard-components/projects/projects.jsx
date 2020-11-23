@@ -1,12 +1,12 @@
 import React from "react";
 
 import firebase from 'firebase'; 
-import img1 from 'assets/images/users/1.jpg';
-import dumbbell1 from 'assets/images/dumbbell.png';
-import dumbbell2 from 'assets/images/dumbbell (1).png';
-import img2 from 'assets/images/users/2.jpg';
-import img3 from 'assets/images/users/3.jpg';
-import img4 from 'assets/images/users/4.jpg';
+import img1 from '../../../assets/images/users/1.jpg';
+import dumbbell1 from '../../../assets/images/dumbbell.png';
+import dumbbell2 from '../../../assets/images/dumbbell (1).png';
+import img2 from '../../../assets/images/users/2.jpg';
+import img3 from '../../../assets/images/users/3.jpg';
+import img4 from '../../../assets/images/users/4.jpg';
 import { Route, Link } from 'react-router-dom';
 import {
     Card,
@@ -181,12 +181,33 @@ class Projects extends React.Component {
     var img = this.state.img;
     var reviewname = this.state.reviewname;
     var review = null;
+    if(this.props.review != true){
     if(reviewname == null){
         review = <this.noreview/>
     }else{
         review = <this.review/>
+    }}
+    var edit = null;
+    if(this.props.my){
+        edit = <div className="ml-auto d-flex no-block align-items-center">
+        <div className="dl">
+        <Link to={'/write/'+this.props.props} 
+className="link font-small float-right">
+<i className="mdi mdi-tooltip-edit mr-1"/>
+    Edit</Link>
+         </div>
+    </div>;
     }
-    
+
+    var readdetail = null;
+    if(this.props.detail != true){
+        readdetail = <div className="d-flex">
+        <div className="read">
+        <Link to={'/detail/'+this.props.props} className="link font-medium">
+                        Read More Details</Link>
+        </div>
+    </div>;
+    }
     return (
         /*--------------------------------------------------------------------------------*/
         /* Used In Dashboard-4 [General]                                                  */
@@ -200,10 +221,7 @@ class Projects extends React.Component {
                     <CardTitle>{title}</CardTitle>
                         <CardSubtitle>by {username}</CardSubtitle></div>
                 </div>
-                    <div className="ml-auto d-flex no-block align-items-center">
-                        <div className="dl">
-                         </div>
-                    </div>
+                    {edit}
                 </div>
                 <div className="d-flex flex-sm-row">
                 <Badge className="mx-1" color="primary" pill>
@@ -239,12 +257,7 @@ class Projects extends React.Component {
                         
                     </tbody>
                 </Table>
-                <div className="d-flex">
-                    <div className="read">
-                    <Link to={'/detail/'+this.props.props} className="link font-medium">
-                                    Read More Details</Link>
-                    </div>
-                </div>
+                {readdetail}
                 </CardBody>
                 {review}
                             
