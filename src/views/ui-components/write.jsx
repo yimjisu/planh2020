@@ -12,23 +12,86 @@ import {
     Input,
     FormText
 } from 'reactstrap';
+import firebase from 'firebase';
+
 
 const Alerts = () => {
+    const [commonState, setCommonState] = useState({
+        title: '',
+        time: '',
+        level: '',
+    });
+
+    const handleCommonChange = (e) => setCommonState({
+        ...commonState,
+        [e.target.name]: [e.target.value],
+    })
+
     const blankTag = { tag: '' };
     const [tagState, setTagState] = useState([
-        { tag: ''},
+        { ...blankTag },
     ]);
     const addTag = () => {
         setTagState ([...tagState, {...blankTag}]);
     };
 
+    const handleTagChange = (e) => {
+        const updatedTags = [...tagState];
+        updatedTags[e.target.dataset.idx]["tag"] = e.target.value;
+        setTagState(updatedTags);
+    };
+    
+
+    const blankAction = {};
+    const [actionState, setActionState] = useState([
+        { ...blankAction },
+    ]);
+    const addAction = () => {
+        setActionState ([...actionState, {...blankAction}]);
+    };
+
+    const handleActionChange = (e) => {
+        const updatedActions = [...actionState];
+        updatedActions[e.target.dataset.idx][e.target.name] = e.target.value;
+        setActionState(updatedActions);
+    };
+
+
+    const handleWrite = (e) => {
+        e.preventDefault();
+        var firebase_root = firebase.database().ref().child('routineTest');
+        var pushed = firebase_root.push();
+        var pushRef = firebase_root.child(pushed.key);
+
+        pushed.set(commonState);
+        pushRef.child('routine').set(actionState);
+        pushRef.child('tag').set(tagState);
+        console.log("Pushed");
+    };
+   
+    
     return (
         <div>  
-            <Form>
+            <Form onSubmit={handleWrite}>
                 <FormGroup>
                     <Label for="title">Title of your Routine</Label>
-                    <Input type="text" name="title" id="routineTitle" placeholder="Write the title of your Routine" />
+                    <Input type="text" name="title" id="routineTitle" placeholder="Write the title of your Routine" onChange={handleCommonChange}/>
                 </FormGroup>
+                <FormGroup>
+                    <Label for="level">Level of hardness</Label>
+                    <Input type="select" name="level" id="levelSelect" onChange={handleCommonChange}>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    </Input>
+                </FormGroup>
+                <FormGroup>
+                    <Label for="time">Time needed for your routine</Label>
+                    <Input type="number" name="time" id="routineTitle" placeholder="Write in minutes" onChange={handleCommonChange}/>
+                </FormGroup>
+                <FormGroup>
                 <Input type="button" value="Add a New Tag" onClick={addTag}/>
                 {
                     tagState.map((val, idx) => {
@@ -41,19 +104,65 @@ const Alerts = () => {
                                 name={tagId}
                                 data-idx={idx}
                                 id={tagId}
-                                className="tag" 
+                                className="tag"
+                                placeholder = "Enter tag name"
+                                onChange={handleTagChange}
                               />
+                              <br></br>
+                            </div>
+                            
+                          );   
+                    })
+                }
+                </FormGroup>
+                <br></br><br></br>
+                <Input type="button" value="Add a New Action" onClick={addAction}/>
+                {
+                    actionState.map((val, idx) => {
+                        const actionId = `action-${idx}`;
+                        const infoId = `info-${idx}`;
+                        const timeId = `time-${idx}`;
+                        return (
+                            <div key={`action-${idx}`}>
+                              <Label htmlFor={actionId}>{`Name of action #${idx + 1}`}</Label>
+                              <Input
+                                type="text"
+                                name="action"
+                                data-idx={idx}
+                                id={actionId}
+                                placeholder = "Enter the name of your action"
+                                onChange={handleActionChange}
+                              />
+                                <Label htmlFor={infoId}>{`Specific steps of action #${idx + 1}`}</Label>
+                                <Input
+                                type="textarea"
+                                rows={Math.round(6)}
+                                name="info"
+                                data-idx={idx}
+                                id={infoId}
+                                placeholder = "Describe the information needed to go through your action."
+                                onChange={handleActionChange}
+                                />
+                                <Label htmlFor={timeId}>{`Time required for action #${idx + 1}`}</Label>
+                                <Input
+                                    type="number"
+                                    name="time"
+                                    data-idx={idx}
+                                    id={timeId}
+                                    placeholder = "Type time required for this action in minutes"
+                                    onChange={handleActionChange}
+                                />
+                                <br></br><br></br>
                             </div>
                           );   
                     })
                 }
-                
-                <FormGroup>
-                    <Label for="exampleText">Text Area</Label>
-                    <Input type="textarea" name="text" id="exampleText" />
-                </FormGroup>
                 <Input type="submit" value="Submit" />
             </Form>
+
+     
+           
+
             {/* --------------------------------------------------------------------------------*/}
             {/* End Inner Div*/}
             {/* --------------------------------------------------------------------------------*/}
