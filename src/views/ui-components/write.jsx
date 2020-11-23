@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import firebase from 'firebase';
 
+
 const Alerts = () => {
     const [commonState, setCommonState] = useState({
         title: '',
@@ -39,14 +40,6 @@ const Alerts = () => {
         updatedTags[e.target.dataset.idx]["tag"] = e.target.value;
         setTagState(updatedTags);
     };
-   
-    const handleWrite = (e) => {
-        e.preventDefault();
-        console.log("submitted");
-        console.log(tagState);
-        console.log(commonState);
-        console.log(actionState);
-    };
     
 
     const blankAction = {};
@@ -62,13 +55,27 @@ const Alerts = () => {
         updatedActions[e.target.dataset.idx][e.target.name] = e.target.value;
         setActionState(updatedActions);
     };
+
+
+    const handleWrite = (e) => {
+        e.preventDefault();
+        var firebase_root = firebase.database().ref().child('routineTest');
+        var pushed = firebase_root.push();
+        var pushRef = firebase_root.child(pushed.key);
+
+        pushed.set(commonState);
+        pushRef.child('routine').set(actionState);
+        pushRef.child('tag').set(tagState);
+        console.log("Pushed");
+    };
    
+    
     return (
         <div>  
             <Form onSubmit={handleWrite}>
                 <FormGroup>
                     <Label for="title">Title of your Routine</Label>
-                    <Input type="text" name="title" id="routineTitle" placeholder="Write the title of your Routine" bsClass="" onChange={handleCommonChange}/>
+                    <Input type="text" name="title" id="routineTitle" placeholder="Write the title of your Routine" onChange={handleCommonChange}/>
                 </FormGroup>
                 <FormGroup>
                     <Label for="level">Level of hardness</Label>
@@ -82,7 +89,7 @@ const Alerts = () => {
                 </FormGroup>
                 <FormGroup>
                     <Label for="time">Time needed for your routine</Label>
-                    <Input type="number" name="time" id="routineTitle" placeholder="Write in minutes" bsClass="" onChange={handleCommonChange}/>
+                    <Input type="number" name="time" id="routineTitle" placeholder="Write in minutes" onChange={handleCommonChange}/>
                 </FormGroup>
                 <FormGroup>
                 <Input type="button" value="Add a New Tag" onClick={addTag}/>
@@ -123,7 +130,6 @@ const Alerts = () => {
                                 name="action"
                                 data-idx={idx}
                                 id={actionId}
-                                bsClass=""
                                 placeholder = "Enter the name of your action"
                                 onChange={handleActionChange}
                               />
@@ -133,7 +139,6 @@ const Alerts = () => {
                                 rows={Math.round(6)}
                                 name="info"
                                 data-idx={idx}
-                                bsClass=""
                                 id={infoId}
                                 placeholder = "Describe the information needed to go through your action."
                                 onChange={handleActionChange}
@@ -143,7 +148,6 @@ const Alerts = () => {
                                     type="number"
                                     name="time"
                                     data-idx={idx}
-                                    bsClass=""
                                     id={timeId}
                                     placeholder = "Type time required for this action in minutes"
                                     onChange={handleActionChange}
