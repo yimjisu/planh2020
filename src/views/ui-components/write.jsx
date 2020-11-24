@@ -113,7 +113,7 @@ const Alerts = (props) => {
                     <Input type="number" name="time" id="routineTitle" placeholder="Write in minutes" onChange={handleCommonChange}/>
                 </FormGroup>
                 <FormGroup>
-                <Input type="button" value="Add a New Tag" onClick={addTag}/>
+                <h4>Add your tag</h4>
                 {
                     tagState.map((val, idx) => {
                         const tagId = `tag-${idx}`;
@@ -135,9 +135,12 @@ const Alerts = (props) => {
                           );   
                     })
                 }
+                <Input type="button" value="Add a New Tag" onClick={addTag}/>
                 </FormGroup>
                 <br></br><br></br>
-                <Input type="button" value="Add a New Action" onClick={addAction}/>
+                <FormGroup>
+                <h4>Write your Routine</h4>
+                
                 {
                     actionState.map((val, idx) => {
                         const actionId = `action-${idx}`;
@@ -178,6 +181,10 @@ const Alerts = (props) => {
                           );   
                     })
                 }
+                <Input type="button" value="Add a New Action" onClick={addAction}/>
+                </FormGroup>
+
+                <h4>Now your done! Submit now</h4>
                 <Input type="submit" value="Submit" />
             </Form>
 

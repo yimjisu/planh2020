@@ -20,9 +20,19 @@ var firebaseConfig = {
     measurementId: "G-VP2PL0V7Y8"
   };
   firebase.initializeApp(firebaseConfig);
-  
-ReactDOM.render(
+  import ThemeRoutes from './routes/routing.jsx';
+  firebase.auth().onAuthStateChanged(user => {
+    if(user){
+        ThemeRoutes[n]['name'] = 'Logout';
+        ThemeRoutes[n]['icon'] = 'mdi mdi-logout';
+        uid = user.uid;
+    }else{
+        ThemeRoutes[n]['name'] = 'LogIn';
+        ThemeRoutes[n]['icon'] = 'mdi mdi-login';
+    }
+});
 
+ReactDOM.render(
     <HashRouter>
         <Switch>
             {indexRoutes.map((prop, key) => {

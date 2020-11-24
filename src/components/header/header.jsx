@@ -31,10 +31,6 @@ import logodarktext from '../../assets/images/logo-text.png';
 import logolighttext from '../../assets/images/logo-light-text.png';
 import profilephoto from '../../assets/images/users/1.jpg';
 
-import recomm_tag from '../../assets/images/search/recomm_tag.png';
-import recomm_lev from '../../assets/images/search/recomm_lev.png';
-
-
 class BadgeList extends React.Component{
     constructor(props) {
         super(props)
@@ -314,7 +310,7 @@ class Header extends React.Component{
                                 {/*--------------------------------------------------------------------------------*/}
                                 {/* Start Search-box toggle                                                        */}
                                 {/*--------------------------------------------------------------------------------*/}
-                                <NavItem className="hidden-sm-down search-box">
+                                <NavItem className="search-box">
                                     {!window.location.href.includes('queried') ?
                                         <div>
                                             <NavLink
