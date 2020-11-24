@@ -15,7 +15,7 @@ import {
 import firebase from 'firebase';
 
 
-const Alerts = () => {
+const Alerts = (props) => {
     const [commonState, setCommonState] = useState({
         title: '',
         time: '',
@@ -62,6 +62,10 @@ const Alerts = () => {
         var firebase_root = firebase.database().ref().child('routine');
         var pushed = firebase_root.push();
         var pushRef = firebase_root.child(pushed.key);
+        if(firebase.auth().currentUser == null){
+            alert('login first!');
+            return;
+        }
         var currentUid = firebase.auth().currentUser.uid;
         var tagRef = firebase.database().ref().child('tag');
         
@@ -84,7 +88,8 @@ const Alerts = () => {
         pushRef.child('routine').set(actionState);
         pushRef.child('name').set("Exercise Noob");
         console.log("Pushed");
-        window.open("/");
+        props.history.replace('/');
+        //window.open("/");
     };
    
     
