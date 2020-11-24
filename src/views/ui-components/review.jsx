@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import ReactDOM, { render } from 'react-dom'
+import { Route, Link } from 'react-router-dom';
 import firebase from 'firebase';
 import { SalesSummary, Projects, Feeds, SocialCards } from '../../components/dashboard-components';
 import
@@ -219,11 +220,38 @@ const onClickLikeHandler = (isComment,isLike,key, rootKey) => {
 class ButtonToggle extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
+      console.log(this.props.userid);
+      console.log(this.props.keyval);
+      var temp_likePressed = false;
+    var temp_dislikePressed = false;
+       var user = firebase.auth().currentUser;
+       var ref_pressed = null;
+       if (user!=null){
+           ref_pressed = firebase.database().ref().child('userinfo').child(user.displayName).child(this.props.keyval);
+       } //need review key
+        var ref_temp_press;
+        if(this.props.isComment && ref_pressed != null){
+            ref_temp_press = ref_pressed.child("comment");
+        }else{
+            ref_temp_press = ref_pressed.child("suggestion");
+        }
+        if(ref_temp_press!=null){
+            ref_temp_press.on('value',snap=>{
+                var val = snap.val();
+                console.log(val);
+                if(val!=null){
+                    //comment like pressed
+                    temp_likePressed = val;
+                    temp_dislikePressed = !temp_likePressed;
+                }
+            })
+        }
+        this.state = {
         isComment: this.props.isComment,
         keyval: this.props.keyval,
-        likePressed : false,
-        dislikePressed : false,
+        likePressed : temp_likePressed,
+        dislikePressed : temp_dislikePressed,
+        userid : this.props.userid
       }
       this.onClickLikeHandler = this.onClickLikeHandler.bind(this);
     }
@@ -252,9 +280,14 @@ class ButtonToggle extends React.Component {
             ref_like = ref_root.child('suggestion').child('like')
             ref_dislike = ref_root.child('suggestion').child('dislike');
         }
-        /*var ref_pressed = firebase.database().ref().child('userinfo').child(this.state.userid).child('-MMZTiR3gBd4Fwd1i2cP').child(''); //need review key
-        if this.isComment 
-        */
+        var user = firebase.auth().currentUser;
+        var ref_pressed_root = null;
+        if (user!=null){
+           ref_pressed_root = firebase.database().ref().child('userinfo').child(user.displayName).child(this.props.keyval);
+        } 
+        var ref_pressed = null;
+        if(ref_pressed_root != null)
+            ref_pressed = this.state.isComment ? ref_pressed_root.child("comment") : ref_pressed_root.child("suggestion");
         if(isLike){
             if(this.state.likePressed){
                 //-1 0
@@ -265,7 +298,9 @@ class ButtonToggle extends React.Component {
                 ref_like.set(val-1);
                 this.setState({likePressed : false, dislikePressed : false});
                 //remove from firebase
-                //ref_pressed.remove()
+                if(ref_pressed!=null){
+                    ref_pressed.remove()
+                }
             }else{
                 if(this.state.dislikePressed){
                     // +1 -1
@@ -288,6 +323,7 @@ class ButtonToggle extends React.Component {
                 }
                 this.setState({likePressed : true, dislikePressed : false});
                 //add to firebase
+                ref_pressed.set(true)
                 //ref_pressed.set({likePressed : true, dislikePressed : false});
             }
         }else{
@@ -300,7 +336,9 @@ class ButtonToggle extends React.Component {
                 ref_dislike.set(val-1);
                 this.setState({likePressed : false, dislikePressed : false});
                 //remove from firebase
-                //ref_pressed.remove()
+                if(ref_pressed!=null){
+                    ref_pressed.remove()
+                }
             }else{
                 if(this.state.likePressed){
                     //-1 +1
@@ -323,15 +361,42 @@ class ButtonToggle extends React.Component {
                     //add to firebase
                     //ref_pressed.set({slikePressed : false});
                 }
+                ref_pressed.set(false)
                 this.setState({likePressed : false, dislikePressed : true});
             }
+        }
+    }
+
+    componentDidMount(){
+        var user = firebase.auth().currentUser;
+        var ref_pressed = null;
+        if (user!=null){
+           ref_pressed = firebase.database().ref().child('userinfo').child(user.displayName).child(this.props.keyval);
+        } //need review key
+        var ref_temp_press;
+        if(this.props.isComment && ref_pressed != null){
+            ref_temp_press = ref_pressed.child("comment");
+        }else{
+            ref_temp_press = ref_pressed.child("suggestion");
+        }
+        if(ref_temp_press!=null){
+            ref_temp_press.on('value',snap=>{
+                var val = snap.val();
+                console.log(val);
+                if(val!=null){
+                    //comment like pressed
+                    this.setState({ likePressed : val,
+                    dislikePressed : !val, });
+                }
+            })
         }
     }
 
     render() {
         var like_bg = this.state.likePressed ? "blue" : "";
         var dislike_bg = this.state.dislikePressed ? "red" : "";
-
+        console.log(this.state.likePressed);
+        console.log(this.state.dislikePressed);
         return (
             <div>
                 <a className="link mr-2" id="TooltipExample2"
@@ -395,7 +460,7 @@ const ReviewDisptab = (props) => {
                         <ButtonToggle 
                         tooltipOpen2={tooltipOpen2} toggle2={toggle2.bind(null)}
                         tooltipOpen3={tooltipOpen3} toggle3={toggle3.bind(null)}
-                        likeval={props.clike} dislikeval={props.cdislike} keyval={props.keyval} isComment={true} rootKey={props.rout_key}/>
+                        likeval={props.clike} dislikeval={props.cdislike} keyval={props.keyval} isComment={true} rootKey={props.rout_key} userid={props.userid}/>
                         <a className="link mr-2" id="TooltipExample"
                          onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>
                                     <i className="mdi mdi-alert-circle" />
@@ -424,7 +489,7 @@ const ReviewDisptab = (props) => {
                     <ButtonToggle 
                         tooltipOpen2={tooltipOpen2} toggle2={toggle2.bind(null)}
                         tooltipOpen3={tooltipOpen3} toggle3={toggle3.bind(null)}
-                        likeval={props.slike} dislikeval={props.sdislike} keyval={props.keyval} isComment={false} rootKey={props.rout_key}/>
+                        likeval={props.slike} dislikeval={props.sdislike} keyval={props.keyval} isComment={false} rootKey={props.rout_key} userid={props.userid}/>
                         <a className="link mr-2" id="TooltipExample"
                          onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>
                                     <i className="mdi mdi-alert-circle" />
@@ -542,7 +607,8 @@ const Reviewtab = (props) => {
             rate : [1,1,1,1,1],
             comment : '',
             suggestion : '',
-            refRoot : null
+            refRoot : null,
+            userid : '',
         }
         this.reference = {};
         console.log(this.state);
@@ -556,6 +622,7 @@ const Reviewtab = (props) => {
         var user = firebase.auth().currentUser;
         if(user){
             this.state.name = user.displayName;
+            this.state.userid = user.uid;
         }
         this.state.refRoot = firebase.database().ref().child('routine').child(this.props.match.params.key);
         /*
@@ -641,7 +708,7 @@ const Reviewtab = (props) => {
                             <input id="input-name" value={this.state.name} style={{display:"none"}}/>
                             <span><CardTitle id="username">{this.state.name}</CardTitle></span>
                         </div>
-                        <Reviewtab refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true}/>
+                        <Reviewtab refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true} userid={this.state.userid}/>
                     </CardBody>
                 </Col>
             </Row>
@@ -721,6 +788,9 @@ class Review_Card extends React.Component{
             sdislike : this.props.data.sdislike,
             keyval : this.props.keyval,
         };
+        console.log(this.props.data.rate);
+        console.log(this.props.data.comment);
+        console.log(this.props.data.suggestion);
         var shoulddisp = true;
         if (this.props.sortop == 1 && this.state.comment.length==0 && !this.props.empty){
             shoulddisp = false;
@@ -758,12 +828,21 @@ class Review_Card extends React.Component{
                             <CardBody>
                                     {   this.props.userid == this.state.name ? (
                                     <div class="pull-right">
-                                        <Button>Modify</Button>                                    
+                                        <Button disabled="true"><Link to={{ pathname : '/reviewWrite/'+this.props.rootKey+'/'+false,
+                                        state : {
+                                            rate : this.state.rate,
+                                            comment : this.state.comment,
+                                            suggestion : this.state.suggestion,
+                                            is_edit : true,
+                                            rev_key : this.state.keyval
+                                        }
+                                        }}>
+                                        Edit</Link></Button>                                    
                                         <Button onClick={()=>{onClickDeleteHandler(this.props.keyval, this.props.rootKey)}}>Delete</Button>
                                     </div>
                                     ) : <div></div>}
                             
-                            <ReviewDisptab comment={this.state.comment} sortop={this.props.sortop} rout_key={this.props.rootKey} keyval={this.state.keyval} clike={this.state.clike} cdislike={this.state.cdislike} suggestion={this.state.suggestion} slike={this.state.slike} sdislike={this.state.sdislike}/>
+                            <ReviewDisptab comment={this.state.comment} userid={this.props.userid} sortop={this.props.sortop} rout_key={this.props.rootKey} keyval={this.state.keyval} clike={this.state.clike} cdislike={this.state.cdislike} suggestion={this.state.suggestion} slike={this.state.slike} sdislike={this.state.sdislike}/>
                                         </CardBody>
                         </Col>
                     </Row>
@@ -957,11 +1036,15 @@ class Cards extends React.Component{
     constructor(props){
         super(props);
         this._isMounted = false;
+        var temp_userid = '';
+        if(firebase.auth().currentUser!=null){
+            temp_userid = firebase.auth().currentUser.displayName;
+        }
         this.state = {
             myreview : [],
             mydatas : [],
-            userid : '2YLAW71rCFbpWe2WOz9al0n1Fvh1'
-        };
+            userid : temp_userid
+        }
     }
     componentWillUnmount() {
 		this._isMounted = false;
