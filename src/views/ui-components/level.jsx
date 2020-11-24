@@ -21,7 +21,7 @@ import {
 } from 'reactstrap';
 
 import firebase from 'firebase';
-import { Projects } from 'components/dashboard-components';
+import { Projects } from '../../components/dashboard-components';
 
 var STATE = {CHECKING: 0, QUERIED: 1};
 
