@@ -221,15 +221,19 @@ class ButtonToggle extends React.Component {
       var temp_likePressed = false;
     var temp_dislikePressed = false;
        var user = firebase.auth().currentUser;
+       
        var ref_pressed = null;
+       
        if (user!=null){
            ref_pressed = firebase.database().ref().child('userinfo').child(user.displayName).child(this.props.keyval);
        } //need review key
         var ref_temp_press;
-        if(this.props.isComment && ref_pressed != null){
-            ref_temp_press = ref_pressed.child("comment");
-        }else{
-            ref_temp_press = ref_pressed.child("suggestion");
+        if(ref_pressed != null){
+            if(this.props.isComment){
+                ref_temp_press = ref_pressed.child("comment");
+            }else{
+                ref_temp_press = ref_pressed.child("suggestion");
+            }
         }
         if(ref_temp_press!=null){
             ref_temp_press.on('value',snap=>{
@@ -369,11 +373,12 @@ class ButtonToggle extends React.Component {
            ref_pressed = firebase.database().ref().child('userinfo').child(user.displayName).child(this.props.keyval);
         } //need review key
         var ref_temp_press;
+        if(ref_pressed != null){
         if(this.props.isComment && ref_pressed != null){
             ref_temp_press = ref_pressed.child("comment");
         }else{
             ref_temp_press = ref_pressed.child("suggestion");
-        }
+        }}
         if(ref_temp_press!=null){
             ref_temp_press.on('value',snap=>{
                 var val = snap.val();

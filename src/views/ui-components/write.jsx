@@ -95,7 +95,7 @@ class Alerts extends React.Component {
         var title = document.getElementById('routineTitle').value;
         var level = document.getElementById('levelSelect').value;
         var time = document.getElementById('routineTime').value;
-        console.log('time', time);
+
         if(user == null){
             alert('login first!');
             return;
@@ -130,7 +130,7 @@ class Alerts extends React.Component {
         pushRef = firebase_root.child(pushed.key);
         key = pushed.key
         }
-        console.log(pushRef);
+        
         var currentUid = firebase.auth().currentUser.uid;
         var tagRef = firebase.database().ref().child('tag');
         
@@ -253,7 +253,7 @@ class Alerts extends React.Component {
                                     data-idx={idx}
                                     id={timeId}
                                     placeholder = "Type time required for this action in minutes"
-                                    defaultvalue={val['time']}
+                                    defaultValue={val['time']}
                                 />
                                 <br></br><br></br>
                             </div>

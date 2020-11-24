@@ -49,7 +49,6 @@ class Projects extends React.Component {
         this._isMounted = true;
         var ref = firebase.database().ref().child('routine');
         var routineRef = ref.child(this.props.props);
-        console.log(routineRef);
         routineRef.on('value', snap=>{
             var val = snap.val();
             if(val!=null & this._isMounted){
@@ -86,7 +85,6 @@ class Projects extends React.Component {
                         reviewname = r['name'];
                         reviewtext = r[text]['text'];
                         score = r[text]['like'] - r[text]['dislike'];
-                        console.log('score', score);
                     }}
                    }}
                    this.setState({
@@ -164,20 +162,20 @@ class Projects extends React.Component {
     }
 
     noreview(){
-        var writereview = null;
+    var writereview = null;
     if(this.props.my != true){
-        writereview = <div className="ml-4">
-        <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} className="link font-medium">
-        <i className="mdi mdi-pencil mr-1"/>
-            Write</Link></div>;
-    }
+        writereview =
+        <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} 
+                className="link font-small float-right">
+                <i className="mdi mdi-pencil mr-1"/>
+                    Write</Link>}
         return(
             <CardFooter body inverse color="info">
                 
                 <CardTitle>
                 No Reviews
-
                 {writereview}
+                
                 </CardTitle>
                 
             </CardFooter>
@@ -197,7 +195,6 @@ class Projects extends React.Component {
     else{
         routine = routine.slice(0, 2);
     }
-    console.log(title, this.props.detail, routine);
 
     var reviewname = this.state.reviewname;
     var review = null;
@@ -208,7 +205,7 @@ class Projects extends React.Component {
         review = <this.review/>
     }}
     var edit = null;
-    if(this.props.my){
+    if(this.props.my == true){
         edit = <div className="ml-auto d-flex no-block align-items-center">
         <div className="dl">
         <Link to={'/write/'+this.props.props} 
