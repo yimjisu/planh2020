@@ -31,6 +31,10 @@ import logodarktext from '../../assets/images/logo-text.png';
 import logolighttext from '../../assets/images/logo-light-text.png';
 import profilephoto from '../../assets/images/users/1.jpg';
 
+import recomm_tag from '../../assets/images/search/recomm_tag.png';
+import recomm_lev from '../../assets/images/search/recomm_lev.png';
+
+
 class BadgeList extends React.Component{
     constructor(props) {
         super(props)
@@ -310,7 +314,7 @@ class Header extends React.Component{
                                 {/*--------------------------------------------------------------------------------*/}
                                 {/* Start Search-box toggle                                                        */}
                                 {/*--------------------------------------------------------------------------------*/}
-                                <NavItem className="search-box">
+                                <NavItem className="hidden-sm-down search-box">
                                     {!window.location.href.includes('queried') ?
                                         <div>
                                             <NavLink
@@ -347,7 +351,7 @@ class Header extends React.Component{
                                                     </Form>
                                                     {this.state.recomm_tags.length >= 1 ? <RecommList recomm_tags={this.state.recomm_tags} function={this.pushTags}/> : null}
                                                 </div>
-                                                <Link to={"/ui-components/queried?" + this.state.mintime + "&" + this.state.maxtime + "&" + this.state.level + this.state.result_tag}>
+                                                <Link to={"/queried/" + this.state.mintime + "&" + this.state.maxtime + "&" + this.state.level + this.state.result_tag}>
                                                     <button className="btn-link search-btn" onClick={this.toggleMenu.bind(null)}>
                                                         <i className="ti-search" />
                                                     </button>

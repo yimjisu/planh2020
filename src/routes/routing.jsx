@@ -23,7 +23,39 @@ import Session from '../views/ui-components/session.jsx';
 import Review from '../views/ui-components/review.jsx';
 import Detail from '../views/ui-components/detail.jsx';
 import Alert from '../views/ui-components/write.jsx';
+import Queried from '../views/ui-components/queried.jsx';
 
+import firebase from 'firebase';
+var firebaseConfig = {
+  apiKey: "AIzaSyCrM4HePxX_a7PukmLZGb8TjsKUJR-Ut_s",
+  authDomain: "planh-67172.firebaseapp.com",
+  databaseURL: "https://planh-67172.firebaseio.com",
+  projectId: "planh-67172",
+  storageBucket: "planh-67172.appspot.com",
+  messagingSenderId: "596466420883",
+  appId: "1:596466420883:web:9dcc0ef3bb814ae7fc5166",
+  measurementId: "G-VP2PL0V7Y8"
+};
+firebase.initializeApp(firebaseConfig);
+
+var name = null;
+var icon = null;
+firebase.auth().onAuthStateChanged(user => {
+  if(user){
+      name = 'Logout';
+      icon = 'mdi mdi-logout';
+  }else{
+      name = 'LogIn';
+      icon = 'mdi mdi-login';
+  }
+});
+if(firebase.auth().currentUser){
+  name = 'Logout';
+  icon = 'mdi mdi-logout';
+}else{
+  name = 'LogIn';
+  icon = 'mdi mdi-login';
+}
  
 var ThemeRoutes = [
   {
@@ -43,14 +75,15 @@ var ThemeRoutes = [
     component: Write
   },{
     path: '/ui-components/session',
-    name: 'Login',
-    icon: 'mdi mdi-login',
+    name: name,
+    icon: icon,
     component: Session
   },
   {path: '/reviewRead/:key/:my', component: Cards},
   {path: '/reviewWrite/:key/:my', component: ReviewWrite},
   {path: '/detail/:key', component: Detail},
   {path: '/write/:key', component: Alert},
+  {path: '/queried/:key',exact:true,component: Queried},
   {
     path: '/',
     pathTo: '/starter/starter',

@@ -1,23 +1,17 @@
 {
   "files": {
-<<<<<<< Updated upstream
-    "main.css": "/static/css/main.cf1f78e2.chunk.css",
-    "main.js": "/static/js/main.6d7ff221.chunk.js",
-    "main.js.map": "/static/js/main.6d7ff221.chunk.js.map",
-=======
     "main.css": "/static/css/main.bc16b62c.chunk.css",
-    "main.js": "/static/js/main.66a54545.chunk.js",
-    "main.js.map": "/static/js/main.66a54545.chunk.js.map",
->>>>>>> Stashed changes
+    "main.js": "/static/js/main.1d9b5eb0.chunk.js",
+    "main.js.map": "/static/js/main.1d9b5eb0.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.1f667310.js",
     "runtime-main.js.map": "/static/js/runtime-main.1f667310.js.map",
     "static/css/2.a66750a8.chunk.css": "/static/css/2.a66750a8.chunk.css",
-    "static/js/2.258f1689.chunk.js": "/static/js/2.258f1689.chunk.js",
-    "static/js/2.258f1689.chunk.js.map": "/static/js/2.258f1689.chunk.js.map",
+    "static/js/2.0183733c.chunk.js": "/static/js/2.0183733c.chunk.js",
+    "static/js/2.0183733c.chunk.js.map": "/static/js/2.0183733c.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.a66750a8.chunk.css.map": "/static/css/2.a66750a8.chunk.css.map",
-    "static/css/main.cf1f78e2.chunk.css.map": "/static/css/main.cf1f78e2.chunk.css.map",
-    "static/js/2.258f1689.chunk.js.LICENSE.txt": "/static/js/2.258f1689.chunk.js.LICENSE.txt",
+    "static/css/main.bc16b62c.chunk.css.map": "/static/css/main.bc16b62c.chunk.css.map",
+    "static/js/2.0183733c.chunk.js.LICENSE.txt": "/static/js/2.0183733c.chunk.js.LICENSE.txt",
     "static/media/1.5ef00eb8.jpg": "/static/media/1.5ef00eb8.jpg",
     "static/media/2.d07e374a.jpg": "/static/media/2.d07e374a.jpg",
     "static/media/3.04d01d59.jpg": "/static/media/3.04d01d59.jpg",
@@ -26,22 +20,14 @@
     "static/media/img1.c25eaa28.jpg": "/static/media/img1.c25eaa28.jpg",
     "static/media/img2.a6b3a67a.jpg": "/static/media/img2.a6b3a67a.jpg",
     "static/media/img3.1e68e30f.jpg": "/static/media/img3.1e68e30f.jpg",
-    "static/media/img4.df236c59.jpg": "/static/media/img4.df236c59.jpg",
-    "static/media/img5.4beb2786.jpg": "/static/media/img5.4beb2786.jpg",
-    "static/media/img5.7ca31843.jpg": "/static/media/img5.7ca31843.jpg",
-    "static/media/img6.3c9d9f36.jpg": "/static/media/img6.3c9d9f36.jpg"
+    "static/media/recomm_lev.bfb970bd.png": "/static/media/recomm_lev.bfb970bd.png",
+    "static/media/recomm_tag.aef364e2.png": "/static/media/recomm_tag.aef364e2.png"
   },
   "entrypoints": [
     "static/js/runtime-main.1f667310.js",
     "static/css/2.a66750a8.chunk.css",
-<<<<<<< Updated upstream
-    "static/js/2.258f1689.chunk.js",
-    "static/css/main.cf1f78e2.chunk.css",
-    "static/js/main.6d7ff221.chunk.js"
-=======
     "static/js/2.0183733c.chunk.js",
     "static/css/main.bc16b62c.chunk.css",
-    "static/js/main.66a54545.chunk.js"
->>>>>>> Stashed changes
+    "static/js/main.1d9b5eb0.chunk.js"
   ]
 }

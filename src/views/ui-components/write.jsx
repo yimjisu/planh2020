@@ -59,26 +59,48 @@ const Alerts = (props) => {
 
     const handleWrite = (e) => {
         e.preventDefault();
-        var firebase_root = firebase.database().ref().child('routine');
-        var pushed = firebase_root.push();
-        var pushRef = firebase_root.child(pushed.key);
+
         if(firebase.auth().currentUser == null){
             alert('login first!');
             return;
         }
+        var commonValues = ['level', 'time', 'title'].map(el => commonState[el]);
+        if(commonValues[2][0] == null){
+            alert('Fill in the title!');
+            return;
+        }
+        if (commonValues[1][0] == null){
+            alert('Fill in the time!');
+            return;
+        }        
+        for(var i = 0; i < tagState.length; i++){
+            if(typeof tagState[i] != 'string'){
+                alert('Fill in the tag!');
+                return;
+            }
+        }
+        console.log(commonValues);
+        if(commonValues[0][0] == null) commonValues[0] = ['low'];
+
+        var firebase_root = firebase.database().ref().child('routine');
+        var pushed = firebase_root.push();
+        var pushRef = firebase_root.child(pushed.key);
+        
         var currentUid = firebase.auth().currentUser.uid;
         var tagRef = firebase.database().ref().child('tag');
         
         console.log(tagState);
         for(var i = 0; i < tagState.length; i++){
-            tagRef.child(tagState[i]).push(pushed.key);
+            if(typeof tagState[i] == 'string') tagRef.child(tagState[i]).push(pushed.key);
         }
-        var commonValues = ['level', 'time', 'title'].map(el => commonState[el]);
+        
+        
         pushRef.child('tag').set({
             level: commonValues[0][0],
             time: commonValues[1][0],
             tag: tagState
         });
+        
 
 
         console.log(commonState["level"]);
@@ -91,7 +113,6 @@ const Alerts = (props) => {
         props.history.replace('/');
         //window.open("/");
     };
-   
     
     return (
         <div>  

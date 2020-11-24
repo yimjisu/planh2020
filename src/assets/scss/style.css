@@ -12956,13 +12956,13 @@ Preloader
 
 .search-box .app-search {
     position: absolute;
-    height: 200px;
+    height: 250px;
     background-color: var(--white);
     margin-right: 0px;
     display: block;
     z-index: 110;
     width: 100%;
-    top: -1px;
+    top: 70px;
     box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
     display: none;
     left: 0px;
@@ -12993,16 +12993,198 @@ Preloader
     top: 170px;
     cursor: pointer;
     background: #fff;
-    width: 15px;
-    height: 15px;
+    width: 30px;
+    height: 30px;
     right: 50%;
-    font-size: 14px;
+    font-size: 50px;
+    border: 0;
+}
+
+.search-box .app-search .time-fnt {
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    border: 0;
+    font-size: 24px
+}
+
+.search-box .app-search .time-input {
+    position: absolute;
+    top: 15px;
+    left: 140px;
+    width: 65px;
+    min-height: 50px;
+    border-radius: 0px;
+    font-size: 17px;
+    transition: 0.5s ease-in;
+}
+
+.search-box .app-search .time-fnt2 {
+    position: absolute;
+    top: 30px;
+    left: 220px;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .time-fnt3 {
+    position: absolute;
+    top: 30px;
+    left: 270px;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .time-input2 {
+    position: absolute;
+    top: 15px;
+    left: 300px;
+    width: 65px;
+    min-height: 50px;
+    border-radius: 0px;
+    font-size: 17px;
+    transition: 0.5s ease-in;
+}
+
+.search-box .app-search .time-fnt4 {
+    position: absolute;
+    top: 30px;
+    left: 380px;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .level-fnt {
+    position: absolute;
+    top: 125px;
+    left: 30px;
+    border: 0;
+    font-size: 24px
+}
+
+.search-box .app-search .low-btn-act {
+    position: absolute;
+    top: 115px;
+    left: 150px;
+    width: 80px;
+    background: #c4c4c4;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .low-btn {
+    position: absolute;
+    top: 115px;
+    left: 150px;
+    width: 80px;
+    background: #7e7e7e;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .mid-btn-act {
+    position: absolute;
+    top: 115px;
+    left: 230px;
+    width: 100px;
+    background: #c4c4c4;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .mid-btn {
+    position: absolute;
+    top: 115px;
+    left: 230px;
+    width: 100px;
+    background: #7e7e7e;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .high-btn-act {
+    position: absolute;
+    top: 115px;
+    left: 330px;
+    width: 80px;
+    background: #c4c4c4;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .high-btn {
+    position: absolute;
+    top: 115px;
+    left: 330px;
+    width: 80px;
+    background: #7e7e7e;
+    border: 0;
+    font-size: 20px
+}
+
+.search-box .app-search .tag-fnt {
+    position: absolute;
+    top: 25px;
+    left: 53%;
+    border: 0;
+    font-size: 24px
+}
+
+.search-box .app-search .tag-input {
+    position: absolute;
+    top: 100px;
+    left: 55%;
+    width: 30%;
+    min-height: 70px;
+    border-radius: 0px;
+    font-size: 17px;
+    transition: 0.5s ease-in;
+}
+
+.search-box .app-search .level-btn {
+    position: absolute;
+    top: 85px;
+    cursor: pointer;
+    right: 15%;
+    border: 0;
+}
+
+.search-box .app-search .tag-btn {
+    position: absolute;
+    top: 85px;
+    cursor: pointer;
+    right: 65%;
     border: 0;
 }
 
 .search-box .app-search.show-search {
     display: block;
 }
+
+.recommlist {
+    position: absolute;
+    top: 170px;
+    width: 30%;
+    left: 55%
+}
+
+.recommtag {
+    top: 0px;
+    left: 0px;
+    height: 50px;
+    width: 100%;
+    font-size: 17px;
+    background: #eaeaea;
+    color: #000
+}
+
+.taglist {
+    position: absolute;
+    top: 25px;
+    width: 20%;
+    left: 65%
+}
+
 
 /*******************
 Megamenu

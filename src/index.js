@@ -7,30 +7,9 @@ import { HashRouter } from 'react-router-dom'
 import firebase from 'firebase';
 
 import './assets/scss/style.css';
+import ThemeRoutes from './routes/routing.jsx';
 
 //const hist = createBrowserHistory();
-var firebaseConfig = {
-    apiKey: "AIzaSyCrM4HePxX_a7PukmLZGb8TjsKUJR-Ut_s",
-    authDomain: "planh-67172.firebaseapp.com",
-    databaseURL: "https://planh-67172.firebaseio.com",
-    projectId: "planh-67172",
-    storageBucket: "planh-67172.appspot.com",
-    messagingSenderId: "596466420883",
-    appId: "1:596466420883:web:9dcc0ef3bb814ae7fc5166",
-    measurementId: "G-VP2PL0V7Y8"
-  };
-  firebase.initializeApp(firebaseConfig);
-  import ThemeRoutes from './routes/routing.jsx';
-  firebase.auth().onAuthStateChanged(user => {
-    if(user){
-        ThemeRoutes[n]['name'] = 'Logout';
-        ThemeRoutes[n]['icon'] = 'mdi mdi-logout';
-        uid = user.uid;
-    }else{
-        ThemeRoutes[n]['name'] = 'LogIn';
-        ThemeRoutes[n]['icon'] = 'mdi mdi-login';
-    }
-});
 
 ReactDOM.render(
     <HashRouter>
