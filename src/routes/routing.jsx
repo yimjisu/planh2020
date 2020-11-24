@@ -47,14 +47,12 @@ var ThemeRoutes = [
     name: 'Login',
     icon: 'mdi mdi-login',
     component: Session
-  },{
-    path: '/ui-components/queried',
-    component: Queried
   },
   {path: '/reviewRead/:key/:my', component: Cards},
   {path: '/reviewWrite/:key/:my', component: ReviewWrite},
   {path: '/detail/:key', component: Detail},
   {path: '/write/:key', component: Alert},
+  {path: '/queried/:key',exact:true,component: Queried},
   {
     path: '/',
     pathTo: '/starter/starter',

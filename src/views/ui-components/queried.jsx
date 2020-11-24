@@ -21,7 +21,7 @@ import {
 } from 'reactstrap';
 
 import firebase from 'firebase';
-import { Projects } from 'components/dashboard-components';
+import { Projects } from '../../components/dashboard-components';
 
 var STATE = {CHECKING: 0, QUERIED: 1};
 
@@ -44,7 +44,7 @@ class Queried extends React.Component{
 
     componentDidMount () {
         this._isMounted = true;
-        var param = window.location.href.split('?');
+        var param = window.location.href.split('/');
 
         param = param[param.length - 1].split('&');
 
