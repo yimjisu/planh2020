@@ -200,7 +200,7 @@ class Projects extends React.Component {
     if(this.props.my){
         edit = <div className="ml-auto d-flex no-block align-items-center">
         <div className="dl">
-        <Link to={'/write/'+this.props.props} 
+        <Link to={'/edit/'+this.props.props} 
 className="link font-small float-right">
 <i className="mdi mdi-tooltip-edit mr-1"/>
     Edit</Link>

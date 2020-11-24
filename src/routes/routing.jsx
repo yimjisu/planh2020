@@ -12,6 +12,7 @@ import LayoutComponent from '../views/ui-components/layout.jsx';
 import PaginationComponent from '../views/ui-components/pagination.jsx';
 import PopoverComponent from '../views/ui-components/popover.jsx';
 import TooltipComponent from '../views/ui-components/tooltip.jsx';
+import Edit from '../views/ui-components/edit.jsx';
 
 
 import Starter from '../views/starter/starter.jsx';
@@ -52,6 +53,7 @@ var ThemeRoutes = [
   {path: '/reviewWrite/:key/:my', component: ReviewWrite},
   {path: '/detail/:key', component: Detail},
   {path: '/write/:key', component: Alert},
+  {path: '/edit/:key', component: Edit},
   {path: '/queried/:key',exact:true,component: Queried},
   {
     path: '/',
