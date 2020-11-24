@@ -162,7 +162,7 @@ class Projects extends React.Component {
                 <CardTitle>
                 No Reviews
 
-                <Link to={'/reviewWrite/'+this.props.props} 
+                <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} 
                 className="link font-small float-right">
                 <i className="mdi mdi-pencil mr-1"/>
                     Write</Link>
