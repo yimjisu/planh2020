@@ -39,6 +39,8 @@ import img1 from '../../assets/images/users/1.jpg';
 import img2 from '../../assets/images/users/2.jpg';
 import img3 from '../../assets/images/users/3.jpg';
 import img4 from '../../assets/images/users/4.jpg';
+import img5 from '../../assets/images/users/5.jpg';
+import img6 from '../../assets/images/users/6.jpg';
 import { Radar } from "react-chartjs-2";
 
 const options = {
@@ -143,8 +145,6 @@ const onClickHandler = (ref_root) => {
             }
         }
     })
-    console.log(total_avg_rating);
-    console.log(rating_num);
     ref_avg.set(total_avg_rating/rating_num);
     //need to get user name somehow
     var total = {
@@ -172,7 +172,6 @@ const onClickReportHandler = (rout_key, rev_key) => {
         alert('To report, login first!');
         return;
     }
-    console.log('reporthandler');
     var ref = firebase.database().ref().child('report');
     let temp = ref.push();
     temp.set({routine: rout_key, review: rev_key});
@@ -180,7 +179,7 @@ const onClickReportHandler = (rout_key, rev_key) => {
 
 const onClickDeleteHandler = (key, rootKey) => {
     var ref_root = firebase.database().ref().child('routine').child(rootKey).child('review').child(key);
-    console.log('deletehandler');
+    
     ref_root.remove();
 }
 
@@ -204,7 +203,7 @@ const onClickLikeHandler = (isComment,isLike,key, rootKey) => {
         ref.on('value', snap => {
             val = snap.val();
         })
-        console.log(val);
+        
         ref.set(val+1);
     }else{
         let ref = isLike ? ref_root.child('suggestion').child('like') : ref_root.child('suggestion').child('dislike');
@@ -212,7 +211,6 @@ const onClickLikeHandler = (isComment,isLike,key, rootKey) => {
         ref.on('value', snap => {
             val = snap.val();
         })
-        console.log(val);
         ref.set(val+1);
     }
 }
@@ -220,8 +218,6 @@ const onClickLikeHandler = (isComment,isLike,key, rootKey) => {
 class ButtonToggle extends React.Component {
     constructor(props) {
       super(props);
-      console.log(this.props.userid);
-      console.log(this.props.keyval);
       var temp_likePressed = false;
     var temp_dislikePressed = false;
        var user = firebase.auth().currentUser;
@@ -238,7 +234,6 @@ class ButtonToggle extends React.Component {
         if(ref_temp_press!=null){
             ref_temp_press.on('value',snap=>{
                 var val = snap.val();
-                console.log(val);
                 if(val!=null){
                     //comment like pressed
                     temp_likePressed = val;
@@ -382,7 +377,6 @@ class ButtonToggle extends React.Component {
         if(ref_temp_press!=null){
             ref_temp_press.on('value',snap=>{
                 var val = snap.val();
-                console.log(val);
                 if(val!=null){
                     //comment like pressed
                     this.setState({ likePressed : val,
@@ -395,8 +389,6 @@ class ButtonToggle extends React.Component {
     render() {
         var like_bg = this.state.likePressed ? "blue" : "";
         var dislike_bg = this.state.dislikePressed ? "red" : "";
-        console.log(this.state.likePressed);
-        console.log(this.state.dislikePressed);
         return (
             <div>
                 <a className="link mr-2" id="TooltipExample2"
@@ -428,10 +420,6 @@ class ButtonToggle extends React.Component {
 
 const ReviewDisptab = (props) => {
     //var key = document.getElementById('input-key').value;
-    console.log(props.keyval);
-    console.log(props.comment.length);
-    console.log(props.suggestion.length);
-    console.log(props.sortop);
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const [tooltipOpen2, setTooltipOpen2] = useState(false);
     const [tooltipOpen3, setTooltipOpen3] = useState(false);
@@ -611,7 +599,6 @@ const Reviewtab = (props) => {
             userid : '',
         }
         this.reference = {};
-        console.log(this.state);
     }
     componentWillUnmount() {
 		this._isMounted = false;
@@ -752,10 +739,7 @@ class Review_Card extends React.Component{
             var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval);
             ref.on('value', snap => {
                 var val = snap.val();
-                console.log(val);
                 if(val!=null & this._isMounted){
-                    console.log(val.suggestion.text);
-                    console.log(val.comment.text);
                     this.state.name = val.name;
                     this.state.rate = val.rate.split(',');
                     this.state.comment = val.comment.text;
@@ -768,13 +752,19 @@ class Review_Card extends React.Component{
                 }
             })
         }
-        console.log(this.state);
     }
-    image(num){
-        if(num == 1) return img1;
+    image(name){
+        if(name){
+            var num = name.length % 6;
+            if(num == 1) return img1;
         if(num == 2) return img2;
         if(num == 3) return img3;
-        if(num == 4) return img4;
+        if(num == 0) return img4;
+        if(num == 4) return img5;
+        if(num == 5) return img6;
+        }
+        
+        return img4;
     }
     render(){
         this.state = {
@@ -786,11 +776,8 @@ class Review_Card extends React.Component{
             suggestion : this.props.data.suggestion,
             slike : this.props.data.slike,
             sdislike : this.props.data.sdislike,
-            keyval : this.props.keyval,
+            keyval : this.props.keyval
         };
-        console.log(this.props.data.rate);
-        console.log(this.props.data.comment);
-        console.log(this.props.data.suggestion);
         var shoulddisp = true;
         if (this.props.sortop == 1 && this.state.comment.length==0 && !this.props.empty){
             shoulddisp = false;
@@ -813,7 +800,7 @@ class Review_Card extends React.Component{
                             <CardTitle>
                     <div className="d-flex no-block align-items-center">
                         <div className="mr-2">
-                            <img src={img4} alt="user" className="rounded-circle" width="45" /></div>
+                            <img src={this.image(this.state.name)} alt="user" className="rounded-circle" width="45" /></div>
                         <div className="">
                             <h5 className="mb-0 font-16 font-medium">{this.state.name}</h5><span>2020-11-07</span></div>
                     </div>
@@ -906,7 +893,6 @@ class Review_List extends React.Component{
     }
 
     onClickSortHandler = (cur_op, new_op) => {
-        console.log('sorthandler');
         if (cur_op != new_op){
             this.setState({sort : new_op});
         }else{
@@ -915,7 +901,6 @@ class Review_List extends React.Component{
     };
     
     onClickSortMethodhandler = (cur_method, new_method) =>{
-        console.log('methodhandler');
         if(cur_method != new_method){
             this.setState({method : new_method});
         }else{
@@ -932,7 +917,6 @@ class Review_List extends React.Component{
         var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review');
         ref.on('value', snap => {
             var val = snap.val();
-            console.log(val);
             if(val!=null & this._isMounted){
                 var keys = [];
                 var datas = [];
@@ -964,7 +948,6 @@ class Review_List extends React.Component{
     render(){
         //for reviews in the review array
         //consider case when there is no review
-        console.log("list render");
         var sorted_arr=[];
         if(this.state.keys.length > 0){
             sorted_arr = this.state.keys.map((key, index)=> [key, this.state.datas[index]]).reverse();
@@ -1020,8 +1003,6 @@ class Review_List extends React.Component{
                                 sdislikePressed = !match[0].slikePressed;
                             } 
                             */
-                            console.log(this.state.sort);
-                            console.log(this.state.method);
                             return(<Review_Card keyval={key} rootKey={this.props.rootKey} data={temp2} empty={false} userid={this.props.userid} sortop={this.state.sort}/>)}) 
                         )
                         : <Review_Card data={[]} empty={true} userid={this.props.userid} rootKey={this.props.rootKey}/>                   
@@ -1051,7 +1032,6 @@ class Cards extends React.Component{
     }
     
     componentDidMount(){
-        console.log("cards didmount");
         this._isMounted = true;
         //get review informations from the firebase
         //get the review of the routine(given by routine ID).
@@ -1059,7 +1039,6 @@ class Cards extends React.Component{
         var ref = ref_root.child('review');
         ref.on('value', snap => {
             var val = snap.val();
-            console.log(val);
             if(val!=null & this._isMounted){
                 var keys = [];
                 var datas = [];
@@ -1075,7 +1054,6 @@ class Cards extends React.Component{
             var val = snap.val();
             if(val!=null & this._isMounted){
                 let temp = val.toFixed(2);
-                console.log(temp);
                 this.setState({avg: temp});
             }
         })
@@ -1096,7 +1074,6 @@ class Cards extends React.Component{
     }
 
     render(){
-        console.log('cards render');
         return(
             <Row>
                 <Col sm={12} lg={12}>
