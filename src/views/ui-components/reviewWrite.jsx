@@ -104,8 +104,9 @@ const data = (rate) => {
     }
 }
 
-const onClickHandler = (ref_root) => {
-
+const onClickHandler = (props) => {
+    //props={this.props} refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true}
+    var ref_root = props.refRoot;
     var user = firebase.auth().currentUser;
     if(user == null){
         alert('To leave a review, login first!');
@@ -159,6 +160,7 @@ const onClickHandler = (ref_root) => {
     };
     let ref_temp = ref.push();
     ref_temp.set(total);
+    props.props.history.replace('/reviewRead/'+props.props.match.params.key+'/'+props.props.match.params.my);
     //close this review page
 };
 
@@ -422,7 +424,7 @@ const Reviewtab = (props) => {
                             <textarea className="form-control" id="text_comment" rows="5" style={{resize: 'none'}} defaultValue={props.comment}></textarea>
                             <div className="input-group-prepend">
                                 <span className="input-group-text" id="basic-addon1">
-                                    <a onClick={() => onClickHandler(props.refRoot)}>Submit</a>
+                                    <a onClick={() => onClickHandler(props)}>Submit</a>
                                 </span>
                             </div>
                         </div>
@@ -448,7 +450,7 @@ const Reviewtab = (props) => {
                             <textarea className="form-control" id="text_suggestion" rows="5" style={{resize: 'none'}} defaultValue={props.suggestion}></textarea>
                             <div className="input-group-prepend">
                                 <span className="input-group-text" id="basic-addon1">
-                                    <a onClick={() => onClickHandler(props.refRoot)}>Submit</a>
+                                    <a onClick={() => onClickHandler(props)}>Submit</a>
                                 </span> 
                             </div>
                         </div>
@@ -516,7 +518,7 @@ const Reviewtab = (props) => {
         <div>
             <Row>
                 <Col xs='12' md='12'>
-                    <Projects props={this.props.match.params.key} detail={true} my={false}/>
+                    <Projects props={this.props.match.params.key} detail={true} my={this.props.match.params.my}/>
                 </Col>
             
             <Col xs='12' md='12'>
@@ -583,7 +585,7 @@ const Reviewtab = (props) => {
                             <input id="input-name" value={this.state.name} style={{display:"none"}}/>
                             <span><CardTitle id="username">{this.state.name}</CardTitle></span>
                         </div>
-                        <Reviewtab refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true}/>
+                        <Reviewtab props={this.props} refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true} />
                     </CardBody>
                 </Col>
             </Row>
