@@ -575,6 +575,11 @@ const Reviewtab = (props) => {
                     />
                     
                     {/*style={{border: 3, float: 'left', height: 'auto', width: 'auto'}}?*/}
+                    <div>
+                    <text className='slider-text pull-right'>Yes</text>
+                    <text className='slider-text pull-right mr-6'>No</text>
+                   
+                    </div>
                     <div className='slider'>
                         <text className='slider-text'>Difficulty well set?</text>
                         <StepRangeSlider className='slider-slider' value={this.state.rate[0]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[0]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){

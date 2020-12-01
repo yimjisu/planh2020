@@ -39,7 +39,8 @@ class Projects extends React.Component {
             tags: [],
             routine: [],
             img: 1,
-            reviewimg: 3
+            reviewimg: 3,
+            body: null
         };
     }
     componentWillUnmount() {
@@ -66,6 +67,7 @@ class Projects extends React.Component {
                    rate: val.rating,
                    time: val.tag['time'],
                    level: val.tag['level'],
+                   body: val.tag['body'],
                    tags: tags,
                    routine: routine,
                    img: val.img
@@ -188,6 +190,7 @@ class Projects extends React.Component {
     let time = this.state.time;
     let level = this.state.level;
     let tags = this.state.tags;
+    let body = this.state.body;
     let routine = this.state.routine;
     let detail = "hidden";
     
@@ -246,6 +249,9 @@ className="link font-small float-right">
                   </Badge>
                   <Badge className="mx-1" color="secondary" pill>
                   <i className="mdi mdi-dumbbell" /> {level}
+                  </Badge>
+                  <Badge className="mx-1" color="warning" pill>
+                  <i className="mdi mdi-human" /> {body}
                   </Badge>
                   {tags.map((tag, index) => {
                       return(<Badge className="mx-1" color="info" pill>

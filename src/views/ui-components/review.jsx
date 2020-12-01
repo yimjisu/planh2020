@@ -862,20 +862,33 @@ const SortCondition = (props) => {
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
+    const [dropdownOpen1, setDropdownOpen1] = useState(false);
+
+    const toggle1 = () => setDropdownOpen1(prevState => !prevState);
     return (
-    <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+        <div className='input-group-append'>
+    <Dropdown className='mr-1' isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle caret>
-        Sort by
+        Filter by
         </DropdownToggle>
       <DropdownMenu>      
         <DropdownItem onClick={()=>window.globalHandler(props.sortop, 1)}>Only comment</DropdownItem>
         <DropdownItem onClick={()=>window.globalHandler(props.sortop, 2)}>Only suggestion</DropdownItem>
         <DropdownItem onClick={()=>window.globalHandler(props.sortop, 0)}>Show all</DropdownItem>
-        <DropdownItem divider/>
-        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 0)}>Newest</DropdownItem>
-        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 1)}>Most Upvote</DropdownItem>
       </DropdownMenu>
     </Dropdown>
+
+        <Dropdown className='ml-1' isOpen={dropdownOpen1} toggle={toggle1}>
+        <DropdownToggle caret>
+        Sort by
+        </DropdownToggle>
+        <DropdownMenu> 
+        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 0)}>Newest</DropdownItem>
+        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 1)}>Most Upvote</DropdownItem>
+        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 2)}>Highest Rating</DropdownItem>
+        </DropdownMenu>
+        </Dropdown>
+        </div>
     );
 };
 
@@ -956,6 +969,8 @@ class Review_List extends React.Component{
         var sorted_arr=[];
         if(this.state.keys.length > 0){
             sorted_arr = this.state.keys.map((key, index)=> [key, this.state.datas[index]]).reverse();
+            var a = sorted_arr[0];
+            console.log(a, eval(a[1].rate.split(',').join('+'))/5);
         }
         if(this.state.method == 1 && this.state.keys.length > 1){
             if(this.state.sort == 0){
@@ -965,6 +980,9 @@ class Review_List extends React.Component{
             }else{
                 sorted_arr.sort((a, b) => (a[1].suggestion.like-a[1].suggestion.dislike)>(b[1].suggestion.like-b[1].suggestion.dislike) ? -1 : 1);
             }   
+        }
+        if(this.state.method == 2 && this.state.keys.length > 1){
+            sorted_arr.sort((a, b) => (eval(a[1].rate.split(',').join('+'))/5)>(eval(b[1].rate.split(',').join('+'))/5) ? -1 : 1);
         }
         var rating = <h6 className="ml-3">Average Rating : {this.props.avg}</h6>;
         if(this.props.avg == null) rating = null;
