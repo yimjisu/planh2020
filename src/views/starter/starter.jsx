@@ -21,44 +21,33 @@ class Starter extends React.Component {
         this._isMounted = true;
         var ref = firebase.database().ref().child('routine');
         var uid = null;
-        var n = 3;
+        
         firebase.auth().onAuthStateChanged(user => {
             if(user){
-                ThemeRoutes[n]['name'] = 'Logout';
-                ThemeRoutes[n]['icon'] = 'mdi mdi-logout';
                 uid = user.uid;
             }else{
-                ThemeRoutes[n]['name'] = 'LogIn';
-                ThemeRoutes[n]['icon'] = 'mdi mdi-login';
+                uid = null;
             }
-        });
-
-        var user = firebase.auth().currentUser;
-        if(user){
-            ThemeRoutes[n]['name'] = 'Logout';
-            ThemeRoutes[n]['icon'] = 'mdi mdi-logout';
-            uid = user.uid;
-        }else{
-            ThemeRoutes[n]['name'] = 'LogIn';
-            ThemeRoutes[n]['icon'] = 'mdi mdi-login';
-        }
-
-        ref.on('value', snap => {
-            var val = snap.val();
-            if(val!=null & this._isMounted){
-                var keys = [];
-                var myroutine = [];
-                for(var key in val){
-                    if(val[key]['uid'] == uid){
-                            myroutine.push(key);
+            ref.on('value', snap => {
+                var val = snap.val();
+                if(val!=null & this._isMounted){
+                    var keys = [];
+                    var myroutine = [];
+                    for(var key in val){
+                        if(val[key]['uid'] == uid){
+                                myroutine.push(key);
+                        }
+                        else{
+                            keys.push(key)
+                        }
                     }
-                    else{
-                        keys.push(key)
-                    }
+                    this.setState({keys: keys, myroutine: myroutine});
                 }
-                this.setState({keys: keys, myroutine: myroutine});
-            }
-        })
+            })
+        });
+        
+
+        
     }
 
     mypage(){

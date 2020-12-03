@@ -13668,7 +13668,7 @@ use profile section
 }
 
 .main-div{
-    width: 90%;
+    min-width: 400px;
     max-width: 500px;
     margin: 0px auto;
     padding: 20px;
@@ -13682,7 +13682,7 @@ use profile section
     margin-right: auto;
     margin-top: 25px;
     margin-bottom: 25px;
-    width: 250px;
+    width: 90%;
 }
 
 .icon-hover:hover{

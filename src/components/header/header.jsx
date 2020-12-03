@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     Card,
+    CardBody,
     CardTitle,
     CardText,
     Nav,
@@ -29,7 +30,15 @@ import logodarkicon from '../../assets/images/logo-icon.png';
 import logolighticon from '../../assets/images/logo-light-icon.png';
 import logodarktext from '../../assets/images/logo-text.png';
 import logolighttext from '../../assets/images/logo-light-text.png';
-import profilephoto from '../../assets/images/users/1.jpg';
+
+import defaultimage from '../../assets/images/users/default-user-image.png';
+import img1 from '../../assets/images/users/1.jpg';
+import img2 from '../../assets/images/users/2.jpg';
+import img3 from '../../assets/images/users/3.jpg';
+import img4 from '../../assets/images/users/4.jpg';
+import img5 from '../../assets/images/users/5.jpg';
+import img6 from '../../assets/images/users/6.jpg';
+
 
 import recomm_tag from '../../assets/images/search/recomm_tag.png';
 import recomm_lev from '../../assets/images/search/recomm_lev.png';
@@ -112,28 +121,89 @@ class RecommList extends React.Component{
     }
 }
 
-
+var STATE = {LOGIN: 0, LOGOUT: 1, CREATE: 2};
 class Header extends React.Component{
     constructor (props){
         super(props);
         this._isMounted = false;
-        this.state = {
+        this.loginBtn = this.loginBtn.bind(this);
+        this.logoutBtn = this.logoutBtn.bind(this);
+        this.createBtn = this.createBtn.bind(this);
+        this.createAccount = this.createAccount.bind(this);
+        this.turnback = this.turnback.bind(this);
+        this.login = this.login.bind(this);
+        this.submitCreateAccount = this.submitCreateAccount.bind(this);
+		this._isMounted = false;
+		this.state = {
             mintime: null,
             maxtime: null,
             level: null,
             recomm_tags: [],
             query_tag: [],
             result_tag: '',
-            tothenext: false
+            tothenext: false,
+            profilephoto: defaultimage,
+            text : 'login',
+            state: null
         }
     }
 
     componentWillUnmount() {
         this.__isMounted = false;
     }
-
+    image(name){
+        if(name){
+            var num = name.length % 6;
+            console.log(num);
+            if(num == 1) return img1;
+        if(num == 2) return img2;
+        if(num == 3) return img3;
+        if(num == 0) return img4;
+        if(num == 4) return img5;
+        if(num == 5) return img6;
+        }
+        return img4;
+    }
     componentDidMount() {
         this._isMounted = true;
+        firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                var image = this.image(user.displayName);
+
+                this.setState({
+                    profilephoto : image,
+                    text : 'logout'
+                })
+                if(this._isMounted){
+                    this.setState({
+                        state: STATE.LOGOUT
+                    })
+                }
+                var user = firebase.auth().currentUser;
+                if(user != null){
+                    var name = user.displayName;
+                    if(name == null) name = '';
+                    if(document.getElementById("user_para")) document.getElementById("user_para").innerHTML = 'Welcome! ' + name;
+                }
+                var rootRef = firebase.database().ref().child('games');
+                rootRef.transaction(function(game){
+                    if(game){
+                        game.state = user.uid;
+                    }
+                    return game;
+                })
+            }
+            else{
+                if(this._isMounted) {this.setState({
+                    state: STATE.LOGIN
+                })}
+                if(document.getElementById("login-menu")) document.getElementById("login-menu").innerHTML = 'Login';
+                this.setState({
+                    profilephoto : defaultimage,
+                    text : 'login'
+                })
+            }}
+        )
     }
 
     showMobilemenu = () => {
@@ -263,7 +333,113 @@ class Header extends React.Component{
         })
     }
 
+    login(e){
+        e.preventDefault();
+        var userEmail = document.querySelector("#email_field");
+        var userPass = document.querySelector("#password_field");
+        
+        document.getElementById("email_field").innerHTML = '';
+        document.getElementById("password_field").innerHTML = '';
+        firebase.auth().signInWithEmailAndPassword(userEmail.value, userPass.value).catch(function(error){
+    
+            var errorCode = error.code;
+            var errorMessage = error.message;
+    
+            window.alert("Error : "+errorMessage);
+        });
+        this.props.history.replace('/');
+    }
+    turnback(e){
+        e.preventDefault();
+        if(this._isMounted) {this.setState({
+            state: STATE.LOGIN
+        })}
+    }
+    createAccount(e){
+        e.preventDefault();
+        if(this._isMounted) {this.setState({
+            state: STATE.CREATE
+        })}
+    }
+
+    submitCreateAccount(e){
+        e.preventDefault();
+        var displayName = document.querySelector("#entry-displayname");
+        var email = document.querySelector("#entry-email");
+        var password = document.querySelector("#entry-password");
+        if(true){
+            document.getElementById("entry-displayname").innerHTML = '';
+            document.getElementById("entry-email").innerHTML = '';
+            document.getElementById("entry-password").innerHTML = '';
+            console.log(displayName, email, password);
+            firebase.auth().createUserWithEmailAndPassword(email.value, password.value).then(function(){
+                var user = firebase.auth().currentUser;
+                user.updateProfile({displayName: displayName.value});
+            });
+            this.props.history.replace('/');
+        }else{
+            window.alert('password가 일치하지 않습니다')
+        }
+    }
+
+    logout(e){
+        e.preventDefault();
+        firebase.auth().signOut();
+    }
+
+    loginBtn(){
+        return(
+            <Card>
+                <CardBody>
+                    <h2>Login</h2>
+                    <input id="email_field" type="email" placeholder="email..."/>
+                    <input id="password_field" type="password" placeholder="password..."/>
+                    <Button className="button" onClick={this.login}>Sign In</Button>
+                    <Button className="button" onClick={this.createAccount} style={{marginLeft:'20px'}}>Sign Up</Button>
+                </CardBody>
+            </Card>
+        );
+    }
+
+    createBtn(){
+        return(
+        <Card>
+            <CardBody>
+
+            
+        <h2>Create Account</h2>
+        <input id="entry-displayname" type="text" placeholder="name..."/>
+        <input id="entry-email" type="email" placeholder="email address..."/>
+        <input id="entry-password" type="password" placeholder="password..."/>
+        <Button className="button" onClick={this.turnback}>Back</Button>
+        <Button className="button" onClick={this.submitCreateAccount} style={{marginLeft:'10px'}}>Sign Up</Button>
+        
+        </CardBody>
+        </Card>);
+    }
+
+    logoutBtn(){
+        return(
+            <div>
+            <div id="user_para">Welcome User</div>
+            <DropdownItem onClick={this.logout}>
+            <i className="fa fa-power-off mr-1 ml-1" />LogOut
+        </DropdownItem>
+        </div>
+        )
+    }
     render() {
+        var text = this.state.text;
+        var profilephoto = this.state.profilephoto;
+        var btn = null;
+        var state = this.state.state;
+        if(state == STATE.LOGIN){
+            btn = <this.loginBtn/>
+        }else if(state == STATE.LOGOUT){
+            btn = <this.logoutBtn/>
+        }else if(state == STATE.CREATE){
+            btn = <this.createBtn/>
+        }
         if (this.state.tothenext) {
             return (
                 <Card />
@@ -381,8 +557,9 @@ class Header extends React.Component{
                                             width="31"
                                         />
                                     </DropdownToggle>
-                                    {/*
+                                    
                                     <DropdownMenu right className="user-dd">
+                                        {/* 
                                         <DropdownItem>
                                             <i className="ti-user mr-1 ml-1" /> My Account
                         </DropdownItem>
@@ -394,12 +571,11 @@ class Header extends React.Component{
                         </DropdownItem>
                                         <DropdownItem className="border-bottom">
                                             <i className="ti-settings mr-1 ml-1" /> Account Settings
-                        </DropdownItem>
-                                        <DropdownItem href="/pages/login">
-                                            <i className="fa fa-power-off mr-1 ml-1" /> Logout
-                        </DropdownItem>
+                                        </DropdownItem>*/}
+                                        
+                        <div className="main-div">{btn}</div>
                                     </DropdownMenu>
-                                    */}
+                                    
                                 </UncontrolledDropdown>
                                 {/*--------------------------------------------------------------------------------*/}
                                 {/* End Profile Dropdown                                                           */}
