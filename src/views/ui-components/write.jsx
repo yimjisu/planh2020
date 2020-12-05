@@ -49,6 +49,7 @@ class Alerts extends React.Component {
             if(val.tag.time)time = val.tag.time;
             if(val.tag.tag)tagState = val.tag.tag;
             if(val.routine) actionState = val.routine;
+            if(val.file)
             this.setState({
                 title : title,
                 level : level,
@@ -89,12 +90,16 @@ class Alerts extends React.Component {
 
     handleActionChange(e){
     }
+
     handleWrite(e){
         e.preventDefault();
+
         var user = firebase.auth().currentUser;
         var title = document.getElementById('routineTitle').value;
         var level = document.getElementById('levelSelect').value;
         var time = document.getElementById('routineTime').value;
+
+        const storage = firebase.storage();
 
         if(user == null){
             alert('login first!');
@@ -140,15 +145,36 @@ class Alerts extends React.Component {
         }
         
         var actionState = [];
+        const promises = [];
         for(var i=0; i<this.state.actionState.length; i++){
             var action = document.getElementById(`action-${i}`).value;
             var info = document.getElementById(`info-${i}`).value;
             var routinetime = document.getElementById(`time-${i}`).value;
-            actionState.push({
-                action : action,
-                time: routinetime,
-                info : info
+            var imageFile = document.getElementById(`image-${i}`).files[0];
+            var imageName = currentUid + '-' + action + '-' + i;
+            const uploadTask = storage.ref(`/images/${imageName}`).put(imageFile);
+            const pending = new Promise(function(resolve, reject) {
+                uploadTask.on("state_changed", console.log, console.error, () => {
+                    storage
+                        .ref("images")
+                        .child(imageName)
+                        .getDownloadURL()
+                        .then((url) => {
+                            console.log(url)
+                            actionState.push({
+                                action : action,
+                                time: routinetime,
+                                info : info,
+                                imageUrl : url,
+                            });
+                            resolve();
+                        });
+                    
+                });
             })
+            promises.push(pending);
+            
+            
         }
         pushRef.child('tag').set({
             level: level,
@@ -158,9 +184,13 @@ class Alerts extends React.Component {
         pushRef.child('img').set(1);
         pushRef.child('uid').set(currentUid);
         pushRef.child('title').set(title);
-        pushRef.child('routine').set(actionState);
         pushRef.child('name').set(user.displayName);
-        this.props.history.replace('/');
+        Promise.all(promises).then(tasks => {
+            pushRef.child('routine').set(actionState);
+            console.log("completed!");
+            this.props.history.replace('/');
+        })
+        
     };
     
     render(){
@@ -224,6 +254,8 @@ class Alerts extends React.Component {
                         const actionId = `action-${idx}`;
                         const infoId = `info-${idx}`;
                         const timeId = `time-${idx}`;
+                        const imageId = `image-${idx}`;
+
                         return (
                             <div key={`action-${idx}`}>
                               <Label htmlFor={actionId}>{`Name of action #${idx + 1}`}</Label>
@@ -255,6 +287,16 @@ class Alerts extends React.Component {
                                     placeholder = "Type time required for this action in minutes"
                                     defaultValue={val['time']}
                                 />
+                                Upload an image to describe your action.
+                                <Input
+                                    type="file"
+                                    name="image"
+                                    data-idx={idx}
+                                    id={imageId}
+                                    placeholder="Image file for explanation"
+                                /> 
+                                <img src={val['imageUrl']} alt=""/>
+                                
                                 <br></br><br></br>
                             </div>
                           );   
