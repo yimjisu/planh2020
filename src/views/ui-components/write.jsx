@@ -150,6 +150,7 @@ class Alerts extends React.Component {
             var action = document.getElementById(`action-${i}`).value;
             var info = document.getElementById(`info-${i}`).value;
             var routinetime = document.getElementById(`time-${i}`).value;
+            var video = document.getElementById(`video-${i}`).value;
             var imageFile = document.getElementById(`image-${i}`).files[0];
             var imageName = currentUid + '-' + action + '-' + i;
             const uploadTask = storage.ref(`/images/${imageName}`).put(imageFile);
@@ -166,6 +167,7 @@ class Alerts extends React.Component {
                                 time: routinetime,
                                 info : info,
                                 imageUrl : url,
+                                video : video
                             });
                             resolve();
                         });
@@ -255,7 +257,7 @@ class Alerts extends React.Component {
                         const infoId = `info-${idx}`;
                         const timeId = `time-${idx}`;
                         const imageId = `image-${idx}`;
-
+                        const videoId = `video-${idx}`;
                         return (
                             <div key={`action-${idx}`}>
                               <Label htmlFor={actionId}>{`Name of action #${idx + 1}`}</Label>
@@ -296,7 +298,15 @@ class Alerts extends React.Component {
                                     placeholder="Image file for explanation"
                                 /> 
                                 <img src={val['imageUrl']} alt=""/>
-                                
+                                Video Url (Youtube)
+                                <Input
+                                    type="text"
+                                    name="video"
+                                    data-idx={idx}
+                                    id={videoId}
+                                    placeholder = "Type in url of the video you would like to upload starting with http"
+                                    defaultValue={val['video']}
+                                />
                                 <br></br><br></br>
                             </div>
                           );   
