@@ -256,23 +256,76 @@ className="link font-small float-right">
                     <tbody>
                         {routine.map((r, index) => 
                         
-                        { if(r['info'].startsWith('https:')){
+                        { 
+                            var image = false;
+                            var video = false;
+                            var link = null;
+                            var storage, httpsReference;
+                            if(r['imageUrl'] != null && this.props.detail == true){
+                                image = true;
+                                storage = firebase.storage();
+                                httpsReference = storage.refFromURL(r['imageUrl']);
+                                httpsReference.getDownloadURL().then(function(url){
+                                var img = document.getElementById('myimg');
+                                img.src = url;
+                                }).catch(function(error) {
+                                    // Handle any errors
+                                });
+                            }
+                            if(r['videoUrl'] != null && this.props.detail == true){
+                                video = true;
+                                var url = r['videoUrl'];
+                                if(url.includes('embed')) link = url;
+                                else link = "https://www.youtube.com/embed/"+url.split('?v=')[1];
+                            }
+                        if(image == true && video == true){
                             return(
                                 <tr>
                                     <td>{r['action']}</td>
-                                    <td>{r['time']}</td>
-                                    <td><a href={r['info']}>Video Link</a></td>
+                                    <td>{r['time']}min</td>
+                                    <td>{r['info']}
+                                    <img className="d-block" id="myimg" height="150px"/>
+                                    <iframe 
+                                    className = 'd-block'
+                                    width="560" height="315" 
+                                    src={link}
+                                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                    </td>
                                 </tr>
-                                )
-                        }else{
+                                );
+                        }
+                        if(image == true){
                             return(
+                                <tr>
+                                    <td>{r['action']}</td>
+                                    <td>{r['time']}min</td>
+                                    <td>{r['info']}
+                                    <img className="d-block" id="myimg" height="150px"/></td>
+                                </tr>
+                            );
+                        }if(video == true){
+                            return(
+                                <tr>
+                                    <td>{r['action']}</td>
+                                    <td>{r['time']}min</td>
+                                    <td>{r['info']}
+                                    <iframe 
+                                    className = 'd-block'
+                                    width="560" height="315" 
+                                    src={link}
+                                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                    </td>
+                                </tr>
+                                );
+                        }
+                        return(
                             <tr>
                                 <td>{r['action']}</td>
                                 <td>{r['time']}</td>
                                 <td>{r['info']}</td>
                             </tr>
                             )
-                        }}
+                        }
                         )}
                         
                     </tbody>
