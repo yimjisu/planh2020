@@ -66,7 +66,7 @@ class Starter extends React.Component {
     render(){
         var user = firebase.auth().currentUser;
         var mypage = null;
-        if (user != null){
+        if (user != null && this.state.myroutine.length > 0){
             mypage = <this.mypage/>;
         }
 
