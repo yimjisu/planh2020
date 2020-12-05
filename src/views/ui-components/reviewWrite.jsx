@@ -158,8 +158,15 @@ const onClickHandler = (props) => {
             text : suggestion
         }
     };
-    let ref_temp = ref.push();
-    ref_temp.set(total);
+    if(!props.is_edit){
+        let ref_temp = ref.push();
+        ref_temp.set(total);
+    }
+    else{
+        let ref_temp = ref.child(props.rev_key);
+        ref_temp.set(total);
+        //replace the review
+    }
     props.props.history.replace('/reviewRead/'+props.props.match.params.key+'/'+props.props.match.params.my);
     //close this review page
 };
@@ -474,13 +481,29 @@ const Reviewtab = (props) => {
     constructor(props){
         super(props);
         this._isMounted = false;
+        var temp_rating = [1,1,1,1,1];
+        var temp_comment = '';
+        var temp_suggestion = '';
+        var temp_is_edit = false;
+        var temp_rev_key = null;
+        console.log(this.props.location);
+        if (this.props.location.state != null){
+            temp_rating = this.props.location.state.rate.map(i=>parseInt(i));
+            temp_comment = this.props.location.state.comment;
+            temp_suggestion = this.props.location.state.suggestion;
+            temp_is_edit = this.props.location.state.is_edit;
+            temp_rev_key = this.props.location.state.rev_key;
+        }
         this.state = {
             name : '',
-            rate : [1,1,1,1,1],
-            comment : '',
-            suggestion : '',
-            refRoot : null
-        }
+            rate : temp_rating,
+            comment : temp_comment,
+            suggestion : temp_suggestion,
+            refRoot : null,
+            is_edit : temp_is_edit,
+            rev_key : temp_rev_key,
+        };
+        console.log(temp_rating);
         this.reference = {};
         console.log(this.state);
     }
@@ -552,29 +575,34 @@ const Reviewtab = (props) => {
                     />
                     
                     {/*style={{border: 3, float: 'left', height: 'auto', width: 'auto'}}?*/}
+                    <div>
+                    <text className='slider-text pull-right'>Yes</text>
+                    <text className='slider-text pull-right mr-6'>No</text>
+                   
+                    </div>
                     <div className='slider'>
                         <text className='slider-text'>Difficulty well set?</text>
-                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[0]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                        <StepRangeSlider className='slider-slider' value={this.state.rate[0]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[0]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     <div className='slider'>
                         <text className='slider-text'>Was routine new?</text>
-                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[1]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                        <StepRangeSlider className='slider-slider' value={this.state.rate[1]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[1]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     <div className='slider'>
                         <text className='slider-text'>Was it effective?</text>
-                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[2]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                        <StepRangeSlider className='slider-slider' value={this.state.rate[2]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[2]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     <div className='slider'>
                         <text className='slider-text'>Post well written?</text>
-                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[3]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                        <StepRangeSlider className='slider-slider' value={this.state.rate[3]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[3]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     <div className='slider'>
                         <text className='slider-text'>Suggestable?</text>
-                        <StepRangeSlider className='slider-slider' value={1} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[4]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
+                        <StepRangeSlider className='slider-slider' value={this.state.rate[4]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[4]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     </CardBody>
@@ -585,7 +613,7 @@ const Reviewtab = (props) => {
                             <input id="input-name" value={this.state.name} style={{display:"none"}}/>
                             <span><CardTitle id="username">{this.state.name}</CardTitle></span>
                         </div>
-                        <Reviewtab props={this.props} refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true} />
+                        <Reviewtab props={this.props} refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true} is_edit={this.state.is_edit} rev_key={this.state.rev_key}/>
                     </CardBody>
                 </Col>
             </Row>

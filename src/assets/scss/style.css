@@ -148,7 +148,7 @@ section {
 .slider-slider{
     float:right;
     max-width: 80px;
-    margin-right: 10px;
+    margin-right: 16px;
 }
 body {
     margin: 0;
@@ -8463,6 +8463,9 @@ button.bg-inverse:focus {
     margin-left: 3rem !important;
 }
 
+.mr-6{
+    margin-right: 4rem;
+}
 .p-0 {
     padding: 0 !important;
 }
@@ -13665,7 +13668,7 @@ use profile section
 }
 
 .main-div{
-    width: 90%;
+    min-width: 400px;
     max-width: 500px;
     margin: 0px auto;
     padding: 20px;
@@ -13679,7 +13682,7 @@ use profile section
     margin-right: auto;
     margin-top: 25px;
     margin-bottom: 25px;
-    width: 250px;
+    width: 90%;
 }
 
 .icon-hover:hover{

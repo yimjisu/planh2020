@@ -7,6 +7,8 @@ import dumbbell2 from '../../../assets/images/dumbbell (1).png';
 import img2 from '../../../assets/images/users/2.jpg';
 import img3 from '../../../assets/images/users/3.jpg';
 import img4 from '../../../assets/images/users/4.jpg';
+import img5 from '../../../assets/images/users/5.jpg';
+import img6 from '../../../assets/images/users/6.jpg';
 import { Route, Link } from 'react-router-dom';
 import {
     Card,
@@ -37,7 +39,8 @@ class Projects extends React.Component {
             tags: [],
             routine: [],
             img: 1,
-            reviewimg: 3
+            reviewimg: 3,
+            body: null
         };
     }
     componentWillUnmount() {
@@ -47,11 +50,9 @@ class Projects extends React.Component {
         this._isMounted = true;
         var ref = firebase.database().ref().child('routine');
         var routineRef = ref.child(this.props.props);
-        console.log(routineRef);
         routineRef.on('value', snap=>{
             var val = snap.val();
             if(val!=null & this._isMounted){
-                console.log(val.title, val.name, val.rating);
                 var tags = [];
                 for(var tag in val.tag['tag']){
                     tags.push(val.tag['tag'][tag]);
@@ -66,6 +67,7 @@ class Projects extends React.Component {
                    rate: val.rating,
                    time: val.tag['time'],
                    level: val.tag['level'],
+                   body: val.tag['body'],
                    tags: tags,
                    routine: routine,
                    img: val.img
@@ -85,7 +87,6 @@ class Projects extends React.Component {
                         reviewname = r['name'];
                         reviewtext = r[text]['text'];
                         score = r[text]['like'] - r[text]['dislike'];
-                        console.log('score', score);
                     }}
                    }}
                    this.setState({
@@ -98,11 +99,18 @@ class Projects extends React.Component {
 
     }
 
-    image(num){
-        if(num == 1) return img1;
+    image(name){
+        if(name){
+            var num = name.length % 6;
+            if(num == 1) return img1;
         if(num == 2) return img2;
         if(num == 3) return img3;
-        if(num == 4) return img4;
+        if(num == 0) return img4;
+        if(num == 4) return img5;
+        if(num == 5) return img6;
+        }
+        
+        return img4;
     }
 
     review(){
@@ -138,7 +146,7 @@ class Projects extends React.Component {
                         
                                 
                         <div className="d-flex no-block align-items-center">
-                                    <div className="mr-2"><img src={this.image(reviewimg)} alt="user" className="rounded-circle" width="45" /></div>
+                                    <div className="mr-2"><img src={this.image(reviewname)} alt="user" className="rounded-circle" width="45" /></div>
                                     <div className="">
                                         <h5 className="mb-0 font-16 font-medium">{reviewname}</h5><span>{reviewtext}</span></div>
                                 </div>
@@ -156,16 +164,20 @@ class Projects extends React.Component {
     }
 
     noreview(){
+    var writereview = null;
+    if(this.props.my != true){
+        writereview =
+        <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} 
+                className="link font-small float-right">
+                <i className="mdi mdi-pencil mr-1"/>
+                    Write</Link>}
         return(
             <CardFooter body inverse color="info">
                 
                 <CardTitle>
                 No Reviews
-
-                <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} 
-                className="link font-small float-right">
-                <i className="mdi mdi-pencil mr-1"/>
-                    Write</Link>
+                {writereview}
+                
                 </CardTitle>
                 
             </CardFooter>
@@ -178,6 +190,7 @@ class Projects extends React.Component {
     let time = this.state.time;
     let level = this.state.level;
     let tags = this.state.tags;
+    let body = this.state.body;
     let routine = this.state.routine;
     let detail = "hidden";
     
@@ -185,9 +198,7 @@ class Projects extends React.Component {
     else{
         routine = routine.slice(0, 2);
     }
-    console.log(title, this.props.detail, routine);
 
-    var img = this.state.img;
     var reviewname = this.state.reviewname;
     var review = null;
     if(this.props.review != true){
@@ -197,7 +208,7 @@ class Projects extends React.Component {
         review = <this.review/>
     }}
     var edit = null;
-    if(this.props.my){
+    if(this.props.my == true){
         edit = <div className="ml-auto d-flex no-block align-items-center">
         <div className="dl">
         <Link to={'/write/'+this.props.props} 
@@ -225,7 +236,7 @@ className="link font-small float-right">
                         <CardBody>
                         <div className="d-flex align-items-center">
                 <div className="d-flex no-block align-items-center">
-                    <div className="mr-2"><img src={this.image(img)} alt="user" className="rounded-circle" width="45" /></div>
+                    <div className="mr-2"><img src={this.image(username)} alt="user" className="rounded-circle" width="45" /></div>
                     <div className="">
                     <CardTitle>{title}</CardTitle>
                         <CardSubtitle>by {username}</CardSubtitle></div>
@@ -238,6 +249,9 @@ className="link font-small float-right">
                   </Badge>
                   <Badge className="mx-1" color="secondary" pill>
                   <i className="mdi mdi-dumbbell" /> {level}
+                  </Badge>
+                  <Badge className="mx-1" color="warning" pill>
+                  <i className="mdi mdi-human" /> {body}
                   </Badge>
                   {tags.map((tag, index) => {
                       return(<Badge className="mx-1" color="info" pill>
@@ -291,6 +305,7 @@ className="link font-small float-right">
                                     src={link}
                                     frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                                     </td>
+
                                 </tr>
                                 );
                         }
@@ -321,7 +336,7 @@ className="link font-small float-right">
                         return(
                             <tr>
                                 <td>{r['action']}</td>
-                                <td>{r['time']}</td>
+                                <td>{r['time']}min</td>
                                 <td>{r['info']}</td>
                             </tr>
                             )

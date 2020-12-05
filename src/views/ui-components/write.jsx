@@ -25,8 +25,10 @@ class Alerts extends React.Component {
         this.handleCommonChange = this.handleCommonChange.bind(this);
         this.state = {
             commonState : {title:'', time:'', level:''},
+
             tagState : ['',],
             actionState : ['',],
+
             title: null,
             level: null,
             time: null
@@ -49,6 +51,7 @@ class Alerts extends React.Component {
             if(val.tag.time)time = val.tag.time;
             if(val.tag.tag)tagState = val.tag.tag;
             if(val.routine) actionState = val.routine;
+
             this.setState({
                 title : title,
                 level : level,
@@ -167,6 +170,7 @@ class Alerts extends React.Component {
                                 info : info,
                                 imageUrl : url,
                                 videoUrl : video
+
                             });
                             resolve();
                         });
@@ -295,7 +299,6 @@ class Alerts extends React.Component {
                                     data-idx={idx}
                                     id={imageId}
                                     placeholder="Image file for explanation"
-                                    defaultValue={val['imageUrl']}
                                 /> 
                                 <img src={val['imageUrl']} alt=""/>
                                 Video Url (Youtube)
@@ -306,6 +309,7 @@ class Alerts extends React.Component {
                                     id={videoId}
                                     placeholder = "Type in url of the video you would like to upload starting with http"
                                     defaultValue={val['videoUrl']}
+
                                 />
                                 <br></br><br></br>
                             </div>

@@ -19,7 +19,6 @@ import Write from '../views/ui-components/write.jsx';
 import Cards from '../views/ui-components/review.jsx';
 import ReviewWrite from '../views/ui-components/reviewWrite.jsx';
 import Level from '../views/ui-components/level.jsx';
-import Session from '../views/ui-components/session.jsx';
 import Review from '../views/ui-components/review.jsx';
 import Detail from '../views/ui-components/detail.jsx';
 import Alert from '../views/ui-components/write.jsx';
@@ -73,12 +72,12 @@ var ThemeRoutes = [
     name: 'Write',
     icon: 'mdi mdi-pencil',
     component: Write
-  },{
+  }/*,{
     path: '/ui-components/session',
     name: name,
     icon: icon,
     component: Session
-  },
+  }*/,
   {path: '/reviewRead/:key/:my', component: Cards},
   {path: '/reviewWrite/:key/:my', component: ReviewWrite},
   {path: '/detail/:key', component: Detail},

@@ -72,3 +72,4 @@
 [1006/135901.462:ERROR:crash_report_database_win.cc(428)] unexpected header
 [1006/140256.738:ERROR:crash_report_database_win.cc(428)] unexpected header
 [1006/172019.008:ERROR:crash_report_database_win.cc(428)] unexpected header
+[1203/125028.486:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
