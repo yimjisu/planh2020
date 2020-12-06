@@ -108,11 +108,13 @@ const onClickHandler = (props) => {
     //props={this.props} refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true}
     var ref_root = props.refRoot;
     var user = firebase.auth().currentUser;
+    console.log(user);
+    /*
     if(user == null){
         alert('To leave a review, login first!');
         return;
     }
-
+    */
     var ref = ref_root.child('review');
     var comment = document.getElementById("text_comment").value;
     var suggestion = document.getElementById("text_suggestion").value;
@@ -121,7 +123,13 @@ const onClickHandler = (props) => {
         return;
     }
     //var name = document.getElementById("input-name").value;
-    var name = user.displayName;
+    var name = "";
+    if (user != null){
+        name = user.displayName;
+    }   
+    else{
+        name = "non login user";
+    }
     var rate = document.getElementById("input-rate").value;
     //update total average rate
     var ref_avg = ref_root.child('rating');
@@ -481,7 +489,7 @@ const Reviewtab = (props) => {
     constructor(props){
         super(props);
         this._isMounted = false;
-        var temp_rating = [1,1,1,1,1];
+        var temp_rating = [3,3,3,3,3];
         var temp_comment = '';
         var temp_suggestion = '';
         var temp_is_edit = false;
@@ -496,7 +504,8 @@ const Reviewtab = (props) => {
         }
         this.state = {
             name : '',
-            rate : temp_rating,
+            //rate : temp_rating,
+            rate : [3,3,3,3,3],
             comment : temp_comment,
             suggestion : temp_suggestion,
             refRoot : null,
@@ -515,8 +524,10 @@ const Reviewtab = (props) => {
         this._isMounted = true;
         var user = firebase.auth().currentUser;
         console.log('user', user);
-        if(user){
+        if(user!=null){
             this.state.name = user.displayName;
+        }else{
+            this.state.name = "non login user";
         }
         this.state.refRoot = firebase.database().ref().child('routine').child(this.props.match.params.key);
         /*

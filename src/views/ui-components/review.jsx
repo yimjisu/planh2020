@@ -172,6 +172,7 @@ const onClickReportHandler = (rout_key, rev_key) => {
         alert('To report, login first!');
         return;
     }
+    alert('Reported. We will check it right away!');
     var ref = firebase.database().ref().child('report');
     let temp = ref.push();
     temp.set({routine: rout_key, review: rev_key});
@@ -710,6 +711,215 @@ const Reviewtab = (props) => {
 }
 }
 
+class AuthorReply extends React.Component{
+    constructor(props){
+        super(props);
+        this._isMounted = false; 
+        //get reply from firebase, review -> reviewuuid -> reply  
+        //edit_flag = 1, means edit mode
+        //if there's reply it's just showing or just write reply sign
+        this.state = {
+            edit_flag : this.props.edit_flag,
+            reply : this.props.reply,
+        }
+        this.writeReplyHandler = this.writeReplyHandler.bind(this);
+        this.cancelHandler = this.cancelHandler.bind(this);
+        this.submitHandler = this.submitHandler.bind(this);
+    }
+    componentWillUnmount(){
+        this._isMounted = false;
+    }
+    componentDidMount(){
+        console.log("didmount");
+        this._isMounted = true;
+        var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval).child('reply');
+        var val;
+        ref.on('value',snap => {
+            var val = snap.val();
+            if(val!=null & this._isMounted){
+                this.setState({reply : val});
+            }
+        });
+    }
+    deleteHandler = () => {
+        var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval).child('reply');
+        ref.remove();
+        this.setState({edit_flag : false, reply : ""})
+        alert('reply deleted');
+    }
+    writeReplyHandler = () => {
+        this.setState({edit_flag : true});
+        console.log(this.state.edit_flag);
+    }
+    cancelHandler = () => {
+        this.setState({edit_flag : false});
+    }
+    submitHandler = () => {
+        var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval);
+        var reply = document.getElementById("text_reply").value;
+        console.log(reply);
+        if(reply.length == 0){
+            alert('Write reply before submit');
+            return;
+        }
+        ref.child('reply').set(reply);
+        this.setState({edit_flag : false});
+    }
+
+    render(){
+        console.log("render triggered");
+        /*
+        if(this.state.reply != null && this.state.reply.length > 0){
+            //it should be just shown with edit, delete button
+            //edit button to edit mode
+            //delete button delete from database
+        }
+        else {
+            //it should be just write reply expands to edit mode
+        }
+        */
+        return(
+            <div>
+            {   this.state.edit_flag == true ? (
+                <div className="input-group">
+                    <h5 className="mb-3">Reply</h5>
+                    { this.state.reply != null && this.state.reply.length > 0 ? 
+                    (<textarea className="form-control" id="text_reply" rows="5" style={{resize: 'none'}} defaultValue={this.state.reply}></textarea>) : 
+                    (<textarea className="form-control" id="text_reply" rows="5" style={{resize: 'none'}}></textarea>)}
+                    <div className="input-group-prepend">
+                    <span className="input-group-text" id="basic-addon1">
+                    <Button onClick = {this.submitHandler}>submit</Button>
+                    <div class="pull-right">
+                    <Button onClick={this.cancelHandler}>cancel</Button>
+                    </div>
+                    </span>
+                    </div> 
+                    </div>
+                    ) : (
+                    <div className="input-group">
+                        { this.state.reply != null && this.state.reply.length > 0 ? 
+                        (<div><h5 className="mb-3">Reply</h5>
+                        <textarea className="form-control" id="text_reply" rows="5" style={{resize: 'none'}} defaultValue={this.state.reply} readOnly></textarea>
+                        <div className="input-group-prepend">
+                        <span className="input-group-text" id="basic-addon1">
+                        <Button onClick = {this.writeReplyHandler}>edit</Button>
+                        <div class="pull-right">
+                        <Button onClick = {this.deleteHandler}>delete</Button>
+                        </div>
+                        </span>
+                        </div></div>):(<div><Button onClick={this.writeReplyHandler}><h5 className="mb-3">Write Reply</h5></Button></div>)
+                        }
+                    </div>
+                    )
+                }
+            </div>
+        )
+    }
+}
+class Pin_Button extends React.Component{
+    constructor(props){
+        super(props);
+        this._isMounted = false;
+        this.state = {
+            toggle : this.props.toggle,
+            isAuthor : this.props.isAuthor,
+            rootKey : this.props.rootKey,
+            keyval : this.props.keyval,
+        }
+        this.onClickPinHandler = this.onClickPinHandler.bind(this);
+    }
+    componentWillUnmount() {
+		this._isMounted = false;
+    }
+    
+    componentDidMount(){
+        this._isMounted = true;
+        //get the data from firebase
+        //given prop : empty, data, review id
+        /*
+        if(this.props.keyval){
+            console.log("component did mount review card")
+            var ref_root = firebase.database().ref().child('routine').child(this.props.rootKey);
+            var ref_author = ref_root.child('name');
+            ref_author.on('value', snap => {
+                var val = snap.val();
+                if(val!=null & this._isMounted){
+                    this.state.author = val;
+                }
+            })
+        }
+        */
+    }
+    onClickPinHandler(){
+        //console.log('before');
+        //console.log(this.state.pins);
+        console.log("onclickpinhandler");
+        console.log(this.state.keyval)
+        if(!this.state.toggle){ //add to pin
+            console.log("add to pin");
+            var ref = firebase.database().ref().child('routine').child(this.state.rootKey).child('pinned');
+            var pins = [];
+            ref.on('value', snap => {
+                var val = snap.val();
+                console.log(this._isMounted);
+                console.log(val);
+                if(val!=null && this._isMounted){
+                    pins = val;    
+                }
+                console.log(pins);
+            })
+            if(!pins.includes(this.state.keyval))
+                pins.push(this.state.keyval);
+            console.log(pins);
+            //this.state.pins = pins;
+            //this.state.pins = pins;
+            //console.log(this.props.data);
+            //this.state.pin_datas.push(this.props.data);
+            //this.state.pins = pins;
+            
+            ref.set(pins);
+            //var temp_tog = this.state.toggle;
+            this.setState({toggle : true});
+        }else{ //remove from pin
+            console.log("remove from pin");
+            var ref = firebase.database().ref().child('routine').child(this.state.rootKey).child('pinned');
+            var pins = [];
+            console.log(pins);
+            ref.on('value', snap => {
+                var val = snap.val();
+                if(val!=null && this._isMounted){
+                    pins = val;
+                    //pins = pins.filter(n => n != this.state.keyval);
+                }
+            })
+            console.log(pins);
+            pins = pins.filter(n => n != this.state.keyval);
+            //this.state.pins = pins;
+            //var temp_idx = pins.indexOf(this.state.keyval);
+            //this.state.pin_datas = this.state.pin_datas.splice(temp_idx,1);
+            
+            ref.set(pins);
+            //this.setState({pins : pins});
+            //this.state.pins = pins;
+            //var temp_tog = this.state.toggle;
+            this.setState({toggle : false});
+        }
+        //console.log('after');
+        //console.log(this.state.pins);
+    }
+    render(){
+        return(
+            <div>
+                {(this.state.isAuthor == true) ? 
+                (this.state.toggle == true ? (<div><Button onClick={this.onClickPinHandler}>Pinned</Button></div>) 
+                : (<div><Button onClick={this.onClickPinHandler}>Click to Pin</Button></div>)) :
+                (this.state.toggle == true ? (<div><Button disabled={true}>Pinned by Author</Button></div>) : <div></div>)}
+            </div>
+        )
+    }
+
+}
+
 class Review_Card extends React.Component{
     constructor(props){
         super(props);
@@ -731,6 +941,28 @@ class Review_Card extends React.Component{
             keyval : this.props.keyval,
         }
         */
+        var temp_userid;
+        if(firebase.auth().currentUser!=null){
+            temp_userid = firebase.auth().currentUser.displayName;
+        }
+        console.log(this.props.userid);
+        console.log(temp_userid);
+        this.state = {
+            author : this.props.author,
+            name : this.props.data.name,
+            rate : this.props.data.rate,
+            comment : this.props.data.comment,
+            clike : this.props.data.clike,
+            cdislike : this.props.data.cdislike,
+            suggestion : this.props.data.suggestion,
+            slike : this.props.data.slike,
+            sdislike : this.props.data.sdislike,
+            keyval : this.props.keyval,
+            userid : temp_userid,
+            //pins : this.props.pins,
+            toggle : this.props.toggle,
+        };
+       //this.onClickPinHandler = this.onClickPinHandler.bind(this);
     }
     componentWillUnmount() {
 		this._isMounted = false;
@@ -741,7 +973,34 @@ class Review_Card extends React.Component{
         //get the data from firebase
         //given prop : empty, data, review id
         if(this.props.keyval){
-            var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval);
+            console.log("component did mount review card")
+            console.log(this.props.keyval);
+            var ref_root = firebase.database().ref().child('routine').child(this.props.rootKey);
+            var ref_author = ref_root.child('name');
+            ref_author.on('value', snap => {
+                var val = snap.val();
+                if(val!=null & this._isMounted){
+                    this.state.author = val;
+                }
+            })
+            var ref_pin = ref_root.child('pinned');
+            var pins_array = [];
+            ref_pin.on('value',snap=>{
+                var val = snap.val();
+                //console.log(val);
+                if(val!=null & this._isMounted){
+                    for(var key in val){
+                        pins_array.push(val[key]);
+                    }
+                }
+            })
+            console.log(pins_array);
+            if(pins_array.includes(this.props.keyval)){
+                this.state.toggle = true;
+            }else{
+                this.state.toggle = false;
+            }
+            var ref = ref_root.child('review').child(this.props.keyval);
             ref.on('value', snap => {
                 var val = snap.val();
                 if(val!=null & this._isMounted){
@@ -753,7 +1012,6 @@ class Review_Card extends React.Component{
                     this.state.cdislike = val.comment.dislike;
                     this.state.slike = val.suggestion.like;
                     this.state.sdislike = val.suggestion.dislike;
-                
                 }
             })
         }
@@ -772,17 +1030,16 @@ class Review_Card extends React.Component{
         return img4;
     }
     render(){
-        this.state = {
-            name : this.props.data.name,
-            rate : this.props.data.rate,
-            comment : this.props.data.comment,
-            clike : this.props.data.clike,
-            cdislike : this.props.data.cdislike,
-            suggestion : this.props.data.suggestion,
-            slike : this.props.data.slike,
-            sdislike : this.props.data.sdislike,
-            keyval : this.props.keyval
-        };
+        console.log("review_card render")
+        console.log(this.props.keyval);
+        //console.log(this.props.data.name);
+        console.log(this.state.userid);
+        console.log(this.state.author);
+        var temp_userid = '';
+        if(firebase.auth().currentUser!=null){
+            temp_userid = firebase.auth().currentUser.displayName;
+        }
+        console.log(temp_userid);
         var shoulddisp = true;
         if (this.props.sortop == 1 && this.state.comment.length==0 && !this.props.empty){
             shoulddisp = false;
@@ -820,6 +1077,9 @@ class Review_Card extends React.Component{
                             <CardBody>
                                     {   this.props.userid == this.state.name ? (
                                     <div class="pull-right">
+                                        {(this.state.userid == this.state.author) ? 
+                                        <Pin_Button isAuthor = {true} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button> 
+                                        : <Pin_Button isAuthor = {false} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button>}
                                         <Button disabled="true"><Link to={{ pathname : '/reviewWrite/'+this.props.rootKey+'/'+false,
                                         state : {
                                             rate : this.state.rate,
@@ -832,10 +1092,15 @@ class Review_Card extends React.Component{
                                         Edit</Link></Button>                                    
                                         <Button onClick={()=>{onClickDeleteHandler(this.props.keyval, this.props.rootKey)}}>Delete</Button>
                                     </div>
-                                    ) : <div></div>}
-                            
+                                    ) :  ((this.state.userid == temp_userid) ? 
+                                        <Pin_Button isAuthor = {true} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button> 
+                                        : <Pin_Button isAuthor = {false} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button>)}
                             <ReviewDisptab comment={this.state.comment} userid={this.props.userid} sortop={this.props.sortop} rout_key={this.props.rootKey} keyval={this.state.keyval} clike={this.state.clike} cdislike={this.state.cdislike} suggestion={this.state.suggestion} slike={this.state.slike} sdislike={this.state.sdislike}/>
-                                        </CardBody>
+                            {  this.props.author == this.state.userid ? 
+                                <AuthorReply reply= {this.state.reply} keyval ={this.props.keyval} rootKey = {this.props.rootKey}/>
+                                : <div></div>
+                            }
+                            </CardBody>
                         </Col>
                     </Row>
                     </Card>
@@ -895,13 +1160,17 @@ const SortCondition = (props) => {
 //the lists of reviews
 class Review_List extends React.Component{
     constructor(props){
+        console.log("constructor review list");
         super(props);
         this._isMounted = false;
         this.state = {
             keys : this.props.myreviews,
             datas : this.props.mydatas,
+            pins : this.props.mypins,
+            pin_datas : this.props.mypindatas,
             sort : 0,
             method : 0,
+            author : "",
         }
         //sort 1 : only comment. sort 2 : only suggestion
         this.onClickSortHandler = this.onClickSortHandler.bind(this);
@@ -931,19 +1200,53 @@ class Review_List extends React.Component{
     }
     
     componentDidMount(){
+        console.log("did mount review_list");
+        console.log(this.state.pins);
         this._isMounted = true;
         var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review');
+        var ref_author = firebase.database().ref().child('routine').child(this.props.rootKey).child('name');
+        var ref_pin = firebase.database().ref().child('routine').child(this.props.rootKey).child('pinned');
+        var pins = [];
+        ref_pin.on('value', snap => {
+            var val = snap.val();
+            console.log(val);
+            if(val!=null && this._isMounted){
+                pins = val;
+            }
+            this.state.pins = pins;
+        })
+        //this.state.pins = pins;
+        //console.log(this.state.pins);
+        //console.log(pins);
+        var pin_datas = [];
+        var keys = [];
+        var datas = [];
         ref.on('value', snap => {
             var val = snap.val();
-            if(val!=null & this._isMounted){
-                var keys = [];
-                var datas = [];
+            console.log(val);
+            if(val!=null && this._isMounted){
                 for(var key in val){
-                    keys.push(key);
-                    datas.push(val[key]);
+                    if(!this.state.pins.includes(key)){
+                       keys.push(key);
+                       datas.push(val[key]); 
+                    }
                 }
+                for(var key in pins){
+                    console.log(val[pins[key]]);
+                    pin_datas.push(val[pins[key]]);
+                }
+                this.state.pin_datas = pin_datas;
                 this.state.keys = keys;
                 this.state.datas = datas;
+                ///console.log(pin_datas);
+            }
+        })
+        ref_author.on('value',snap => {
+            var val = snap.val();
+            console.log(val);
+            if(val!=null && this._isMounted){
+                //this.state.author = val;
+                this.state.author = val;
             }
         })
         //pressed list
@@ -966,7 +1269,51 @@ class Review_List extends React.Component{
     render(){
         //for reviews in the review array
         //consider case when there is no review
+        console.log('review list render');
         var sorted_arr=[];
+        var pin_arr = [];
+        //console.log(this.state.pins);
+        var ref_pin = firebase.database().ref().child('routine').child(this.props.rootKey).child('pinned');
+        var pins = [];
+        ref_pin.on('value', snap => {
+            var val = snap.val();
+            if(val!=null){
+                pins = val;
+            }
+        })
+        this.state.pins = pins;
+        var pin_datas = [];
+        var keys = [];
+        var datas = [];
+        var ref =  firebase.database().ref().child('routine').child(this.props.rootKey).child('review');
+        ref.on('value', snap => {
+            var val = snap.val();
+            console.log(val);
+            if(val!=null){
+                for(var key in val){
+                    if(!pins.includes(key)){
+                        keys.push(key);
+                        datas.push(val[key]);
+                    }
+                }
+                for(var key in pins){
+                    console.log(val[pins[key]]);
+                    pin_datas.push(val[pins[key]]);
+                }
+            }
+        })
+        this.state.pin_datas = pin_datas; 
+        this.state.keys = keys;
+        this.state.datas = datas;
+        console.log(this.state.pins);
+        console.log(this.state.pin_datas);
+        console.log(this.state.keys);
+        console.log(this.state.datas);
+        if(this.state.pins.length > 0 && this.state.pin_datas!=null &&this.state.pin_datas.length > 0){
+            pin_arr = this.state.pins.map((key, index)=> [key, this.state.pin_datas[index]]).reverse();
+            console.log("pin_arr");
+            console.log(pin_arr);
+        }
         if(this.state.keys.length > 0){
             sorted_arr = this.state.keys.map((key, index)=> [key, this.state.datas[index]]).reverse();
             var a = sorted_arr[0];
@@ -996,9 +1343,28 @@ class Review_List extends React.Component{
                 </h5>
                 
                 <div>
-                {
-                    //sorting method, this.state.keys => sort with something and map with that.
-                    sorted_arr.length>0 ? (
+                    {
+                        pin_arr.length >0 ? (
+                        pin_arr.map((data, index)=>{
+                            let key = data[0];
+                            console.log(key);
+                            let temp = data[1];
+                            console.log(temp);
+                            var temp2 = {
+                                name : temp.name,
+                                rate : temp.rate.split(','),
+                                comment : temp.comment.text,
+                                clike : temp.comment.like,
+                                cdislike : temp.comment.dislike,
+                                suggestion : temp.suggestion.text,
+                                slike : temp.suggestion.like,
+                                sdislike : temp.suggestion.dislike
+                            };
+                            return(<Review_Card toggle = {true} pins = {this.state.pins} keyval={key} rootKey={this.props.rootKey} data={temp2} empty={false} userid={this.props.userid} sortop={this.state.sort} author={this.state.author}/>)})) 
+                        : <div></div>
+                        }
+                    {
+                        sorted_arr.length>0 ? (
                         sorted_arr.map((data, index) => { 
                             let key = data[0];
                             let temp = data[1];
@@ -1012,21 +1378,7 @@ class Review_List extends React.Component{
                                 slike : temp.suggestion.like,
                                 sdislike : temp.suggestion.dislike
                             };
-                            //routine key should be provided
-                            /*
-                            let match = this.state.pressed.filter(i=>i.rev_key == key);
-                            let clikePressed = false;
-                            let cdislikePressed = false;
-                            let slikePressed = false;
-                            let sdislikePressed = false;
-                            if(match.length == 1){
-                                clikePressed = match[0].clikePressed;
-                                cdislikePressed = !match[0].clikePressed;
-                                slikePressed = match[0].slikePressed;
-                                sdislikePressed = !match[0].slikePressed;
-                            } 
-                            */
-                            return(<Review_Card keyval={key} rootKey={this.props.rootKey} data={temp2} empty={false} userid={this.props.userid} sortop={this.state.sort}/>)}) 
+                            return(<Review_Card toggle = {false} pins = {this.state.pins} keyval={key} rootKey={this.props.rootKey} data={temp2} empty={false} userid={this.props.userid} sortop={this.state.sort} author={this.state.author}/>)}) 
                         )
                         : <Review_Card data={[]} empty={true} userid={this.props.userid} rootKey={this.props.rootKey}/>                   
                 }
@@ -1047,6 +1399,8 @@ class Cards extends React.Component{
         this.state = {
             myreview : [],
             mydatas : [],
+            mypin : [],
+            mypindatas : [],
             userid : temp_userid
         }
     }
@@ -1060,16 +1414,52 @@ class Cards extends React.Component{
         //get the review of the routine(given by routine ID).
         var ref_root = firebase.database().ref().child('routine').child(this.props.match.params.key);
         var ref = ref_root.child('review');
+        var ref_pin = ref_root.child('pinned');
+        var pin_arr = [];
+        /*
+        ref_pin.on('value', snap => {
+            var val = snap.val();
+            console.log(val);
+            if(val!=null & this._isMounted){
+                for(var key in val){
+                    console.log(val[key]);
+                    pins.push(val[key]);
+                }
+                this.state.pins = pins;
+            }
+        })
+        */
+        ref_pin.on('value',snap => {
+            var val = snap.val();
+            if(val!=null & this._isMounted){
+                for(var key in val){
+                    pin_arr.push(val[key]);
+                }
+                this.setState({mypin : pin_arr,});
+            }
+        })
         ref.on('value', snap => {
             var val = snap.val();
+            console.log(val);
             if(val!=null & this._isMounted){
                 var keys = [];
                 var datas = [];
                 for(var key in val){
-                    keys.push(key);
-                    datas.push(val[key]);
+                    if(!pin_arr.includes(key)){
+                        keys.push(key)  
+                        datas.push(val[key]);
+                    }
                 }
-                this.setState({myreview: keys, mydatas: datas});
+                //this.setStatekeys = keys;
+                //this.state.datas = datas;
+                var pin_datas = [];
+                for(var key in pin_arr){
+                    console.log(key);
+                    console.log(val[pin_arr[key]]);
+                    pin_datas.push(val[pin_arr[key]]);
+                }
+                //this.state.pin_datas = pin_datas; 
+                this.setState({myreview : keys, mydatas : datas, mypindatas : pin_datas});
             }
         })
         var ref_avg = ref_root.child('rating');
@@ -1095,7 +1485,7 @@ class Cards extends React.Component{
         })
         */
     }
-
+    //if I am the review writter, add comment writing space. (editable)
     render(){
         return(
             <Row>
@@ -1103,7 +1493,7 @@ class Cards extends React.Component{
                 <Projects props={this.props.match.params.key} detail={true} my={this.props.match.params.my}/>
                 </Col>
                 <Col sm={12} lg={12}>
-                <Review_List myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid} avg={this.state.avg} rootKey={this.props.match.params.key}/>
+                <Review_List mypindatas={this.state.mypindatas} mypins={this.state.mypin} myreviews={this.state.myreview} mydatas={this.state.mydatas} userid={this.state.userid} avg={this.state.avg} rootKey={this.props.match.params.key}/>
                 </Col>
             </Row>
                     )
