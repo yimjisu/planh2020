@@ -155,29 +155,42 @@ class Alerts extends React.Component {
             var video = document.getElementById(`video-${i}`).value;
             var imageFile = document.getElementById(`image-${i}`).files[0];
             var imageName = currentUid + '-' + action + '-' + i;
-            const uploadTask = storage.ref(`/images/${imageName}`).put(imageFile);
-            const pending = new Promise(function(resolve, reject) {
-                uploadTask.on("state_changed", console.log, console.error, () => {
-                    storage
-                        .ref("images")
-                        .child(imageName)
-                        .getDownloadURL()
-                        .then((url) => {
-                            console.log(url)
-                            actionState.push({
-                                action : action,
-                                time: routinetime,
-                                info : info,
-                                imageUrl : url,
-                                videoUrl : video
 
+            if(imageFile){
+                const uploadTask = storage.ref(`/images/${imageName}`).put(imageFile);
+                const pending = new Promise(function(resolve, reject) {
+                    uploadTask.on("state_changed", console.log, console.error, () => {
+                        storage
+                            .ref("images")
+                            .child(imageName)
+                            .getDownloadURL()
+                            .then((url) => {
+                                console.log(url)
+                                actionState.push({
+                                    action : action,
+                                    time: routinetime,
+                                    info : info,
+                                    imageUrl : url,
+                                    videoUrl : video
+
+                                });
+                                resolve();
                             });
-                            resolve();
-                        });
-                    
+                        
+                    });
+                })  
+                promises.push(pending);
+            } else {
+                var url = this.state.actionState[i].imageUrl;
+                actionState.push({
+                    action : action,
+                    time: routinetime,
+                    info : info,
+                    imageUrl : url,
+                    videoUrl : video
                 });
-            })
-            promises.push(pending);
+            }
+            
             
             
         }
