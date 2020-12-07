@@ -49,16 +49,12 @@ class BadgeList extends React.Component{
         super(props)
     }
 
-    sendTarget = (e) => {
-        this.props.function(e.target.tag)
-    }
-
     render () {
         return(
             <div className="taglist" >
                 {this.props.query_tag.map((key, index) => {
                     return(
-                        <Badge onClick={(e) => this.sendTarget(e)} tag={key} className="mx-1" color="info" pill >
+                        <Badge tag={key} className="mx-1" color="info" pill >
                             <i className="mdi mdi-dots-horizontal" /> {key}
                         </Badge>
                     )
@@ -144,6 +140,17 @@ class Header extends React.Component{
             tothenext: false,
             profilephoto: defaultimage,
             text : 'login',
+<<<<<<< HEAD
+=======
+            title_query: null,
+            shoulder: false,
+            arms: false,
+            back: false,
+            chest: false,
+            abdominals: false,
+            legs: false,
+            finished: false,
+>>>>>>> search
             state: null
         }
     }
@@ -229,6 +236,78 @@ class Header extends React.Component{
         })
     }
 
+    onClickShoulder = () => {
+        if (this.state.shoulder){
+            this.setState({
+                shoulder: false
+            })
+        }else{
+            this.setState({
+                shoulder: true
+            })
+        }
+    }
+
+    onClickArms = () => {
+        if (this.state.arms){
+            this.setState({
+                arms: false
+            })
+        }else{
+            this.setState({
+                arms: true
+            })
+        }
+    }
+
+    onClickBack = () => {
+        if (this.state.back){
+            this.setState({
+                back: false
+            })
+        }else{
+            this.setState({
+                back: true
+            })
+        }
+    }
+
+    onClickChest = () => {
+        if (this.state.chest){
+            this.setState({
+                chest: false
+            })
+        }else{
+            this.setState({
+                chest: true
+            })
+        }
+    }
+
+    onClickAbdominals = () => {
+        if (this.state.abdominals){
+            this.setState({
+                abdominals: false
+            })
+        }else{
+            this.setState({
+                abdominals: true
+            })
+        }
+    }
+
+    onClickLegs = () => {
+        if (this.state.legs){
+            this.setState({
+                legs: false
+            })
+        }else{
+            this.setState({
+                legs: true
+            })
+        }
+    }
+
     onClickLow = () => {
         if (this.state.level === 'low'){
             this.setState({
@@ -291,6 +370,12 @@ class Header extends React.Component{
         })
     }
 
+    onChangeTitleSearch = (e) => {
+        this.setState({
+            title_query: e.target.value
+        })
+    }
+
 
     pushTags = (newTag) => {
         if (!this.state.query_tag.includes(newTag) & newTag != null){
@@ -315,22 +400,37 @@ class Header extends React.Component{
         })
     }
 
-    resetSearch = () => {
+    resetSearch = (e) => {
         this.setState({
             mintime: null,
             maxtime: null,
             level: null,
             recomm_tags: [],
             query_tag: [],
-            result_tag: ''
+            result_tag: '',
+            bodypart: [],
+            title_query: null
         })
+
         document.getElementById("search").reset();
+        this.props.history.replace('/');
     }
 
-    startSearch = () => {
+    startSearch = (e) => {
+        var query_text = this.state.mintime + '&' + this.state.maxtime + '&' + this.state.level + '&' + this.state.bodypart + '&' + this.state.title_query + this.state.result_tag;
+
         this.setState({
-            tothenext: true
+            mintime: null,
+            maxtime: null,
+            level: null,
+            recomm_tags: [],
+            query_tag: [],
+            result_tag: '',
+            bodypart: [],
+            title_query: null
         })
+        document.getElementById("search").reset();
+        this.props.history.replace('/querier/' + query_text);
     }
 
     login(e){
@@ -362,6 +462,38 @@ class Header extends React.Component{
         })}
     }
 
+<<<<<<< HEAD
+    login(e){
+        e.preventDefault();
+        var userEmail = document.querySelector("#email_field");
+        var userPass = document.querySelector("#password_field");
+        
+        document.getElementById("email_field").innerHTML = '';
+        document.getElementById("password_field").innerHTML = '';
+        firebase.auth().signInWithEmailAndPassword(userEmail.value, userPass.value).catch(function(error){
+    
+            var errorCode = error.code;
+            var errorMessage = error.message;
+    
+            window.alert("Error : "+errorMessage);
+        });
+        this.props.history.replace('/');
+    }
+    turnback(e){
+        e.preventDefault();
+        if(this._isMounted) {this.setState({
+            state: STATE.LOGIN
+        })}
+    }
+    createAccount(e){
+        e.preventDefault();
+        if(this._isMounted) {this.setState({
+            state: STATE.CREATE
+        })}
+    }
+
+=======
+>>>>>>> search
     submitCreateAccount(e){
         e.preventDefault();
         var displayName = document.querySelector("#entry-displayname");
@@ -491,7 +623,6 @@ class Header extends React.Component{
                                 {/* Start Search-box toggle                                                        */}
                                 {/*--------------------------------------------------------------------------------*/}
                                 <NavItem className="hidden-sm-down search-box">
-                                    {!window.location.href.includes('queried') ?
                                         <div>
                                             <NavLink
                                                 href="#"
@@ -520,6 +651,21 @@ class Header extends React.Component{
                                                     {this.state.level === "high" ? <Button className="high-btn-act" onClick={this.onClickHigh}>High</Button> : <Button className="high-btn" onClick={this.onClickHigh}>High</Button>}
                                                 </div>
                                                 <div>   
+                                                    <CardTitle className="bodypart-fnt">Body Part</CardTitle>
+                                                    {this.state.shoulder ? <Button className="shoulder-btn-act" onClick={this.onClickShoulder}>Shoulder</Button> : <Button className="shoulder-btn" onClick={this.onClickShoulder}>Shoulder</Button>}
+                                                    {this.state.arms ? <Button className="arms-btn-act" onClick={this.onClickArms}>Arms</Button> : <Button className="arms-btn" onClick={this.onClickArms}>Arms</Button>}
+                                                    {this.state.back ? <Button className="back-btn-act" onClick={this.onClickBack}>Back</Button> : <Button className="back-btn" onClick={this.onClickBack}>Back</Button>}
+                                                    {this.state.abdominals ? <Button className="abdo-btn-act" onClick={this.onClickAbdominals}>Abdominal</Button> : <Button className="abdo-btn" onClick={this.onClickAbdominals}>Abdominal</Button>}
+                                                    {this.state.chest ? <Button className="chest-btn-act" onClick={this.onClickChest}>Chest</Button> : <Button className="chest-btn" onClick={this.onClickChest}>Chest</Button>}
+                                                    {this.state.legs ? <Button className="legs-btn-act" onClick={this.onClickLegs}>Legs</Button> : <Button className="legs-btn" onClick={this.onClickLegs}>Legs</Button>}
+                                                </div>
+                                                <div>   
+                                                    <CardTitle className="title-query-fnt">Title</CardTitle>
+                                                    <Form id="title-input">
+                                                        <Input className="title-query-input" type="text" onChange={this.onChangeTitleSearch} placeholder="Type here..."/>
+                                                    </Form>
+                                                </div>
+                                                <div>   
                                                     <CardTitle className="tag-fnt">Tag</CardTitle>
                                                     {this.state.query_tag.length >= 1 ? <BadgeList query_tag={this.state.query_tag} function={this.removeTag} /> : null}
                                                     <Form id="tag-input">
@@ -527,17 +673,18 @@ class Header extends React.Component{
                                                     </Form>
                                                     {this.state.recomm_tags.length >= 1 ? <RecommList recomm_tags={this.state.recomm_tags} function={this.pushTags}/> : null}
                                                 </div>
+<<<<<<< HEAD
                                                 <Link to={"/queried/" + this.state.mintime + "&" + this.state.maxtime + "&" + this.state.level + this.state.result_tag}>
+=======
+                                                
+                                                <Link to={"/querier/" + this.state.mintime + "&" + this.state.maxtime + "&" + this.state.level + "&" + this.state.title_query + "&" + this.state.shoulder + "&" + this.state.arms + "&" + this.state.back + "&" + this.state.abdominals + "&" + this.state.chest + "&" + this.state.legs + this.state.result_tag}>
+>>>>>>> search
                                                     <button className="btn-link search-btn" onClick={this.toggleMenu.bind(null)}>
                                                         <i className="ti-search" />
                                                     </button>
                                                 </Link>
                                             </Form>
                                         </div>
-                                        :
-                                        null
-                                    }
-                                    
                                 </NavItem>
                                 {/*--------------------------------------------------------------------------------*/}
                                 {/* End Search-box toggle                                                          */}
