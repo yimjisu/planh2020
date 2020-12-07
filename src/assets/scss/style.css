@@ -12956,7 +12956,7 @@ Preloader
 
 .search-box .app-search {
     position: absolute;
-    height: 250px;
+    height: 550px;
     background-color: var(--white);
     margin-right: 0px;
     display: block;
@@ -12990,7 +12990,7 @@ Preloader
 
 .search-box .app-search .search-btn {
     position: absolute;
-    top: 170px;
+    top: 450px;
     cursor: pointer;
     background: #fff;
     width: 30px;
@@ -13054,9 +13054,198 @@ Preloader
     font-size: 20px
 }
 
+.search-box .app-search .bodypart-fnt {
+    position: absolute;
+    top: 225px;
+    left: 30px;
+    border: 0;
+    font-size: 24px
+}
+
+.search-box .app-search .arms-btn-act {
+    background-color: #fab75f;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 280px;
+    left: 200px;
+    font-size: 20px
+}
+
+.search-box .app-search .arms-btn {
+    background-color: #ee9117;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 280px;
+    left: 200px;
+    font-size: 20px
+}
+
+.search-box .app-search .back-btn-act {
+    background-color: #4bdd47;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 280px;
+    left: 320px;
+    font-size: 20px
+}
+
+.search-box .app-search .back-btn {
+    background-color: #1f961c;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 280px;
+    left: 320px;
+    font-size: 20px
+}
+
+.search-box .app-search .legs-btn-act {
+    background-color: #c3c984;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 370px;
+    left: 320px;
+    font-size: 20px
+}
+
+.search-box .app-search .legs-btn {
+    background-color: #777d34;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 370px;
+    left: 320px;
+    font-size: 20px
+}
+
+.search-box .app-search .abdo-btn-act {
+    background-color: #5964d2;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 370px;
+    left: 35px;
+    font-size: 20px
+}
+
+.search-box .app-search .abdo-btn {
+    background-color: #242f9e;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 370px;
+    left: 35px;
+    font-size: 20px
+}
+
+.search-box .app-search .chest-btn-act {
+    background-color: #bc65c9;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 370px;
+    left: 197px;
+    font-size: 20px
+}
+
+.search-box .app-search .chest-btn {
+    background-color: #7b2987;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 370px;
+    left: 197px;
+    font-size: 20px
+}
+
+.search-box .app-search .shoulder-btn-act {
+    background-color: #dc4040;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 280px;
+    left: 45px;
+    font-size: 20px
+}
+
+.search-box .app-search .shoulder-btn {
+    background-color: #aa1515;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 280px;
+    left: 45px;
+    font-size: 20px
+}
+
+
 .search-box .app-search .level-fnt {
     position: absolute;
-    top: 125px;
+    top: 115px;
     left: 30px;
     border: 0;
     font-size: 24px
@@ -13128,6 +13317,25 @@ Preloader
     left: 53%;
     border: 0;
     font-size: 24px
+}
+
+.search-box .app-search .title-query-fnt {
+    position: absolute;
+    top: 225px;
+    left: 53%;
+    border: 0;
+    font-size: 24px
+}
+
+.search-box .app-search .title-query-input {
+    position: absolute;
+    top: 300px;
+    left: 55%;
+    width: 30%;
+    min-height: 70px;
+    border-radius: 0px;
+    font-size: 17px;
+    transition: 0.5s ease-in;
 }
 
 .search-box .app-search .tag-input {

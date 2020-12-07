@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     Card,
+    CardBody,
     CardTitle,
     CardText,
     Nav,
@@ -29,7 +30,15 @@ import logodarkicon from '../../assets/images/logo-icon.png';
 import logolighticon from '../../assets/images/logo-light-icon.png';
 import logodarktext from '../../assets/images/logo-text.png';
 import logolighttext from '../../assets/images/logo-light-text.png';
-import profilephoto from '../../assets/images/users/1.jpg';
+
+import defaultimage from '../../assets/images/users/default-user-image.png';
+import img1 from '../../assets/images/users/1.jpg';
+import img2 from '../../assets/images/users/2.jpg';
+import img3 from '../../assets/images/users/3.jpg';
+import img4 from '../../assets/images/users/4.jpg';
+import img5 from '../../assets/images/users/5.jpg';
+import img6 from '../../assets/images/users/6.jpg';
+
 
 import recomm_tag from '../../assets/images/search/recomm_tag.png';
 import recomm_lev from '../../assets/images/search/recomm_lev.png';
@@ -40,16 +49,12 @@ class BadgeList extends React.Component{
         super(props)
     }
 
-    sendTarget = (e) => {
-        this.props.function(e.target.tag)
-    }
-
     render () {
         return(
             <div className="taglist" >
                 {this.props.query_tag.map((key, index) => {
                     return(
-                        <Badge onClick={(e) => this.sendTarget(e)} tag={key} className="mx-1" color="info" pill >
+                        <Badge tag={key} className="mx-1" color="info" pill >
                             <i className="mdi mdi-dots-horizontal" /> {key}
                         </Badge>
                     )
@@ -112,28 +117,97 @@ class RecommList extends React.Component{
     }
 }
 
-
+var STATE = {LOGIN: 0, LOGOUT: 1, CREATE: 2};
 class Header extends React.Component{
     constructor (props){
         super(props);
         this._isMounted = false;
-        this.state = {
+        this.loginBtn = this.loginBtn.bind(this);
+        this.logoutBtn = this.logoutBtn.bind(this);
+        this.createBtn = this.createBtn.bind(this);
+        this.createAccount = this.createAccount.bind(this);
+        this.turnback = this.turnback.bind(this);
+        this.login = this.login.bind(this);
+        this.submitCreateAccount = this.submitCreateAccount.bind(this);
+		this._isMounted = false;
+		this.state = {
             mintime: null,
             maxtime: null,
             level: null,
             recomm_tags: [],
             query_tag: [],
             result_tag: '',
-            tothenext: false
+            tothenext: false,
+            profilephoto: defaultimage,
+            text : 'login',
+            title_query: null,
+            shoulder: false,
+            arms: false,
+            back: false,
+            chest: false,
+            abdominals: false,
+            legs: false,
+            finished: false,
+            state: null
         }
     }
 
     componentWillUnmount() {
         this.__isMounted = false;
     }
-
+    image(name){
+        if(name){
+            var num = name.length % 6;
+            console.log(num);
+            if(num == 1) return img1;
+        if(num == 2) return img2;
+        if(num == 3) return img3;
+        if(num == 0) return img4;
+        if(num == 4) return img5;
+        if(num == 5) return img6;
+        }
+        return img4;
+    }
     componentDidMount() {
         this._isMounted = true;
+        firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                var image = this.image(user.displayName);
+
+                this.setState({
+                    profilephoto : image,
+                    text : 'logout'
+                })
+                if(this._isMounted){
+                    this.setState({
+                        state: STATE.LOGOUT
+                    })
+                }
+                var user = firebase.auth().currentUser;
+                if(user != null){
+                    var name = user.displayName;
+                    if(name == null) name = '';
+                    if(document.getElementById("user_para")) document.getElementById("user_para").innerHTML = 'Welcome! ' + name;
+                }
+                var rootRef = firebase.database().ref().child('games');
+                rootRef.transaction(function(game){
+                    if(game){
+                        game.state = user.uid;
+                    }
+                    return game;
+                })
+            }
+            else{
+                if(this._isMounted) {this.setState({
+                    state: STATE.LOGIN
+                })}
+                if(document.getElementById("login-menu")) document.getElementById("login-menu").innerHTML = 'Login';
+                this.setState({
+                    profilephoto : defaultimage,
+                    text : 'login'
+                })
+            }}
+        )
     }
 
     showMobilemenu = () => {
@@ -157,6 +231,78 @@ class Header extends React.Component{
         this.setState({
             maxtime: e.target.value
         })
+    }
+
+    onClickShoulder = () => {
+        if (this.state.shoulder){
+            this.setState({
+                shoulder: false
+            })
+        }else{
+            this.setState({
+                shoulder: true
+            })
+        }
+    }
+
+    onClickArms = () => {
+        if (this.state.arms){
+            this.setState({
+                arms: false
+            })
+        }else{
+            this.setState({
+                arms: true
+            })
+        }
+    }
+
+    onClickBack = () => {
+        if (this.state.back){
+            this.setState({
+                back: false
+            })
+        }else{
+            this.setState({
+                back: true
+            })
+        }
+    }
+
+    onClickChest = () => {
+        if (this.state.chest){
+            this.setState({
+                chest: false
+            })
+        }else{
+            this.setState({
+                chest: true
+            })
+        }
+    }
+
+    onClickAbdominals = () => {
+        if (this.state.abdominals){
+            this.setState({
+                abdominals: false
+            })
+        }else{
+            this.setState({
+                abdominals: true
+            })
+        }
+    }
+
+    onClickLegs = () => {
+        if (this.state.legs){
+            this.setState({
+                legs: false
+            })
+        }else{
+            this.setState({
+                legs: true
+            })
+        }
     }
 
     onClickLow = () => {
@@ -221,6 +367,12 @@ class Header extends React.Component{
         })
     }
 
+    onChangeTitleSearch = (e) => {
+        this.setState({
+            title_query: e.target.value
+        })
+    }
+
 
     pushTags = (newTag) => {
         if (!this.state.query_tag.includes(newTag) & newTag != null){
@@ -245,25 +397,146 @@ class Header extends React.Component{
         })
     }
 
-    resetSearch = () => {
+    resetSearch = (e) => {
         this.setState({
             mintime: null,
             maxtime: null,
             level: null,
             recomm_tags: [],
             query_tag: [],
-            result_tag: ''
+            result_tag: '',
+            bodypart: [],
+            title_query: null
+        })
+
+        document.getElementById("search").reset();
+        this.props.history.replace('/');
+    }
+
+    startSearch = (e) => {
+        var query_text = this.state.mintime + '&' + this.state.maxtime + '&' + this.state.level + '&' + this.state.bodypart + '&' + this.state.title_query + this.state.result_tag;
+
+        this.setState({
+            mintime: null,
+            maxtime: null,
+            level: null,
+            recomm_tags: [],
+            query_tag: [],
+            result_tag: '',
+            bodypart: [],
+            title_query: null
         })
         document.getElementById("search").reset();
+        this.props.history.replace('/querier/' + query_text);
     }
 
-    startSearch = () => {
-        this.setState({
-            tothenext: true
-        })
+    login(e){
+        e.preventDefault();
+        var userEmail = document.querySelector("#email_field");
+        var userPass = document.querySelector("#password_field");
+        
+        document.getElementById("email_field").innerHTML = '';
+        document.getElementById("password_field").innerHTML = '';
+        firebase.auth().signInWithEmailAndPassword(userEmail.value, userPass.value).catch(function(error){
+    
+            var errorCode = error.code;
+            var errorMessage = error.message;
+    
+            window.alert("Error : "+errorMessage);
+        });
+        this.props.history.replace('/');
+    }
+    turnback(e){
+        e.preventDefault();
+        if(this._isMounted) {this.setState({
+            state: STATE.LOGIN
+        })}
+    }
+    createAccount(e){
+        e.preventDefault();
+        if(this._isMounted) {this.setState({
+            state: STATE.CREATE
+        })}
     }
 
+    submitCreateAccount(e){
+        e.preventDefault();
+        var displayName = document.querySelector("#entry-displayname");
+        var email = document.querySelector("#entry-email");
+        var password = document.querySelector("#entry-password");
+        if(true){
+            document.getElementById("entry-displayname").innerHTML = '';
+            document.getElementById("entry-email").innerHTML = '';
+            document.getElementById("entry-password").innerHTML = '';
+            console.log(displayName, email, password);
+            firebase.auth().createUserWithEmailAndPassword(email.value, password.value).then(function(){
+                var user = firebase.auth().currentUser;
+                user.updateProfile({displayName: displayName.value});
+            });
+            this.props.history.replace('/');
+        }else{
+            window.alert('password가 일치하지 않습니다')
+        }
+    }
+
+    logout(e){
+        e.preventDefault();
+        firebase.auth().signOut();
+    }
+
+    loginBtn(){
+        return(
+            <Card>
+                <CardBody>
+                    <h2>Login</h2>
+                    <input id="email_field" type="email" placeholder="email..."/>
+                    <input id="password_field" type="password" placeholder="password..."/>
+                    <Button className="button" onClick={this.login}>Sign In</Button>
+                    <Button className="button" onClick={this.createAccount} style={{marginLeft:'20px'}}>Sign Up</Button>
+                </CardBody>
+            </Card>
+        );
+    }
+
+    createBtn(){
+        return(
+        <Card>
+            <CardBody>
+
+            
+        <h2>Create Account</h2>
+        <input id="entry-displayname" type="text" placeholder="name..."/>
+        <input id="entry-email" type="email" placeholder="email address..."/>
+        <input id="entry-password" type="password" placeholder="password..."/>
+        <Button className="button" onClick={this.turnback}>Back</Button>
+        <Button className="button" onClick={this.submitCreateAccount} style={{marginLeft:'10px'}}>Sign Up</Button>
+        
+        </CardBody>
+        </Card>);
+    }
+
+    logoutBtn(){
+        return(
+            <div>
+            <div id="user_para">Welcome User</div>
+            <DropdownItem onClick={this.logout}>
+            <i className="fa fa-power-off mr-1 ml-1" />LogOut
+        </DropdownItem>
+        </div>
+        )
+    }
     render() {
+        var text = this.state.text;
+        var profilephoto = this.state.profilephoto;
+        var btn = null;
+        var state = this.state.state;
+        if(state == STATE.LOGIN){
+            btn = <this.loginBtn/>
+        }else if(state == STATE.LOGOUT){
+            btn = <this.logoutBtn/>
+        }else if(state == STATE.CREATE){
+            btn = <this.createBtn/>
+        }
         if (this.state.tothenext) {
             return (
                 <Card />
@@ -315,7 +588,6 @@ class Header extends React.Component{
                                 {/* Start Search-box toggle                                                        */}
                                 {/*--------------------------------------------------------------------------------*/}
                                 <NavItem className="hidden-sm-down search-box">
-                                    {!window.location.href.includes('queried') ?
                                         <div>
                                             <NavLink
                                                 href="#"
@@ -344,6 +616,21 @@ class Header extends React.Component{
                                                     {this.state.level === "high" ? <Button className="high-btn-act" onClick={this.onClickHigh}>High</Button> : <Button className="high-btn" onClick={this.onClickHigh}>High</Button>}
                                                 </div>
                                                 <div>   
+                                                    <CardTitle className="bodypart-fnt">Body Part</CardTitle>
+                                                    {this.state.shoulder ? <Button className="shoulder-btn-act" onClick={this.onClickShoulder}>Shoulder</Button> : <Button className="shoulder-btn" onClick={this.onClickShoulder}>Shoulder</Button>}
+                                                    {this.state.arms ? <Button className="arms-btn-act" onClick={this.onClickArms}>Arms</Button> : <Button className="arms-btn" onClick={this.onClickArms}>Arms</Button>}
+                                                    {this.state.back ? <Button className="back-btn-act" onClick={this.onClickBack}>Back</Button> : <Button className="back-btn" onClick={this.onClickBack}>Back</Button>}
+                                                    {this.state.abdominals ? <Button className="abdo-btn-act" onClick={this.onClickAbdominals}>Abdominal</Button> : <Button className="abdo-btn" onClick={this.onClickAbdominals}>Abdominal</Button>}
+                                                    {this.state.chest ? <Button className="chest-btn-act" onClick={this.onClickChest}>Chest</Button> : <Button className="chest-btn" onClick={this.onClickChest}>Chest</Button>}
+                                                    {this.state.legs ? <Button className="legs-btn-act" onClick={this.onClickLegs}>Legs</Button> : <Button className="legs-btn" onClick={this.onClickLegs}>Legs</Button>}
+                                                </div>
+                                                <div>   
+                                                    <CardTitle className="title-query-fnt">Title</CardTitle>
+                                                    <Form id="title-input">
+                                                        <Input className="title-query-input" type="text" onChange={this.onChangeTitleSearch} placeholder="Type here..."/>
+                                                    </Form>
+                                                </div>
+                                                <div>   
                                                     <CardTitle className="tag-fnt">Tag</CardTitle>
                                                     {this.state.query_tag.length >= 1 ? <BadgeList query_tag={this.state.query_tag} function={this.removeTag} /> : null}
                                                     <Form id="tag-input">
@@ -351,17 +638,14 @@ class Header extends React.Component{
                                                     </Form>
                                                     {this.state.recomm_tags.length >= 1 ? <RecommList recomm_tags={this.state.recomm_tags} function={this.pushTags}/> : null}
                                                 </div>
-                                                <Link to={"/ui-components/queried?" + this.state.mintime + "&" + this.state.maxtime + "&" + this.state.level + this.state.result_tag}>
+                                                
+                                                <Link to={"/querier/" + this.state.mintime + "&" + this.state.maxtime + "&" + this.state.level + "&" + this.state.title_query + "&" + this.state.shoulder + "&" + this.state.arms + "&" + this.state.back + "&" + this.state.abdominals + "&" + this.state.chest + "&" + this.state.legs + this.state.result_tag}>
                                                     <button className="btn-link search-btn" onClick={this.toggleMenu.bind(null)}>
                                                         <i className="ti-search" />
                                                     </button>
                                                 </Link>
                                             </Form>
                                         </div>
-                                        :
-                                        null
-                                    }
-                                    
                                 </NavItem>
                                 {/*--------------------------------------------------------------------------------*/}
                                 {/* End Search-box toggle                                                          */}
@@ -381,8 +665,9 @@ class Header extends React.Component{
                                             width="31"
                                         />
                                     </DropdownToggle>
-                                    {/*
+                                    
                                     <DropdownMenu right className="user-dd">
+                                        {/* 
                                         <DropdownItem>
                                             <i className="ti-user mr-1 ml-1" /> My Account
                         </DropdownItem>
@@ -394,12 +679,11 @@ class Header extends React.Component{
                         </DropdownItem>
                                         <DropdownItem className="border-bottom">
                                             <i className="ti-settings mr-1 ml-1" /> Account Settings
-                        </DropdownItem>
-                                        <DropdownItem href="/pages/login">
-                                            <i className="fa fa-power-off mr-1 ml-1" /> Logout
-                        </DropdownItem>
+                                        </DropdownItem>*/}
+                                        
+                        <div className="main-div">{btn}</div>
                                     </DropdownMenu>
-                                    */}
+                                    
                                 </UncontrolledDropdown>
                                 {/*--------------------------------------------------------------------------------*/}
                                 {/* End Profile Dropdown                                                           */}
