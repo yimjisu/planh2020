@@ -65,6 +65,15 @@ class Projects extends React.Component {
                 }
                 var routine = [];
                 for(var t in val.routine){
+                    var imageurl = val.routine[t]['imageUrl'];
+                    if(imageurl){
+                    var storage = firebase.storage();
+                    var httpsReference = storage.refFromURL(imageurl);
+                    httpsReference.getDownloadURL().then(function(url){
+                    val.routine[i]['imageUrl'] = url;
+                    }).catch(function(error) {
+                        // Handle any errors
+                    });}
                     routine.push(val.routine[t]);
                 }
                this.setState({
@@ -220,17 +229,18 @@ class Projects extends React.Component {
     if(this.props.my == true || this.props.my == "true"){
         edit = <div className="ml-auto no-block align-items-center">
          <div className="dl">
-        <a className="link font-small float-right">
+        <Link to='/' className="link font-small float-right">
         <i className="mdi mdi-delete mr-1" 
         onClick={() => {
             if(window.confirm('Want to delete this routine?')){
                 var ref = firebase.database().ref().child('routine');
                 var routineRef = ref.child(this.props.props);
                 routineRef.remove();
+
             }
         }
         }/>
-    </a>
+    </Link>
          </div>
         <div className="dl">
         <Link to={'/write/'+this.props.props} 
@@ -312,17 +322,8 @@ className="link font-small float-right">
                             var image = false;
                             var video = false;
                             var link = null;
-                            var storage, httpsReference;
                             if(r['imageUrl'] != null && this.props.detail == true){
                                 image = true;
-                                storage = firebase.storage();
-                                httpsReference = storage.refFromURL(r['imageUrl']);
-                                httpsReference.getDownloadURL().then(function(url){
-                                var img = document.getElementById('myimg');
-                                img.src = url;
-                                }).catch(function(error) {
-                                    // Handle any errors
-                                });
                             }
                             if(r['videoUrl'] != null && this.props.detail == true){
                                 video = true;
@@ -336,7 +337,7 @@ className="link font-small float-right">
                                     <td>{r['action']}</td>
                                     <td>{r['time']}min</td>
                                     <td>{r['info']}
-                                    <img className="d-block" id="myimg" height="150px"/>
+                                    <img className="d-block" id={"myimg"+index} height="150px" src={r['imageUrl']}/>
                                     <iframe 
                                     className = 'd-block'
                                     width="560" height="315" 
@@ -353,7 +354,7 @@ className="link font-small float-right">
                                     <td>{r['action']}</td>
                                     <td>{r['time']}min</td>
                                     <td>{r['info']}
-                                    <img className="d-block" id="myimg" height="150px"/></td>
+                                    <img className="d-block" id="myimg" height="150px" src={r['imageUrl']}/></td>
                                 </tr>
                             );
                         }if(video == true){
