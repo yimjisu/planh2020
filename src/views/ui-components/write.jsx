@@ -23,15 +23,17 @@ class Alerts extends React.Component {
         this.addTag = this.addTag.bind(this);
         this.addAction = this.addAction.bind(this);
         this.handleCommonChange = this.handleCommonChange.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
         this.state = {
             commonState : {title:'', time:'', level:''},
 
             tagState : ['',],
-            actionState : ['',],
+            actionState : [{},],
 
             title: null,
             level: null,
             time: null,
+            promises: [],
             body: {'arm': false, 'shoulder': false, 'back': false, 'chest': false, 'leg':false, 'abdominal':false}
         };
     }
@@ -55,7 +57,7 @@ class Alerts extends React.Component {
             if(val.routine) actionState = val.routine;
             if(val.tag.bodypart) body = val.tag.bodypart;
             for(var key in body){
-            document.getElementById(key).checked = body[key];
+                if(document.getElementById(key)) document.getElementById(key).checked = body[key];
             }
             if(level){
                 document.getElementById('level-'+level).checked = true;
@@ -75,7 +77,7 @@ class Alerts extends React.Component {
     }
     addAction(){
         var newaction = this.state.actionState;
-        newaction.push('');
+        newaction.push({});
         this.setState({
             actionState : newaction
         });
@@ -91,7 +93,7 @@ class Alerts extends React.Component {
 
     handleCommonChange(e){
        this.setState({
-           [e.targetname] : [e.target.value]
+           [e.target.name] : [e.target.value]
        });
     }
 
@@ -100,6 +102,42 @@ class Alerts extends React.Component {
     }
 
     handleActionChange(e){
+    }
+
+    handleImageChange(e){
+        console.log(e);
+        var currentUid = firebase.auth().currentUser.uid;
+        var i = e.target.id;
+        var action = document.getElementById(`action-${i}`).value;
+        const storage = firebase.storage();
+        var imageFile = e.target.files[0];
+        var imageName = currentUid + '-' + action + '-' + i;
+        console.log(imageFile);
+        var promises = this.state.promises;
+        var actionState = this.state.actionState;
+        if(imageFile){
+            const uploadTask = storage.ref(`/images/${imageName}`).put(imageFile);
+            const pending = new Promise(function(resolve, reject) {
+                uploadTask.on("state_changed", console.log, console.error, () => {
+                    storage
+                        .ref("images")
+                        .child(imageName)
+                        .getDownloadURL()
+                        .then((url) => {
+                            console.log(url);
+                            actionState[i]['imageUrl'] = url;
+                            resolve();
+                        });
+                    
+                });
+            })
+
+            promises.push(pending);
+            this.setState({
+                actionState: actionState,
+                promises: promises
+            })
+        }
     }
 
     handleWrite(e){
@@ -113,7 +151,7 @@ class Alerts extends React.Component {
         var levelkey = ['low', 'middle', 'high'];
         for(var i=0; i<3; i++)
         if(document.getElementById('level-'+levelkey[i]).checked) level = levelkey[i];
-        const storage = firebase.storage();
+        
 
         if(user == null){
             alert('login first!');
@@ -164,56 +202,31 @@ class Alerts extends React.Component {
                 tagRef.child(tagState[i]).push(key);
         }
         
-        var actionState = [];
-        const promises = [];
+        var actionState = this.state.actionState;
+        const promises = this.state.promises;
         for(var i=0; i<this.state.actionState.length; i++){
             var action = document.getElementById(`action-${i}`).value;
             var info = document.getElementById(`info-${i}`).value;
             var routinetime = document.getElementById(`time-${i}`).value;
             var video = document.getElementById(`video-${i}`).value;
+            console.log(video, i);
             if(video == '') video = null;
-            var imageFile = document.getElementById(`image-${i}`).files[0];
-            var imageName = currentUid + '-' + action + '-' + i;
-
-            if(imageFile){
-                const uploadTask = storage.ref(`/images/${imageName}`).put(imageFile);
-                const pending = new Promise(function(resolve, reject) {
-                    uploadTask.on("state_changed", console.log, console.error, () => {
-                        storage
-                            .ref("images")
-                            .child(imageName)
-                            .getDownloadURL()
-                            .then((url) => {
-                                actionState.push({
-                                    action : action,
-                                    time: routinetime,
-                                    info : info,
-                                    imageUrl : url,
-                                    videoUrl : video
-                                });
-                                resolve();
-                            });
-                        
-                    });
-                })  
-                promises.push(pending);
-            } else {
-                var url = null;
-                if(Object.keys(this.state.actionState[i]).includes('imageUrl'))
-                    url = this.state.actionState[i].imageUrl;
-                actionState.push({
-                    action : action,
-                    time: routinetime,
-                    info : info,
-                    imageUrl : url,
-                    videoUrl : video
-                });
-            }            
+            
+            var url = null;
+            if(this.state.actionState[i] && 'imageUrl' in this.state.actionState[i])
+                url = this.state.actionState[i].imageUrl;
+            console.log(url, video);
+            actionState[i] = {
+                action : action,
+                time: routinetime,
+                info : info,
+                imageUrl : url,
+                videoUrl : video
+            };           
         }
         pushRef.child('tag').set({
             level: level,
             time: time,
-            bodypart: bodystate,
             tag: tagState
         });
         pushRef.child('img').set(1);
@@ -225,7 +238,6 @@ class Alerts extends React.Component {
             console.log("completed!");
             this.props.history.replace('/');
         })
-        
     };
     
     render(){
@@ -304,7 +316,7 @@ class Alerts extends React.Component {
                         const actionId = `action-${idx}`;
                         const infoId = `info-${idx}`;
                         const timeId = `time-${idx}`;
-                        const imageId = `image-${idx}`;
+                        const imageId = idx;
                         const videoId = `video-${idx}`;
                         return (
                             <div key={`action-${idx}`}>
@@ -345,6 +357,7 @@ class Alerts extends React.Component {
                                     data-idx={idx}
                                     id={imageId}
                                     placeholder="Image file for explanation"
+                                    onChange={(e) => this.handleImageChange(e)}
                                 /> 
                                 <img src={val['imageUrl']} alt=""/>
                                 Video Url (Youtube)
