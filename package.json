@@ -4,6 +4,7 @@
     "homepage": "https://planh2020.io/",
     "private": true,
     "dependencies": {
+        "@mdi/font": "^5.8.55",
         "bootstrap": "^4.5.3",
         "chart.js": "^2.7.2",
         "firebase": "^8.0.2",

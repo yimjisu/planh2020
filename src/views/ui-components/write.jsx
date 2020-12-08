@@ -31,7 +31,8 @@ class Alerts extends React.Component {
 
             title: null,
             level: null,
-            time: null
+            time: null,
+            body: {'arm': false, 'shoulder': false, 'back': false, 'chest': false, 'leg':false, 'abdominal':false}
         };
     }
     componentWillUnmount() {
@@ -42,7 +43,8 @@ class Alerts extends React.Component {
         const key = this.props.match.params.key;
         if(key == null) return;
         const ref = firebase.database().ref().child('routine').child(key);
-        var title='', level='', time='', tagState=[], actionState=[];
+        var title='', level='', time='', tagState=['',], actionState=['',];
+        var body = '';
         ref.on('value', snap => {
             var val = snap.val();
             if(val!=null){
@@ -51,15 +53,19 @@ class Alerts extends React.Component {
             if(val.tag.time)time = val.tag.time;
             if(val.tag.tag)tagState = val.tag.tag;
             if(val.routine) actionState = val.routine;
-
+            if(val.tag.bodypart) body = val.tag.bodypart;
+            for(var key in body){
+            document.getElementById(key).checked = body[key];
+            }
             this.setState({
                 title : title,
                 level : level,
                 time : time,
                 commonState : [title, level, time],
                 tagState : tagState,
-                actionState : actionState
-            }) 
+                actionState : actionState,
+                body: body
+            });
             }
         }); 
               
@@ -115,6 +121,12 @@ class Alerts extends React.Component {
             alert('Fill in the time!');
             return;
         }      
+        var bodystate = this.state.body;
+        for (var key in this.state.body){
+            console.log(key);
+            var check = document.getElementById(key).checked;
+            bodystate[key] = check;
+        }
         var tagState = [];  
         for(var i = 0; i < this.state.tagState.length; i++){
             var tag = document.getElementById(`tag-${i}`).value;
@@ -153,6 +165,7 @@ class Alerts extends React.Component {
             var info = document.getElementById(`info-${i}`).value;
             var routinetime = document.getElementById(`time-${i}`).value;
             var video = document.getElementById(`video-${i}`).value;
+            if(video == '') video = null;
             var imageFile = document.getElementById(`image-${i}`).files[0];
             var imageName = currentUid + '-' + action + '-' + i;
 
@@ -165,14 +178,12 @@ class Alerts extends React.Component {
                             .child(imageName)
                             .getDownloadURL()
                             .then((url) => {
-                                console.log(url)
                                 actionState.push({
                                     action : action,
                                     time: routinetime,
                                     info : info,
                                     imageUrl : url,
                                     videoUrl : video
-
                                 });
                                 resolve();
                             });
@@ -181,7 +192,9 @@ class Alerts extends React.Component {
                 })  
                 promises.push(pending);
             } else {
-                var url = this.state.actionState[i].imageUrl;
+                var url = null;
+                if(Object.keys(this.state.actionState[i]).includes('imageUrl'))
+                    url = this.state.actionState[i].imageUrl;
                 actionState.push({
                     action : action,
                     time: routinetime,
@@ -189,14 +202,12 @@ class Alerts extends React.Component {
                     imageUrl : url,
                     videoUrl : video
                 });
-            }
-            
-            
-            
+            }            
         }
         pushRef.child('tag').set({
             level: level,
             time: time,
+            bodypart: bodystate,
             tag: tagState
         });
         pushRef.child('img').set(1);
@@ -218,6 +229,7 @@ class Alerts extends React.Component {
         var level = this.state.level;
         var tagState = this.state.tagState;
         var actionState = this.state.actionState;
+        var body = this.state.body;
     return (
         <div>  
             <Form onSubmit={(e) => this.handleWrite(e)}>
@@ -226,7 +238,7 @@ class Alerts extends React.Component {
                     <Input type="text" name="title"  defaultValue={title} id="routineTitle" placeholder="Write the title of your Routine" onChange={(e) => this.handleCommonChange(e)}/>
                 </FormGroup>
                 <FormGroup>
-                    <Label for="level">Level of hardness</Label>
+                    <Label for="level">Level of difficulty</Label>
                     <Input type="select" name="level" id="levelSelect"  defaultValue={level} onChange={(e) => this.handleCommonChange(e)}>
                     <option>low</option>
                     <option>middle</option>
@@ -235,7 +247,18 @@ class Alerts extends React.Component {
                 </FormGroup>
                 <FormGroup>
                     <Label for="time">Time needed for your routine</Label>
-                    <Input type="number" name="time"  defaultValue={time} id="routineTime" placeholder="Write in minutes"onChange={(e) => this.handleCommonChange(e)}/>
+                    <Input type="number" name="time"  step='0.01' defaultValue={time} id="routineTime" placeholder="Write in minutes"onChange={(e) => this.handleCommonChange(e)}/>
+                </FormGroup>
+                <FormGroup>
+                    <Label for="body">Body part used in your routine</Label>
+                    <div className='d-flex'>
+                    {Object.entries(body).map(([key, value]) => {
+                        return(
+                        <div className='d-inline ml-5'>
+                        <Input type="checkbox" name="body" id={key}/> {key}
+                        </div>);
+                    })}
+                    </div>
                 </FormGroup>
                 <FormGroup>
                 <h4>Add your tag</h4>
@@ -300,6 +323,7 @@ class Alerts extends React.Component {
                                 <Input
                                     type="number"
                                     name="time"
+                                    step="0.01"
                                     data-idx={idx}
                                     id={timeId}
                                     placeholder = "Type time required for this action in minutes"
