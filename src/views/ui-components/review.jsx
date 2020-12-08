@@ -929,12 +929,12 @@ class Pin_Button extends React.Component{
     render(){
         return(
             <div>
-                {(this.state.isAuthor == true) ? 
-                (this.state.toggle == true ? 
+                {(this.props.isAuthor == true) ? 
+                (this.props.toggle == true ? 
                     (<i className="mdi mdi-pin" onClick={() => this.onClickPinHandler()}/>) 
                 : (<i className="mdi mdi-pin-off" onClick={() => this.onClickPinHandler()}/>)) 
                 :
-                (this.state.toggle == true ? (<i disabled={true} className="mdi mdi-pin" />) : <div></div>)}
+                (this.props.toggle == true ? (<i disabled={true} className="mdi mdi-pin" />) : <div></div>)}
             </div>
         )
     }
