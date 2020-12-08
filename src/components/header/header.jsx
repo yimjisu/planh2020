@@ -140,8 +140,6 @@ class Header extends React.Component{
             tothenext: false,
             profilephoto: defaultimage,
             text : 'login',
-<<<<<<< HEAD
-=======
             title_query: null,
             shoulder: false,
             arms: false,
@@ -150,7 +148,6 @@ class Header extends React.Component{
             abdominals: false,
             legs: false,
             finished: false,
->>>>>>> search
             state: null
         }
     }
@@ -462,7 +459,6 @@ class Header extends React.Component{
         })}
     }
 
-<<<<<<< HEAD
     login(e){
         e.preventDefault();
         var userEmail = document.querySelector("#email_field");
@@ -492,8 +488,6 @@ class Header extends React.Component{
         })}
     }
 
-=======
->>>>>>> search
     submitCreateAccount(e){
         e.preventDefault();
         var displayName = document.querySelector("#entry-displayname");
@@ -673,12 +667,8 @@ class Header extends React.Component{
                                                     </Form>
                                                     {this.state.recomm_tags.length >= 1 ? <RecommList recomm_tags={this.state.recomm_tags} function={this.pushTags}/> : null}
                                                 </div>
-<<<<<<< HEAD
-                                                <Link to={"/queried/" + this.state.mintime + "&" + this.state.maxtime + "&" + this.state.level + this.state.result_tag}>
-=======
                                                 
                                                 <Link to={"/querier/" + this.state.mintime + "&" + this.state.maxtime + "&" + this.state.level + "&" + this.state.title_query + "&" + this.state.shoulder + "&" + this.state.arms + "&" + this.state.back + "&" + this.state.abdominals + "&" + this.state.chest + "&" + this.state.legs + this.state.result_tag}>
->>>>>>> search
                                                     <button className="btn-link search-btn" onClick={this.toggleMenu.bind(null)}>
                                                         <i className="ti-search" />
                                                     </button>
