@@ -57,6 +57,9 @@ class Alerts extends React.Component {
             for(var key in body){
             document.getElementById(key).checked = body[key];
             }
+            if(level){
+                document.getElementById('level-'+level).checked = true;
+            }
             this.setState({
                 title : title,
                 level : level,
@@ -104,9 +107,12 @@ class Alerts extends React.Component {
 
         var user = firebase.auth().currentUser;
         var title = document.getElementById('routineTitle').value;
-        var level = document.getElementById('levelSelect').value;
+        var level;
         var time = document.getElementById('routineTime').value;
 
+        var levelkey = ['low', 'middle', 'high'];
+        for(var i=0; i<3; i++)
+        if(document.getElementById('level-'+levelkey[i]).checked) level = levelkey[i];
         const storage = firebase.storage();
 
         if(user == null){
@@ -239,11 +245,14 @@ class Alerts extends React.Component {
                 </FormGroup>
                 <FormGroup>
                     <Label for="level">Level of difficulty</Label>
-                    <Input type="select" name="level" id="levelSelect"  defaultValue={level} onChange={(e) => this.handleCommonChange(e)}>
-                    <option>low</option>
-                    <option>middle</option>
-                    <option>high</option>
-                    </Input>
+                    <div className='d-flex'>
+                    {['low', 'middle', 'high'].map((key, value) => {
+                        return(
+                        <div className='d-inline ml-5'>
+                        <Input type="radio" name="level" id={'level-'+key}/> {key}
+                        </div>);
+                    })}
+                    </div>
                 </FormGroup>
                 <FormGroup>
                     <Label for="time">Time needed for your routine</Label>
