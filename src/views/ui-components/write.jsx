@@ -55,7 +55,7 @@ class Alerts extends React.Component {
             if(val.routine) actionState = val.routine;
             if(val.tag.bodypart) body = val.tag.bodypart;
             for(var key in body){
-            document.getElementById(key).checked = body[key];
+                if(document.getElementById(key)) document.getElementById(key).checked = body[key];
             }
             if(level){
                 document.getElementById('level-'+level).checked = true;
@@ -171,10 +171,11 @@ class Alerts extends React.Component {
             var info = document.getElementById(`info-${i}`).value;
             var routinetime = document.getElementById(`time-${i}`).value;
             var video = document.getElementById(`video-${i}`).value;
+            console.log(video, i);
             if(video == '') video = null;
             var imageFile = document.getElementById(`image-${i}`).files[0];
             var imageName = currentUid + '-' + action + '-' + i;
-
+            console.log(imageFile);
             if(imageFile){
                 const uploadTask = storage.ref(`/images/${imageName}`).put(imageFile);
                 const pending = new Promise(function(resolve, reject) {
@@ -184,12 +185,14 @@ class Alerts extends React.Component {
                             .child(imageName)
                             .getDownloadURL()
                             .then((url) => {
+                                console.log(url)
                                 actionState.push({
                                     action : action,
                                     time: routinetime,
                                     info : info,
                                     imageUrl : url,
                                     videoUrl : video
+
                                 });
                                 resolve();
                             });
@@ -199,8 +202,9 @@ class Alerts extends React.Component {
                 promises.push(pending);
             } else {
                 var url = null;
-                if(Object.keys(this.state.actionState[i]).includes('imageUrl'))
-                    url = this.state.actionState[i].imageUrl;
+                if(this.state.actionState[i] && 'imageUrl' in this.state.actionState[i])
+                 url = this.state.actionState[i].imageUrl;
+                console.log(url, video);
                 actionState.push({
                     action : action,
                     time: routinetime,
@@ -208,12 +212,14 @@ class Alerts extends React.Component {
                     imageUrl : url,
                     videoUrl : video
                 });
-            }            
+            }
+            
+            
+            
         }
         pushRef.child('tag').set({
             level: level,
             time: time,
-            bodypart: bodystate,
             tag: tagState
         });
         pushRef.child('img').set(1);
@@ -225,7 +231,6 @@ class Alerts extends React.Component {
             console.log("completed!");
             this.props.history.replace('/');
         })
-        
     };
     
     render(){
