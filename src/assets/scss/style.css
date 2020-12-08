@@ -263,6 +263,11 @@ a {
     -webkit-text-decoration-skip: objects;
 }
 
+.linked:hover{
+    cursor: pointer;
+    color: #1e88e5;
+}
+
 a:hover {
     color: #381be7;
     text-decoration: none;
@@ -11070,6 +11075,11 @@ html {
     position: relative;
 }
 
+
+a {
+    color: #1e88e5;
+}
+
 a.link {
     color: #67757c;
 }
@@ -11079,9 +11089,6 @@ a.link:focus {
     color: #1e88e5;
 }
 
-a {
-    color: #1e88e5;
-}
 
 .no-wrap td,
 .no-wrap th {
@@ -13895,4 +13902,8 @@ use profile section
 
 .icon-hover:hover{
     color: #381be7;
+}
+
+.hover{
+    color: '#'
 }

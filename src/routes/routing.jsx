@@ -80,7 +80,7 @@ var ThemeRoutes = [
   },*/,
   {path: '/reviewRead/:key/:my', component: Cards},
   {path: '/reviewWrite/:key/:my', component: ReviewWrite},
-  {path: '/detail/:key', component: Detail},
+  {path: '/detail/:key/:my', component: Detail},
   {path: '/write/:key', component: Alert},
   {path: '/queried/:key',exact:true,component: Queried},
   {

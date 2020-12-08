@@ -23,7 +23,12 @@ import {
 
 import firebase from 'firebase';
 import { Projects } from '../../components/dashboard-components';
-
+import leg from '../../assets/images/leg.png';
+import arm from '../../assets/images/arm.png';
+import abdominal from '../../assets/images/abdominal.png';
+import shoulder from '../../assets/images/shoulder.png';
+import back from '../../assets/images/back.png';
+import chest from '../../assets/images/chest.png';
 class BadgeList extends React.Component{
     constructor(props) {
         super(props)
@@ -54,11 +59,24 @@ class BodyList extends React.Component{
         return(
             <div class=''>
                 {this.props.query_tag.map((key, index) => {
-                    return(
-                        <Badge color="warning" tag={key} className="mx-1" pill >
-                            <i className="mdi mdi-dots-horizontal" /> {key}
+                    
+                        var bodyimg;
+                        if(key == 'arm') bodyimg = arm;
+                        if(key == 'shoulder') bodyimg = shoulder;
+                        if(key == 'back') bodyimg = back;
+                        if(key == 'chest') bodyimg = chest;
+                        if(key == 'abdominal') bodyimg = abdominal;
+                        if(key == 'leg') bodyimg = leg;
+                        return(
+                        <Badge className="mx-1" tag={key} color="danger" pill>
+                            <img height="13px" src={bodyimg}/> {key}
                         </Badge>
-                    )
+                        )
+                        /*
+                        <Badge color="danger" tag={key} className="mx-1" pill >
+                            <i className="mdi mdi-dots-horizontal" /> {key}
+                        </Badge>*/
+                    
                 })}
             </div>
         )
@@ -175,7 +193,6 @@ class Queried extends React.Component{
         for (var j = 0 ; j < this.state.tags.length ; j++ ){
             var temp = [];
             var target = this.state.tags[j].toLowerCase();
-            window.alert(target);
             for (var i = 0; i < keys.length ; i++){
                 if (temp2.includes(keys[i])){
                     var compare_target = data[i].tag.tag;
@@ -344,47 +361,49 @@ class Queried extends React.Component{
             <div>
                 <CardTitle>Routine Search Result</CardTitle>
                 <CardTitle>--------- Filtering ---------</CardTitle>
+                <div className = 'd-flex'>
                 { this.state.title_query != null ?
-                    <CardTitle>{'Including [[' + this.state.title_query + ']] in the title'}</CardTitle>
+                    <ul className='d-flex'>{'Including [[' + this.state.title_query + ']] in the title'}</ul>
                 :
                     null
                 }
                 { this.state.minminute >= 1 && this.state.maxminute <= 9999 ?
-                    <CardTitle>{'Time:   ' + this.state.minminute + ' min to ' + this.state.maxminute + ' min'}</CardTitle>
+                    <ul className='d-flex'>{'Time:   ' + this.state.minminute + ' min to ' + this.state.maxminute + ' min'}</ul>
                 :
                     null
                 }
                 { this.state.minminute >= 1 && this.state.maxminute > 9999 ?
-                    <CardTitle>{'Time:   more than ' + this.state.minminute + ' min'}</CardTitle>
+                    <ul className='d-flex'>{'Time:   more than ' + this.state.minminute + ' min'}</ul>
                 :
                     null
                 }
                 { this.state.minminute < 1 && this.state.maxminute <= 9999 ?
-                    <CardTitle>{'Time:   less than ' + this.state.maxminute + ' min'}</CardTitle>
+                    <ul className='d-flex'>{'Time:   less than ' + this.state.maxminute + ' min'}</ul>
                 :
                     null
                 }
                 { this.state.level != null ?
-                    <CardTitle>{'Level:  ' + this.state.level}</CardTitle>
+                    <ul className='d-flex ml-1'>{'Level:  ' + this.state.level}</ul>
                 :
                     null
                 }
                 { this.state.tags.length > 0 ?
-                    <div>
-                        <CardTitle>{'Tags:'}</CardTitle>
+                    <div className='d-flex'>
+                        <ul className='ml-1'>{'Tags:'}</ul>
                         <BadgeList color="info" query_tag={this.state.tags} />
                     </div>
                 :
                     null
                 }
                 { this.state.bodypart.length > 0 ?
-                    <div>
-                        <CardTitle>{'Bodypart:'}</CardTitle>
+                    <div className='d-flex'>
+                        <ul className='ml-1'>{'Bodypart:'}</ul>
                         <BodyList color="warning" query_tag={this.state.bodypart} />
                     </div>
                 :
                     null
                 }
+                </div>
                 <CardTitle>---------- Result ----------</CardTitle>
                 <CardTitle></CardTitle>
                 { this.state.results.length > 0 ?
