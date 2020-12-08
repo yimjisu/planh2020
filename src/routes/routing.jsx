@@ -77,12 +77,18 @@ var ThemeRoutes = [
     name: name,
     icon: icon,
     component: Session
-  }*/,
+  },*/,
   {path: '/reviewRead/:key/:my', component: Cards},
   {path: '/reviewWrite/:key/:my', component: ReviewWrite},
   {path: '/detail/:key', component: Detail},
   {path: '/write/:key', component: Alert},
   {path: '/queried/:key',exact:true,component: Queried},
+  {
+    path: '/querier/:key',
+    pathTo: '/queried/:key',
+    name: 'Query',
+    redirect: true
+  },
   {
     path: '/',
     pathTo: '/starter/starter',

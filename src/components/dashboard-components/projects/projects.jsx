@@ -9,6 +9,12 @@ import img3 from '../../../assets/images/users/3.jpg';
 import img4 from '../../../assets/images/users/4.jpg';
 import img5 from '../../../assets/images/users/5.jpg';
 import img6 from '../../../assets/images/users/6.jpg';
+import leg from '../../../assets/images/leg.png';
+import arm from '../../../assets/images/arm.png';
+import abdominal from '../../../assets/images/abdominal.png';
+import shoulder from '../../../assets/images/shoulder.png';
+import back from '../../../assets/images/back.png';
+import chest from '../../../assets/images/chest.png';
 import { Route, Link } from 'react-router-dom';
 import {
     Card,
@@ -40,7 +46,7 @@ class Projects extends React.Component {
             routine: [],
             img: 1,
             reviewimg: 3,
-            body: null
+            body: []
         };
     }
     componentWillUnmount() {
@@ -67,11 +73,14 @@ class Projects extends React.Component {
                    rate: val.rating,
                    time: val.tag['time'],
                    level: val.tag['level'],
-                   body: val.tag['body'],
                    tags: tags,
                    routine: routine,
                    img: val.img
                });
+
+               if(val.tag.bodypart){
+                this.setState({body: val.tag['bodypart']});
+               }
                if(val.review != null){
                    var review = val.review;
                    var reviewname = '';
@@ -198,7 +207,7 @@ class Projects extends React.Component {
     else{
         routine = routine.slice(0, 2);
     }
-
+    console.log('props', this.props);
     var reviewname = this.state.reviewname;
     var review = null;
     if(this.props.review != true){
@@ -208,8 +217,21 @@ class Projects extends React.Component {
         review = <this.review/>
     }}
     var edit = null;
-    if(this.props.my == true){
-        edit = <div className="ml-auto d-flex no-block align-items-center">
+    if(this.props.my == true || this.props.my == "true"){
+        edit = <div className="ml-auto no-block align-items-center">
+         <div className="dl">
+        <a className="link font-small float-right">
+        <i className="mdi mdi-delete mr-1" 
+        onClick={() => {
+            if(window.confirm('Want to delete this routine?')){
+                var ref = firebase.database().ref().child('routine');
+                var routineRef = ref.child(this.props.props);
+                routineRef.remove();
+            }
+        }
+        }/>
+    </a>
+         </div>
         <div className="dl">
         <Link to={'/write/'+this.props.props} 
 className="link font-small float-right">
@@ -223,11 +245,13 @@ className="link font-small float-right">
     if(this.props.detail != true){
         readdetail = <div className="d-flex">
         <div className="read">
-        <Link to={'/detail/'+this.props.props} className="link font-medium">
+        <Link to={'/detail/'+this.props.props+'/'+this.props.my} className="link font-medium">
                         Read More Details</Link>
         </div>
     </div>;
     }
+
+    
     return (
         /*--------------------------------------------------------------------------------*/
         /* Used In Dashboard-4 [General]                                                  */
@@ -243,16 +267,30 @@ className="link font-small float-right">
                 </div>
                     {edit}
                 </div>
-                <div className="d-flex flex-sm-row">
+                <div className="d-block">
                 <Badge className="mx-1" color="primary" pill>
                 <i className="mdi mdi-timer" />   {time}min
                   </Badge>
                   <Badge className="mx-1" color="secondary" pill>
                   <i className="mdi mdi-dumbbell" /> {level}
                   </Badge>
-                  <Badge className="mx-1" color="warning" pill>
-                  <i className="mdi mdi-human" /> {body}
-                  </Badge>
+                    {Object.entries(body).map(([key, value]) => {
+                        var bodyimg = dumbbell1;
+                        if(value == false) return null;
+                        if(key == 'arm') bodyimg = arm;
+                        if(key == 'shoulder') bodyimg = shoulder;
+                        if(key == 'back') bodyimg = back;
+                        if(key == 'chest') bodyimg = chest;
+                        if(key == 'abdominal') bodyimg = abdominal;
+                        if(key == 'leg') bodyimg = leg;
+                        return(
+                        <Badge className="mx-1" color="danger" pill>
+                            <img height="13px" src={bodyimg} /> {key}
+                        </Badge>
+                        )
+                    })}
+                  
+
                   {tags.map((tag, index) => {
                       return(<Badge className="mx-1" color="info" pill>
                   <i className="mdi mdi-dots-horizontal"/> {tag}

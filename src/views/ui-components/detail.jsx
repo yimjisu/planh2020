@@ -11,12 +11,12 @@ class Detail extends React.Component {
         super(props);
     }
     render(){
-    console.log(this.props.match.params.key);
+    console.log(this.props.match.params);
     return (
         <div>
             <Row>
                 <Col sm={12}>
-                    <Projects props={this.props.match.params.key} detail={true} my={false}/>
+                    <Projects props={this.props.match.params.key} detail={true} my={this.props.match.params.my}/>
                 </Col>
             </Row>
         </div>
