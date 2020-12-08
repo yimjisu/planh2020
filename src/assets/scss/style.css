@@ -12959,11 +12959,7 @@ Preloader
 
 .search-box .app-search {
     position: absolute;
-<<<<<<< HEAD
-    height: 250px;
-=======
     height: 550px;
->>>>>>> search
     background-color: var(--white);
     margin-right: 0px;
     display: block;
@@ -13061,11 +13057,6 @@ Preloader
     font-size: 20px
 }
 
-<<<<<<< HEAD
-.search-box .app-search .level-fnt {
-    position: absolute;
-    top: 125px;
-=======
 .search-box .app-search .bodypart-fnt {
     position: absolute;
     top: 225px;
@@ -13258,7 +13249,6 @@ Preloader
 .search-box .app-search .level-fnt {
     position: absolute;
     top: 115px;
->>>>>>> search
     left: 30px;
     border: 0;
     font-size: 24px
@@ -13332,8 +13322,6 @@ Preloader
     font-size: 24px
 }
 
-<<<<<<< HEAD
-=======
 .search-box .app-search .title-query-fnt {
     position: absolute;
     top: 225px;
@@ -13353,7 +13341,6 @@ Preloader
     transition: 0.5s ease-in;
 }
 
->>>>>>> search
 .search-box .app-search .tag-input {
     position: absolute;
     top: 100px;

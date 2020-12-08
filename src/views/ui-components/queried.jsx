@@ -23,8 +23,6 @@ import {
 
 import firebase from 'firebase';
 import { Projects } from '../../components/dashboard-components';
-<<<<<<< HEAD
-=======
 
 class BadgeList extends React.Component{
     constructor(props) {
@@ -66,7 +64,6 @@ class BodyList extends React.Component{
         )
     }
 }
->>>>>>> search
 
 
 class Queried extends React.Component{
@@ -97,10 +94,6 @@ class Queried extends React.Component{
     componentDidMount () {
         this._isMounted = true;
         var param = window.location.href.split('/');
-<<<<<<< HEAD
-
-=======
->>>>>>> search
         param = param[param.length - 1].split('&');
 
         var tag_temp = []
