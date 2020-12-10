@@ -1296,7 +1296,7 @@ class Review_List extends React.Component{
                 console.log(a, eval(a[1].rate.split(',').join('+'))/5);
             }
         }
-        if(this.state.method == 1 && this.state.keys != null &&this.sorted_arr.length > 1){
+        if(this.state.method == 1 && this.state.keys != null && sorted_arr.length > 1){
             if(this.state.sort == 0){
                 sorted_arr.sort((a, b) => (a[1].comment.like+a[1].suggestion.like-a[1].comment.dislike-a[1].suggestion.dislike)>(b[1].comment.like+b[1].suggestion.like-b[1].comment.dislike-b[1].suggestion.dislike) ? -1 : 1);
             }else if(this.state.sort == 1){
@@ -1305,7 +1305,7 @@ class Review_List extends React.Component{
                 sorted_arr.sort((a, b) => (a[1].suggestion.like-a[1].suggestion.dislike)>(b[1].suggestion.like-b[1].suggestion.dislike) ? -1 : 1);
             }   
         }
-        if(this.state.method == 2 && this.state.keys!=null && this.sorted_arr.length > 1){
+        if(this.state.method == 2 && this.state.keys!=null && sorted_arr.length > 1){
             sorted_arr.sort((a, b) => (eval(a[1].rate.split(',').join('+'))/5)>(eval(b[1].rate.split(',').join('+'))/5) ? -1 : 1);
         }
         var rating = <h6 className="ml-3">Average Rating : {this.props.avg}</h6>;
