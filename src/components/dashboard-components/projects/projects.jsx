@@ -335,7 +335,7 @@ className="link font-small float-right">
                             return(
                                 <tr>
                                     <td>{r['action']}</td>
-                                    <td>{r['time']}min</td>
+                                    <td>{r['time']} {r['timeUnit']}</td>
                                     <td>{r['info']}
                                     <img className="d-block" id={"myimg"+index} height="150px" src={r['imageUrl']}/>
                                     <iframe 
@@ -352,7 +352,7 @@ className="link font-small float-right">
                             return(
                                 <tr>
                                     <td>{r['action']}</td>
-                                    <td>{r['time']}min</td>
+                                    <td>{r['time']} {r['timeUnit']}</td>
                                     <td>{r['info']}
                                     <img className="d-block" id="myimg" height="150px" src={r['imageUrl']}/></td>
                                 </tr>
@@ -361,7 +361,7 @@ className="link font-small float-right">
                             return(
                                 <tr>
                                     <td>{r['action']}</td>
-                                    <td>{r['time']}min</td>
+                                    <td>{r['time']} {r['timeUnit']}</td>
                                     <td>{r['info']}
                                     <iframe 
                                     className = 'd-block'
@@ -375,7 +375,7 @@ className="link font-small float-right">
                         return(
                             <tr>
                                 <td>{r['action']}</td>
-                                <td>{r['time']}min</td>
+                                <td>{r['time']} {r['timeUnit']}</td>
                                 <td>{r['info']}</td>
                             </tr>
                             )

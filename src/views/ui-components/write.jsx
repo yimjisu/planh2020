@@ -45,8 +45,8 @@ class Alerts extends React.Component {
         const key = this.props.match.params.key;
         if(key == null) return;
         const ref = firebase.database().ref().child('routine').child(key);
-        var title='', level='', time='', tagState=['',], actionState=['',];
-        var body = '';
+        var title='', level='', time='', tagState=['',], actionState=[{},];
+        var body = {'arm': false, 'shoulder': false, 'back': false, 'chest': false, 'leg':false, 'abdominal':false};
         ref.on('value', snap => {
             var val = snap.val();
             if(val!=null){
@@ -59,7 +59,7 @@ class Alerts extends React.Component {
             for(var key in body){
                 if(document.getElementById(key)) document.getElementById(key).checked = body[key];
             }
-            if(level){
+            if(level && document.getElementById('level-'+level)){
                 document.getElementById('level-'+level).checked = true;
             }
             this.setState({
@@ -208,6 +208,7 @@ class Alerts extends React.Component {
             var action = document.getElementById(`action-${i}`).value;
             var info = document.getElementById(`info-${i}`).value;
             var routinetime = document.getElementById(`time-${i}`).value;
+            var routinetimeUnit = document.getElementById(`timeunit-${i}`).value;
             var video = document.getElementById(`video-${i}`).value;
             console.log(video, i);
             if(video == '') video = null;
@@ -219,6 +220,7 @@ class Alerts extends React.Component {
             actionState[i] = {
                 action : action,
                 time: routinetime,
+                timeUnit: routinetimeUnit,
                 info : info,
                 imageUrl : url,
                 videoUrl : video
@@ -227,7 +229,8 @@ class Alerts extends React.Component {
         pushRef.child('tag').set({
             level: level,
             time: time,
-            tag: tagState
+            tag: tagState,
+            bodypart: bodystate
         });
         pushRef.child('img').set(1);
         pushRef.child('uid').set(currentUid);
@@ -268,7 +271,12 @@ class Alerts extends React.Component {
                 </FormGroup>
                 <FormGroup>
                     <Label for="time">Time needed for your routine</Label>
-                    <Input type="number" name="time"  step='0.01' defaultValue={time} id="routineTime" placeholder="Write in minutes"onChange={(e) => this.handleCommonChange(e)}/>
+                    <div className='d-flex'>
+                    <Input type="number" name="time"  step='1' 
+                    defaultValue={time} id="routineTime" 
+                    placeholder="Write in minutes"
+                    onChange={(e) => this.handleCommonChange(e)}/>
+                    <p className='mt-2 mb-0'>min</p></div>
                 </FormGroup>
                 <FormGroup>
                     <Label for="body">Body part used in your routine</Label>
@@ -316,6 +324,7 @@ class Alerts extends React.Component {
                         const actionId = `action-${idx}`;
                         const infoId = `info-${idx}`;
                         const timeId = `time-${idx}`;
+                        const timeUnitId = `timeunit-${idx}`;
                         const imageId = idx;
                         const videoId = `video-${idx}`;
                         return (
@@ -341,15 +350,27 @@ class Alerts extends React.Component {
                                 defaultValue={val['info']}
                                 />
                                 <Label htmlFor={timeId}>{`Time required for action #${idx + 1}`}</Label>
+                                <div className='d-flex'>
                                 <Input
                                     type="number"
                                     name="time"
-                                    step="0.01"
+                                    step="1"
                                     data-idx={idx}
                                     id={timeId}
-                                    placeholder = "Type time required for this action in minutes"
+                                    placeholder = "Write the time required for action"
                                     defaultValue={val['time']}
                                 />
+                                <Input
+                                    type='select'
+                                    name="time"
+                                    style={{width: '100px'}}
+                                    data-idx={idx}
+                                    id={timeUnitId}
+                                    defaultValue={val['timeUnit']}
+                                ><option>min</option>
+                                <option>sec</option>
+                                <option>times</option></Input>
+                                </div>
                                 Upload an image to describe your action.
                                 <Input
                                     type="file"
