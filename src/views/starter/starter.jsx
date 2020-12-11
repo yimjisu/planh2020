@@ -6,11 +6,13 @@ import {
 import { SalesSummary, Projects, Feeds, SocialCards } from '../../components/dashboard-components';
 import firebase from 'firebase';
 import ThemeRoutes from '../../routes/routing.jsx';
+import { useTranslation } from 'react-i18next'
 class Starter extends React.Component {
     constructor(props){
         super(props);
         this._isMounted = false;
         this.mypage = this.mypage.bind(this);
+        this.render1 = this.render1.bind(this);
         this.state = {keys:[], myroutine:[]};
     }
     componentWillUnmount() {
@@ -51,9 +53,10 @@ class Starter extends React.Component {
     }
 
     mypage(){
+        const { t, i18n } = useTranslation();
         return(
             <div>
-            <h5 className="mb-3">My Page</h5>
+            <h5 className="mb-3">{t('My Page')}</h5>
             <Row>
                 {this.state.myroutine.map((key, index) => {
                     return(
@@ -64,6 +67,10 @@ class Starter extends React.Component {
         );
     }
     render(){
+        return(<this.render1/>);
+    }
+    render1(){
+        const { t, i18n } = useTranslation();
         var user = firebase.auth().currentUser;
         var mypage = null;
         if (user != null && this.state.myroutine.length > 0){
@@ -73,7 +80,7 @@ class Starter extends React.Component {
     return (
         <div>
             {mypage}
-            <h5 className="mb-3">Explore routines</h5>
+            <h5 className="mb-3">{t('Explore routines')}</h5>
             <Row>
                 {this.state.keys.map((key, index) => {
                     return(

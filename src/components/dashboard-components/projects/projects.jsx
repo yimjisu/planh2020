@@ -30,12 +30,16 @@ import {
     Col,
     Badge
 } from 'reactstrap';
+
+import { useTranslation } from 'react-i18next'
+
 class Projects extends React.Component {
     constructor(props){
         super(props);
         this._isMounted = false;
         this.review = this.review.bind(this);
         this.noreview = this.noreview.bind(this);
+        this.render1 = this.render1.bind(this);
         this.state = {
             title: null,
             name: null,
@@ -46,7 +50,8 @@ class Projects extends React.Component {
             routine: [],
             img: 1,
             reviewimg: 3,
-            body: []
+            body: [],
+            t: null
         };
     }
     componentWillUnmount() {
@@ -132,6 +137,7 @@ class Projects extends React.Component {
     }
 
     review(){
+        const { t, i18n } = useTranslation();
         let rate =this.state.rate;
         var reviewimg = this.state.reviewimg;
     var reviewname = this.state.reviewname;
@@ -141,14 +147,14 @@ class Projects extends React.Component {
         writereview = <div className="ml-4">
         <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} className="link font-medium">
         <i className="mdi mdi-pencil mr-1"/>
-            Write</Link></div>;
+            {t('Write')}</Link></div>;
     }
         return(
             <CardFooter body inverse color="info">
                         <CardTitle>
                         <div className="feed-item">
-                            Review <span className="ml-3 font-12 text-muted">
-                                Rating
+                            {t('Review')} <span className="ml-3 font-12 text-muted">
+                                {t('Rating')}
                                 {[...Array( Math.round(rate))].map((n, index) => {
                                     return(<img className="mx-sm-1" width="20px" src={dumbbell1} />
                                 )})}
@@ -159,7 +165,6 @@ class Projects extends React.Component {
                                 </span>
                         </div>
                         </CardTitle>
-                        
                         <CardText>
                         
                                 
@@ -173,7 +178,7 @@ class Projects extends React.Component {
                             <div>
                                 <Link to={'/reviewRead/'+this.props.props+'/'+this.props.my} className="link font-medium">
                                 <i className="mdi mdi-book-open-variant mr-1"/>
-                                    Read More</Link> </div>
+                                    {t('Read More')}</Link> </div>
                             {writereview}
                             </div></div>
                         </CardText>
@@ -182,18 +187,19 @@ class Projects extends React.Component {
     }
 
     noreview(){
+        const { t, i18n } = useTranslation();
     var writereview = null;
     if(this.props.my != true){
         writereview =
         <Link to={'/reviewWrite/'+this.props.props+'/'+this.props.my} 
                 className="link font-small float-right">
                 <i className="mdi mdi-pencil mr-1"/>
-                    Write</Link>}
+                    {t('Write')}</Link>}
         return(
             <CardFooter body inverse color="info">
                 
                 <CardTitle>
-                No Reviews
+                {t('No Reviews')}
                 {writereview}
                 
                 </CardTitle>
@@ -202,6 +208,10 @@ class Projects extends React.Component {
         );
     }
     render(){
+        return (<this.render1/>);
+    }
+    render1(){
+    const { t, i18n } = useTranslation();
     let title = this.state.title;
     let username = this.state.name;
     
@@ -216,7 +226,6 @@ class Projects extends React.Component {
     else{
         routine = routine.slice(0, 2);
     }
-    console.log('props', this.props);
     var reviewname = this.state.reviewname;
     var review = null;
     if(this.props.review != true){
@@ -246,7 +255,7 @@ class Projects extends React.Component {
         <Link to={'/write/'+this.props.props} 
 className="link font-small float-right">
 <i className="mdi mdi-tooltip-edit mr-1"/>
-    Edit</Link>
+    {t('Edit')}</Link>
          </div>
     </div>;
     }
@@ -256,7 +265,7 @@ className="link font-small float-right">
         readdetail = <div className="d-flex">
         <div className="read">
         <Link to={'/detail/'+this.props.props+'/'+this.props.my} className="link font-medium">
-                        Read More Details</Link>
+                        {t('Read More Details')}</Link>
         </div>
     </div>;
     }
@@ -279,10 +288,10 @@ className="link font-small float-right">
                 </div>
                 <div className="d-block">
                 <Badge className="mx-1" color="primary" pill>
-                <i className="mdi mdi-timer" />   {time}min
+                <i className="mdi mdi-timer" />   {time}{t('min')}
                   </Badge>
                   <Badge className="mx-1" color="secondary" pill>
-                  <i className="mdi mdi-dumbbell" /> {level}
+                  <i className="mdi mdi-dumbbell" /> {t(level)}
                   </Badge>
                     {Object.entries(body).map(([key, value]) => {
                         var bodyimg = dumbbell1;
@@ -295,7 +304,7 @@ className="link font-small float-right">
                         if(key == 'leg') bodyimg = leg;
                         return(
                         <Badge className="mx-1" color="danger" pill>
-                            <img height="13px" src={bodyimg} /> {key}
+                            <img height="13px" src={bodyimg} /> {t(key)}
                         </Badge>
                         )
                     })}
@@ -310,9 +319,9 @@ className="link font-small float-right">
                 <Table className={detail + " v-middle"} responsive>
                     <thead>
                         <tr className="border-0">
-                            <th className="border-0">Action</th>
-                            <th className="border-0">Time</th>
-                            <th className="border-0">Info</th>
+                            <th className="border-0">{t('Action')}</th>
+                            <th className="border-0">{t('Time')}</th>
+                            <th className="border-0">{t('Info')}</th>
                         </tr>
                     </thead>
                     <tbody>
