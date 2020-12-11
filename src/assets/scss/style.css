@@ -29,6 +29,7 @@ File: scss
 @import url(all/icons/weather-icons/css/weather-icons.min.css);
 @import url(all/icons/themify-icons/themify-icons.css);
 @import url(all/icons/material-design-iconic-font/css/materialdesignicons.min.css);
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:300,400,500,600,700&display=swap');
 
 .topbar {
     box-shadow: 1px 0px 7px rgba(0, 0, 0, 0.05);
@@ -152,7 +153,8 @@ section {
 }
 body {
     margin: 0;
-    font-family: "Poppins", sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-family: "Poppins", "Noto Sans KR",  sans-serif;
     font-size: 0.875rem;
     font-weight: 300;
     line-height: 1.5;
@@ -383,6 +385,7 @@ button::-moz-focus-inner,
     padding: 0;
     border-style: none;
 }
+
 
 input[type="radio"],
 input[type="checkbox"] {
@@ -6184,7 +6187,7 @@ button.close {
     z-index: 1070;
     display: block;
     margin: 0;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", "Noto Sans KR",  sans-serif;
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -6309,7 +6312,7 @@ button.close {
     z-index: 1060;
     display: block;
     max-width: 276px;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", "Noto Sans KR",  sans-serif;
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -13905,4 +13908,9 @@ use profile section
 
 .hover{
     color: '#'
+}
+
+.language{
+    color: #eee;
+    cursor: pointer;
 }

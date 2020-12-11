@@ -5,7 +5,7 @@ import indexRoutes from './routes/index.jsx';
 import { Route, Switch } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom'
 import firebase from 'firebase';
-
+import './i18n'
 import './assets/scss/style.css';
 import ThemeRoutes from './routes/routing.jsx';
 

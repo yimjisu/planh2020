@@ -42,7 +42,7 @@ import img6 from '../../assets/images/users/6.jpg';
 
 import recomm_tag from '../../assets/images/search/recomm_tag.png';
 import recomm_lev from '../../assets/images/search/recomm_lev.png';
-
+import { useTranslation } from 'react-i18next'
 
 class BadgeList extends React.Component{
     constructor(props) {
@@ -148,7 +148,8 @@ class Header extends React.Component{
             abdominals: false,
             legs: false,
             finished: false,
-            state: null
+            state: null,
+            i18n: null
         }
     }
 
@@ -210,6 +211,18 @@ class Header extends React.Component{
         )
     }
 
+    languageBtn(){
+        const { t, i18n } = useTranslation()
+        const changelanguageToKo = () => i18n.changeLanguage('ko')
+        const changelanguageToEn = () => i18n.changeLanguage('en')
+        return (
+            <div className='mt-4 d-flex'>
+            <p className='language' onClick={changelanguageToKo}>한글</p>
+            <p className='language ml-1 mr-1'> | </p>
+            <p className='language' onClick={changelanguageToEn}>English</p>  
+            </div>
+        )
+    }
     showMobilemenu = () => {
         document.getElementById('main-wrapper').classList.toggle('show-sidebar');
     }
@@ -559,6 +572,7 @@ class Header extends React.Component{
         var profilephoto = this.state.profilephoto;
         var btn = null;
         var state = this.state.state;
+        
         if(state == STATE.LOGIN){
             btn = <this.loginBtn/>
         }else if(state == STATE.LOGOUT){
@@ -571,7 +585,7 @@ class Header extends React.Component{
                 <Card />
             )
         }else{
-
+            
             return (
                 <header className="topbar navbarbg" data-navbarbg="skin4">
                     <Navbar className="top-navbar" dark expand="md">
@@ -685,7 +699,9 @@ class Header extends React.Component{
                                 {/*--------------------------------------------------------------------------------*/}
                                 {/* Start Profile Dropdown                                                         */}
                                 {/*--------------------------------------------------------------------------------*/}
+                                <this.languageBtn/> 
                                 <UncontrolledDropdown nav inNavbar>
+                                
                                     <DropdownToggle nav caret className="pro-pic">
                                         <img
                                             src={profilephoto}
