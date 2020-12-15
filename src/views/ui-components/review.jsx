@@ -367,6 +367,42 @@ class ButtonToggle extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps){
+        console.log("button toggle did update");
+        console.log(prevProps);
+        console.log(this.props);
+        console.log(this.state);
+        var user = firebase.auth().currentUser;
+        var ref_pressed = null;
+        if (user!=null){
+           ref_pressed = firebase.database().ref().child('userinfo').child(user.displayName).child(this.props.keyval);
+        } //need review key
+        var ref_temp_press;
+        if(ref_pressed != null){
+            if(this.props.isComment && ref_pressed != null){
+                ref_temp_press = ref_pressed.child("comment");
+            }else{
+                ref_temp_press = ref_pressed.child("suggestion");
+            }
+        }
+        if(prevProps !== this.props){
+            if(ref_temp_press!=null){
+                ref_temp_press.once('value').then(snap=>{
+                    var val = snap.val();
+                    console.log(val);
+                    if(val!=null){
+                        //comment like pressed
+                        this.setState({ likePressed : val,
+                        dislikePressed : !val, });
+                    }else{
+                        this.setState({ likePressed : false,
+                        dislikePressed : false});
+                    }
+                })
+            }
+        }   
+    }
+
     componentDidMount(){
         var user = firebase.auth().currentUser;
         var ref_pressed = null;
