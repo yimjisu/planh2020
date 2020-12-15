@@ -24,7 +24,10 @@ const resources = {
       "middle":"middle",
       "high":"high",
       "My Page": "My Page",
-      'Explore routines': 'Explore routines'
+      'Explore routines': 'Explore routines',
+      'Home': 'Home',
+      'Check My Level': 'Check My level',
+      'Write': 'Write'
     }
   },
   ko: {
@@ -35,7 +38,7 @@ const resources = {
       "Read More": "더보기",
       "No Reviews":"리뷰 없음",
       "Edit":"수정하기",
-      "Read More Details":"디테일 더보기",
+      "Read More Details":"자세히 보기",
       "min":"분",
       "Action":"동작",
       "Time":"시간",
@@ -50,7 +53,10 @@ const resources = {
       "middle":"중간",
       "high":"어려움",
       "My Page": "마이 페이지",
-      'Explore routines': '루틴 둘러보기'
+      'Explore routines': '루틴 둘러보기',
+      'Home': '홈',
+      'Check My Level': '레벨 확인하기',
+      'Write': '작성하기'
     }
   }
 };
