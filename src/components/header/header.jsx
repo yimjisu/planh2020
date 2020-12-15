@@ -212,9 +212,9 @@ class Header extends React.Component{
     }
 
     languageBtn(){
-        const { t, i18n } = useTranslation()
-        const changelanguageToKo = () => i18n.changeLanguage('ko')
-        const changelanguageToEn = () => i18n.changeLanguage('en')
+        const { t, i18n } = useTranslation();
+        const changelanguageToKo = () => i18n.changeLanguage('ko');
+        const changelanguageToEn = () => i18n.changeLanguage('en');
         return (
             <div className='mt-4 d-flex'>
             <p className='language' onClick={changelanguageToKo}>한글</p>

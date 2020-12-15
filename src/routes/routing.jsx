@@ -23,7 +23,7 @@ import Review from '../views/ui-components/review.jsx';
 import Detail from '../views/ui-components/detail.jsx';
 import Alert from '../views/ui-components/write.jsx';
 import Queried from '../views/ui-components/queried.jsx';
-
+import { useTranslation } from 'react-i18next'
 import firebase from 'firebase';
 var firebaseConfig = {
   apiKey: "AIzaSyCrM4HePxX_a7PukmLZGb8TjsKUJR-Ut_s",
@@ -55,7 +55,7 @@ if(firebase.auth().currentUser){
   name = 'LogIn';
   icon = 'mdi mdi-login';
 }
- 
+
 var ThemeRoutes = [
   {
     path: '/starter/starter',
