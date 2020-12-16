@@ -118,21 +118,20 @@ const Data = (rate) => {
 
 const OnClickHandler = (props) => {
     //props={this.props} refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true}
-    const { t, i18n } = useTranslation();
+    //const { t, i18n } = useTranslation();
     var ref_root = props.refRoot;
     var user = firebase.auth().currentUser;
     console.log(user);
-    /*
     if(user == null){
         alert('To leave a review, login first!');
         return;
     }
-    */
     var ref = ref_root.child('review');
     var comment = document.getElementById("text_comment").value;
     var suggestion = document.getElementById("text_suggestion").value;
     if(comment.length == 0 && suggestion.length == 0){
-        alert(t('Write review before submit'));
+        var temp = 'Write review before submit';
+        alert(temp);
         return;
     }
     //var name = document.getElementById("input-name").value;
@@ -194,9 +193,9 @@ const OnClickHandler = (props) => {
 
 const OnClickReportHandler = (rout_key, rev_key) => {
     var user = firebase.auth().currentUser;
-    const { t, i18n } = useTranslation();
+    //const { t, i18n } = useTranslation();
     if(user == null){
-        alert(t('To report, login first!'));
+        alert('To report, login first!');
         return;
     }
     console.log('reporthandler');
@@ -260,14 +259,14 @@ class ButtonToggle extends React.Component {
     }
     
     onClickLikeHandler = (isLike) => {
-        const { t, i18n } = useTranslation();
+        //const { t, i18n } = useTranslation();
         var user = firebase.auth().currentUser;
         if(user == null){
             if(isLike){
-                alert(t('To leave a dislike, login first!'));
+                alert('To leave a like, login first!');
             }
             else{
-                alert(t('To leave a like, login first!'));
+                alert('To leave a dislike, login first!');
             }
             return;
         }

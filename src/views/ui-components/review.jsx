@@ -112,10 +112,11 @@ const Data = (rate) => {
 }
 
 const OnClickHandler = (ref_root) => {
-    const { t, i18n } = useTranslation();
+    //const { t, i18n } = useTranslation();
     var user = firebase.auth().currentUser;
     if(user == null){
-        alert(t('To leave a review, login first!'));
+        var temp = 'To leave a review, login first!';
+        alert(temp);
         return;
     }
 
@@ -123,7 +124,8 @@ const OnClickHandler = (ref_root) => {
     var comment = document.getElementById("text_comment").value;
     var suggestion = document.getElementById("text_suggestion").value;
     if(comment.length == 0 && suggestion.length == 0){
-        alert(t('Write review before submit'));
+        var temp = 'Write review before submit';
+        alert(temp);
         return;
     }
     //var name = document.getElementById("input-name").value;
@@ -169,12 +171,12 @@ const OnClickHandler = (ref_root) => {
 
 const OnClickReportHandler = (rout_key, rev_key) => {
     var user = firebase.auth().currentUser;
-    const { t, i18n } = useTranslation();
+    //const { t, i18n } = useTranslation();
     if(user == null){
-        alert(t('To report, login first!'));
+        alert('To report, login first!');
         return;
     }
-    alert(t('Reported. We will check it right away!'));
+    alert('Reported. We will check it right away!');
     var ref = firebase.database().ref().child('report');
     let temp = ref.push();
     temp.set({routine: rout_key, review: rev_key});
@@ -192,10 +194,10 @@ const onClickLikeHandler = (isComment,isLike,key, rootKey) => {
     var user = firebase.auth().currentUser;
     if(user == null){
         if(isLike){
-            alert('To leave a dislike, login first!');
+            alert('To leave a like, login first!');
         }
         else{
-            alert('To leave a like, login first!');
+            alert('To leave a dislike, login first!');
         }
         return;
     }
@@ -261,14 +263,14 @@ class ButtonToggle extends React.Component {
     }
     
     onClickLikeHandler = (isLike) => {
-        const { t, i18n } = useTranslation();
+        //const { t, i18n } = useTranslation();
         var user = firebase.auth().currentUser;
         if(user == null){
             if(isLike){
-                alert(t('To leave a dislike, login first!'));
+                alert('To leave a like, login first!');
             }
             else{
-                alert(t('To leave a like, login first!'));
+                alert('To leave a dislike, login first!');
             }
             return;
         }
@@ -790,11 +792,11 @@ class AuthorReply extends React.Component{
         });
     }
     deleteHandler = () => {
-        const { t, i18n } = useTranslation();
+        //const { t, i18n } = useTranslation();
         var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval).child('reply');
         ref.remove();
         this.setState({edit_flag : false, reply : ""})
-        alert(t('reply deleted'));
+        alert('reply deleted');
     }
     writeReplyHandler = () => {
         this.setState({edit_flag : true});
@@ -809,7 +811,7 @@ class AuthorReply extends React.Component{
         var reply = document.getElementById("text_reply").value;
         console.log(reply);
         if(reply.length == 0){
-            alert(t('Write reply before submit'));
+            alert('Write reply before submit');
             return;
         }
         ref.child('reply').set(reply);
@@ -1046,8 +1048,8 @@ class Review_Card extends React.Component{
     }
     
     onClickDeleteHandler(key, rootKey){
-        const { t, i18n } = useTranslation();
-        alert(t('The review is deleted'));
+        //const { t, i18n } = useTranslation();
+        alert('The review is deleted');
         var ref_root = firebase.database().ref().child('routine').child(rootKey).child('review').child(key);
         ref_root.remove();
         this.setState({temp : true});
