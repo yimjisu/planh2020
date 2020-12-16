@@ -42,7 +42,7 @@ import img4 from '../../assets/images/users/4.jpg';
 import img5 from '../../assets/images/users/5.jpg';
 import img6 from '../../assets/images/users/6.jpg';
 import { Radar } from "react-chartjs-2";
-
+import { useTranslation } from 'react-i18next';
 const options = {
     legend: {
         display: false,
@@ -79,14 +79,15 @@ const options = {
     }
 }
 
-const data = (rate) => {
+const Data = (rate) => {
+    const { t, i18n } = useTranslation();
     return {
     labels: [
-        "Difficulty well set?",
-        "Was routine new?",
-        "Was it effective?",
-        "Post well written?",
-        "Suggestable?",
+        t("Difficulty well set?"),
+        t("Was routine new?"),
+        t("Was it effective?"),
+        t("Post well written?"),
+        t("Suggestable?"),
     ],
     datasets: [
         {
@@ -110,11 +111,11 @@ const data = (rate) => {
     }
 }
 
-const onClickHandler = (ref_root) => {
-
+const OnClickHandler = (ref_root) => {
+    const { t, i18n } = useTranslation();
     var user = firebase.auth().currentUser;
     if(user == null){
-        alert('To leave a review, login first!');
+        alert(t('To leave a review, login first!'));
         return;
     }
 
@@ -122,7 +123,7 @@ const onClickHandler = (ref_root) => {
     var comment = document.getElementById("text_comment").value;
     var suggestion = document.getElementById("text_suggestion").value;
     if(comment.length == 0 && suggestion.length == 0){
-        alert('Write review before submit');
+        alert(t('Write review before submit'));
         return;
     }
     //var name = document.getElementById("input-name").value;
@@ -166,19 +167,21 @@ const onClickHandler = (ref_root) => {
     //close this review page
 };
 
-const onClickReportHandler = (rout_key, rev_key) => {
+const OnClickReportHandler = (rout_key, rev_key) => {
     var user = firebase.auth().currentUser;
+    const { t, i18n } = useTranslation();
     if(user == null){
-        alert('To report, login first!');
+        alert(t('To report, login first!'));
         return;
     }
-    alert('Reported. We will check it right away!');
+    alert(t('Reported. We will check it right away!'));
     var ref = firebase.database().ref().child('report');
     let temp = ref.push();
     temp.set({routine: rout_key, review: rev_key});
 }   
 
 const onClickDeleteHandler = (key, rootKey) => {
+    alert('The review is deleted');
     var ref_root = firebase.database().ref().child('routine').child(rootKey).child('review').child(key);
     
     ref_root.remove();
@@ -253,18 +256,19 @@ class ButtonToggle extends React.Component {
         dislikePressed : temp_dislikePressed,
         userid : this.props.userid
       }
+      this.render1 = this.render1.bind(this);
       this.onClickLikeHandler = this.onClickLikeHandler.bind(this);
     }
     
     onClickLikeHandler = (isLike) => {
-        
+        const { t, i18n } = useTranslation();
         var user = firebase.auth().currentUser;
         if(user == null){
             if(isLike){
-                alert('To leave a dislike, login first!');
+                alert(t('To leave a dislike, login first!'));
             }
             else{
-                alert('To leave a like, login first!');
+                alert(t('To leave a like, login first!'));
             }
             return;
         }
@@ -428,9 +432,10 @@ class ButtonToggle extends React.Component {
         }
     }
 
-    render() {
+    render1() {
         var like_bg = this.state.likePressed ? "blue" : "";
         var dislike_bg = this.state.dislikePressed ? "red" : "";
+        const { t, i18n } = useTranslation();
         return (
             <div>
                 <a className="link mr-2" id="TooltipExample2"
@@ -443,7 +448,7 @@ class ButtonToggle extends React.Component {
                         isOpen={this.props.tooltipOpen2}
                         target="TooltipExample2"
                         toggle={this.props.toggle2}
-                    >Like</Tooltip>
+                    >{t('Like')}</Tooltip>
                 <a className="link mr-2" id="TooltipExample3"
                     onClick={()=>this.onClickLikeHandler(false, this.props.rootKey)}
                     style={{color: this.state.dislikePressed ? "red" : ""}}>
@@ -454,10 +459,13 @@ class ButtonToggle extends React.Component {
                             isOpen={this.props.tooltipOpen3}
                             target="TooltipExample3"
                             toggle={this.props.toggle3}
-                        >DisLike</Tooltip>
+                        >{t('DisLike')}</Tooltip>
                 </div>
         );
     }
+    render(){
+        return(<this.render1/>);
+    } 
   }
 
 const ReviewDisptab = (props) => {
@@ -476,6 +484,7 @@ const ReviewDisptab = (props) => {
     const toggle3 = () => {
         setTooltipOpen3(!tooltipOpen3);
     }
+    const { t, i18n } = useTranslation();
     return (
         <div className="ml-3 mr-3 align-items-center d-flex">
             {   
@@ -483,7 +492,7 @@ const ReviewDisptab = (props) => {
             
             
             <div className="input-group">
-            <h5 className="mb-3">Comment</h5>
+            <h5 className="mb-3">{t('Comment')}</h5>
                 <textarea className="form-control" id="text_comment" rows="8" style={{resize: 'none'}} value={props.comment} readOnly></textarea>
                 <div className="input-group-prepend">
                     <span className="input-group-text">
@@ -492,7 +501,7 @@ const ReviewDisptab = (props) => {
                         tooltipOpen3={tooltipOpen3} toggle3={toggle3.bind(null)}
                         likeval={props.clike} dislikeval={props.cdislike} keyval={props.keyval} isComment={true} rootKey={props.rout_key} userid={props.userid}/>
                         <a className="link mr-2" id="TooltipExample"
-                         onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>
+                         onClick={()=>OnClickReportHandler(props.rout_key,props.keyval)}>
                                     <i className="mdi mdi-alert-circle" />
                                 </a>
                                 <Tooltip
@@ -501,7 +510,7 @@ const ReviewDisptab = (props) => {
                                     target="TooltipExample"
                                     toggle={toggle.bind(null)}
                                 >
-                                    Report
+                                    {t('Report')}
                         </Tooltip>
                     </span>
                 </div>
@@ -512,7 +521,7 @@ const ReviewDisptab = (props) => {
                 props.sortop != 1 && props.suggestion.length>0? (
             
             <div className="input-group ml-5">
-            <h5 className="mb-3">Suggestion</h5>
+            <h5 className="mb-3">{t('Suggestion')}</h5>
                 <textarea className="form-control" id="text_comment" rows="8" style={{resize: 'none'}} value={props.suggestion} readOnly></textarea>
                 <div className="input-group-prepend">
                     <span className="input-group-text">
@@ -521,7 +530,7 @@ const ReviewDisptab = (props) => {
                         tooltipOpen3={tooltipOpen3} toggle3={toggle3.bind(null)}
                         likeval={props.slike} dislikeval={props.sdislike} keyval={props.keyval} isComment={false} rootKey={props.rout_key} userid={props.userid}/>
                         <a className="link mr-2" id="TooltipExample"
-                         onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>
+                         onClick={()=>OnClickReportHandler(props.rout_key,props.keyval)}>
                                     <i className="mdi mdi-alert-circle" />
                                 </a>
                                 <Tooltip
@@ -530,7 +539,7 @@ const ReviewDisptab = (props) => {
                                     target="TooltipExample"
                                     toggle={toggle.bind(null)}
                                 >
-                                    Report
+                                    {t('Report')}
                         </Tooltip>
                     </span>
                 </div>
@@ -549,6 +558,7 @@ const Reviewtab = (props) => {
     const toggle = tab => {
         if(activeTab !== tab) setActiveTab(tab);
     }
+    const { t, i18n } = useTranslation();
     return (
       <div>
         <Nav tabs>
@@ -557,7 +567,7 @@ const Reviewtab = (props) => {
               className={classnames({ active: activeTab === '1' })}
               onClick={() => { toggle('1'); }}
             >
-              Comments
+              {t('Comments')}
             </NavLink>
           </NavItem>
           <NavItem>
@@ -565,7 +575,7 @@ const Reviewtab = (props) => {
               className={classnames({ active: activeTab === '2' })}
               onClick={() => { toggle('2'); }}
             >
-              Suggestions
+              {t('Suggestions')}
             </NavLink>
           </NavItem>
         </Nav>
@@ -574,7 +584,7 @@ const Reviewtab = (props) => {
             <Row>
                 <Col sm="12">
                 <div>
-                    <label for="comment">Write your comment: </label>
+                    <label for="comment">{t('Write your comment')}: </label>
                 </div>
                 {
                     props.editable ? (
@@ -582,7 +592,7 @@ const Reviewtab = (props) => {
                             <textarea className="form-control" id="text_comment" rows="5" style={{resize: 'none'}} defaultValue={props.comment}></textarea>
                             <div className="input-group-prepend">
                                 <span className="input-group-text" id="basic-addon1">
-                                    <Button onClick={onClickHandler}>submit</Button>
+                                    <Button onClick={OnClickHandler}>{t('submit')}</Button>
                                 </span>
                             </div>
                         </div>
@@ -600,7 +610,7 @@ const Reviewtab = (props) => {
             <Row>
                 <Col sm="12">
                 <div>
-                    <label for="suggestion">Write your suggestion: </label>
+                    <label for="suggestion">{t('Write your suggestion')}: </label>
                 </div>
                 {
                     props.editable ? (
@@ -608,7 +618,7 @@ const Reviewtab = (props) => {
                             <textarea className="form-control" id="text_suggestion" rows="5" style={{resize: 'none'}} defaultValue={props.suggestion}></textarea>
                             <div className="input-group-prepend">
                                 <span className="input-group-text" id="basic-addon1">
-                                    <Button onClick={onClickHandler(props.refRoot)}>submit</Button>
+                                    <Button onClick={OnClickHandler(props.refRoot)}>{t('submit')}</Button>
                                 </span>
                             </div>
                         </div>
@@ -686,7 +696,7 @@ const Reviewtab = (props) => {
                     {/* --------------------------------------------------------------------------------*/}
                     <CardBody>
                     <CardTitle>Rating</CardTitle>
-                    <Radar className="graph" id="radar-graph" data={data(this.state.rate)} options={options} ref={(reference) => {this.reference = reference}}/>
+                    <Radar className="graph" id="radar-graph" data={Data(this.state.rate)} options={options} ref={(reference) => {this.reference = reference}}/>
                     </CardBody>
                 </Col>
                 <Col xs="12" md="2">
@@ -762,6 +772,7 @@ class AuthorReply extends React.Component{
         this.writeReplyHandler = this.writeReplyHandler.bind(this);
         this.cancelHandler = this.cancelHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
+        this.render1 = this.render1.bind(this);
     }
     componentWillUnmount(){
         this._isMounted = false;
@@ -779,10 +790,11 @@ class AuthorReply extends React.Component{
         });
     }
     deleteHandler = () => {
+        const { t, i18n } = useTranslation();
         var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval).child('reply');
         ref.remove();
         this.setState({edit_flag : false, reply : ""})
-        alert('reply deleted');
+        alert(t('reply deleted'));
     }
     writeReplyHandler = () => {
         this.setState({edit_flag : true});
@@ -792,18 +804,19 @@ class AuthorReply extends React.Component{
         this.setState({edit_flag : false});
     }
     submitHandler = () => {
+        const { t, i18n } = useTranslation();
         var ref = firebase.database().ref().child('routine').child(this.props.rootKey).child('review').child(this.props.keyval);
         var reply = document.getElementById("text_reply").value;
         console.log(reply);
         if(reply.length == 0){
-            alert('Write reply before submit');
+            alert(t('Write reply before submit'));
             return;
         }
         ref.child('reply').set(reply);
         this.setState({edit_flag : false});
     }
 
-    render(){
+    render1(){
         console.log("render triggered");
         /*
         if(this.state.reply != null && this.state.reply.length > 0){
@@ -815,22 +828,23 @@ class AuthorReply extends React.Component{
             //it should be just write reply expands to edit mode
         }
         */
+       const { t, i18n } = useTranslation();
         return(
             <div>
                 {this.state.isAuthor == true ?
             (   this.state.edit_flag == true ? (
                 <div className="input-group">
                     <div className="ml-4 mt-2">
-                    <h5 className="mb-3"><i className='mdi mdi-reply mr-1' />Reply</h5>
+                    <h5 className="mb-3"><i className='mdi mdi-reply mr-1' />{t('Reply')}</h5>
                     { this.state.reply != null && this.state.reply.length > 0 ? 
                     (<textarea className="form-control" id="text_reply" style={{resize: 'none'}} defaultValue={this.state.reply}></textarea>) : 
                     (<textarea className="form-control" id="text_reply" style={{resize: 'none'}}></textarea>)}
                     <div className="input-group-prepend">
                     <span className="input-group-text" id="basic-addon1">
                     <div className='linked' onClick = {this.submitHandler}>
-                    <i className='mdi mdi-check mr-1' />Submit</div>   
+                    <i className='mdi mdi-check mr-1' />{t('Submit')}</div>   
                     <div className='linked ml-3' onClick = {this.cancelHandler}>
-                    <i className='mdi mdi-keyboard-backspace mr-1' />Cancel</div>
+                    <i className='mdi mdi-keyboard-backspace mr-1' />{t('Cancel')}</div>
                         
                     </span>
                     </div> 
@@ -839,21 +853,21 @@ class AuthorReply extends React.Component{
                     ) : (
                     <div className="input-group">
                         { this.state.reply != null && this.state.reply.length > 0 ? 
-                        (<div className='ml-4 mt-2'><h5 className="mb-3"><i className='mdi mdi-reply mr-1' />Reply</h5>
+                        (<div className='ml-4 mt-2'><h5 className="mb-3"><i className='mdi mdi-reply mr-1' />{t('Reply')}</h5>
                         <textarea className="form-control" id="text_reply" style={{resize: 'none'}} defaultValue={this.state.reply} readOnly></textarea>
                         <div className="input-group-prepend">
                         <span className="input-group-text" id="basic-addon1">
-                        <div className='linked' onClick = {this.writeReplyHandler}><i className='mdi mdi-tooltip-edit mr-1' />Edit</div>
+                        <div className='linked' onClick = {this.writeReplyHandler}><i className='mdi mdi-tooltip-edit mr-1' />{t('Edit')}</div>
                         <div class="pull-right">
                         <div className='linked' onClick = {this.deleteHandler}>
-                            <i className='mdi mdi-delete ml-1' />Delete</div>
+                            <i className='mdi mdi-delete ml-1' />{t('Delete')}</div>
                         
                         </div>
                         </span>
                         </div></div>):(
                             <h5 className='linked d-flex ml-3 mt-3' onClick = {this.writeReplyHandler}>
                                 <i className='mdi mdi-tooltip-edit mr-1' />
-                                Write Reply
+                                {t('Write Reply')}
                             </h5>
                             )
                         }
@@ -863,13 +877,16 @@ class AuthorReply extends React.Component{
                 (this.state.reply != null && this.state.reply.length > 0 ? 
                     (<div className='ml-4 mt-2'>
                     <h5 className="mb-3">
-                    <i className='mdi mdi-reply mr-1' />Reply</h5>
+                    <i className='mdi mdi-reply mr-1' />{t('Reply')}</h5>
                     <textarea className="form-control" id="text_reply" style={{resize: 'none'}} defaultValue={this.state.reply} readOnly></textarea>
                 </div>) : <div></div>)
             }
             </div>
         )
     }
+    render(){
+        return(<this.render1/>);
+    } 
 }
 class Pin_Button extends React.Component{
     constructor(props){
@@ -1018,12 +1035,24 @@ class Review_Card extends React.Component{
             userid : temp_userid,
             //pins : this.props.pins,
             toggle : this.props.toggle,
+            temp : false,
         };
        //this.onClickPinHandler = this.onClickPinHandler.bind(this);
+       this.onClickDeleteHandler = this.onClickDeleteHandler.bind(this);
+       this.render1 = this.render1.bind(this);
     }
     componentWillUnmount() {
 		this._isMounted = false;
     }
+    
+    onClickDeleteHandler(key, rootKey){
+        const { t, i18n } = useTranslation();
+        alert(t('The review is deleted'));
+        var ref_root = firebase.database().ref().child('routine').child(rootKey).child('review').child(key);
+        ref_root.remove();
+        this.setState({temp : true});
+    }
+    
     
     componentDidMount(){
         this._isMounted = true;
@@ -1094,7 +1123,8 @@ class Review_Card extends React.Component{
         
         return img4;
     }
-    render(){
+    render1(){
+        const { t, i18n } = useTranslation();
         console.log("review_card render");
         console.log(this.props.keyval);
         //console.log(this.props.data.name);
@@ -1105,6 +1135,7 @@ class Review_Card extends React.Component{
         if(firebase.auth().currentUser!=null){
             temp_userid = firebase.auth().currentUser.displayName;
         }
+        var temp_2 = this.state.temp;
         this.state = {
             author : this.props.author,
             name : this.props.data.name,
@@ -1119,6 +1150,7 @@ class Review_Card extends React.Component{
             userid : temp_userid,
             //pins : this.props.pins,
             toggle : this.props.toggle,
+            temp : temp_2,
         };
         console.log(temp_userid);
         var shoulddisp = true;
@@ -1131,7 +1163,7 @@ class Review_Card extends React.Component{
         return(
             <div>
                 {
-                    !this.props.empty&&shoulddisp? (
+                    !this.props.empty&&shoulddisp&&!this.state.temp? (
                     <Card>
                     <Row>
                         <Col xs="6" md="4">
@@ -1149,14 +1181,14 @@ class Review_Card extends React.Component{
                     </div>
                     </CardTitle>
                     <CardText>
-                    Rating
-                    <Radar className="graph" data={data(this.state.rate)} options={options}/>
+                    {t('Rating')}
+                    <Radar className="graph" data={Data(this.state.rate)} options={options}/>
                     </CardText>
                     </CardBody>               
                         </Col>
                         <Col xs="6" md="8">
                             <CardBody>
-                                    {   this.props.userid == this.state.name ? (
+                                    {   temp_userid == this.state.name ? (
                                     <div class="pull-right">
                                         {(temp_userid == this.state.author) ? 
                                         <Pin_Button isAuthor = {true} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button> 
@@ -1170,8 +1202,8 @@ class Review_Card extends React.Component{
                                             rev_key : this.state.keyval
                                         }
                                         }}>
-                                        Edit</Link></Button>                                    
-                                        <Button onClick={()=>{onClickDeleteHandler(this.props.keyval, this.props.rootKey)}}>Delete</Button>
+                                        {t('Edit')}</Link></Button>                                    
+                                        <Button onClick={()=>{this.onClickDeleteHandler(this.props.keyval, this.props.rootKey)}}>{t('Delete')}</Button>
                                     </div>
                                     ) :  ((this.state.author == temp_userid) ? 
                                         <Pin_Button isAuthor = {true} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button> 
@@ -1185,13 +1217,13 @@ class Review_Card extends React.Component{
                         </Col>
                     </Row>
                     </Card>
-                    ) : ( !shoulddisp? <div></div> : (
+                    ) : ( !shoulddisp||this.state.temp? <div></div> : (
                     <Card>
                         <Row>
                             <Col xs="12" md="12">
                                 <CardBody>
-                                <CardTitle>There's no review yet.</CardTitle>
-                                <CardText>How about writing yours?</CardText>
+                                <CardTitle>{t('There\'s no review yet')}.</CardTitle>
+                                <CardText>{t('How about writing yours')}?</CardText>
                                 </CardBody>
                             </Col>
                         </Row>
@@ -1201,6 +1233,9 @@ class Review_Card extends React.Component{
             </div>
         )
     }
+    render(){
+        return(<this.render1/>);
+    } 
 }
 
 const SortCondition = (props) => {
@@ -1211,27 +1246,28 @@ const SortCondition = (props) => {
     const [dropdownOpen1, setDropdownOpen1] = useState(false);
 
     const toggle1 = () => setDropdownOpen1(prevState => !prevState);
+    const { t, i18n } = useTranslation();
     return (
         <div className='input-group-append'>
     <Dropdown className='mr-1' isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle caret>
-        Filter by
+        {t('Filter by')}
         </DropdownToggle>
       <DropdownMenu>      
-        <DropdownItem onClick={()=>window.globalHandler(props.sortop, 1)}>Only comment</DropdownItem>
-        <DropdownItem onClick={()=>window.globalHandler(props.sortop, 2)}>Only suggestion</DropdownItem>
-        <DropdownItem onClick={()=>window.globalHandler(props.sortop, 0)}>Show all</DropdownItem>
+        <DropdownItem onClick={()=>window.globalHandler(props.sortop, 1)}>{t('Only comment')}</DropdownItem>
+        <DropdownItem onClick={()=>window.globalHandler(props.sortop, 2)}>{t('Only suggestion')}</DropdownItem>
+        <DropdownItem onClick={()=>window.globalHandler(props.sortop, 0)}>{t('Show all')}</DropdownItem>
       </DropdownMenu>
     </Dropdown>
 
         <Dropdown className='ml-1' isOpen={dropdownOpen1} toggle={toggle1}>
         <DropdownToggle caret>
-        Sort by
+        {t('Sort by')}
         </DropdownToggle>
         <DropdownMenu> 
-        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 0)}>Newest</DropdownItem>
-        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 1)}>Most Upvote</DropdownItem>
-        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 2)}>Highest Rating</DropdownItem>
+        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 0)}>{t('Newest')}</DropdownItem>
+        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 1)}>{t('Most Upvote')}</DropdownItem>
+        <DropdownItem onClick={()=>window.globalMethodHandler(props.method, 2)}>{t('Highest Rating')}</DropdownItem>
         </DropdownMenu>
         </Dropdown>
         </div>
@@ -1258,6 +1294,7 @@ class Review_List extends React.Component{
         this.onClickSortMethodhandler = this.onClickSortMethodhandler.bind(this);
         window.globalHandler = this.onClickSortHandler;
         window.globalMethodHandler = this.onClickSortMethodhandler;
+        this.render1 = this.render1.bind(this);
     }
 
     onClickSortHandler = (cur_op, new_op) => {
@@ -1315,12 +1352,12 @@ class Review_List extends React.Component{
         
     }
 
-    render(){
+    render1(){
         //for reviews in the review array
         //consider case when there is no review
         var sorted_arr=[];
         var pin_arr = [];
-
+        const { t, i18n } = useTranslation();
         if(this.state.keys.length > 0){
             sorted_arr = this.state.keys.map((key, index)=> [key, this.state.datas[index]]);
             pin_arr = sorted_arr.filter(n => n[1].pinned == true).reverse();
@@ -1344,17 +1381,22 @@ class Review_List extends React.Component{
         if(this.state.method == 2 && this.state.keys!=null && sorted_arr.length > 1){
             sorted_arr.sort((a, b) => (eval(a[1].rate.split(',').join('+'))/5)>(eval(b[1].rate.split(',').join('+'))/5) ? -1 : 1);
         }
-        var rating = <h6 className="ml-3">Average Rating : {this.props.avg}</h6>;
+        var rating = <h6 className="ml-3">{t('Average Rating')} : {this.props.avg}</h6>;
         if(this.props.avg == null) rating = null;
+        var empty = false;
+        if(sorted_arr.length == 0 && pin_arr.length == 0)
+            empty = true;
         return(
             <div>
+                { empty ? <div></div>: (
                 <h5 className="mb-3 d-flex">
-                    Reviews of this routine{rating}
+                    {t('Reviews of this routine')}{rating}
                     <div className="ml-auto">
                     <SortCondition sortop={this.state.sort} method={this.state.method}/>
                     </div>
                 </h5>
-                
+                )
+                }
                 <div>
                     {
                         pin_arr.length >0 ? (
@@ -1393,12 +1435,15 @@ class Review_List extends React.Component{
                             };
                             return(<Review_Card toggle = {false} keyval={key} rootKey={this.props.rootKey} data={temp2} empty={false} userid={this.props.userid} sortop={this.state.sort} author={this.state.author}/>)}) 
                         )
-                        : (pin_arr.length>0 ? <div></div> : <Review_Card data={[]} empty={true} userid={this.props.userid} rootKey={this.props.rootKey}/>)                  
+                        : (pin_arr.length > 0 ? <div></div> : <Review_Card data={[]} empty={true} userid={this.props.userid} rootKey={this.props.rootKey}/>)                  
                 }
                 </div>
             </div>
         )
     }
+    render(){
+        return(<this.render1/>);
+    } 
 }
 
 class Cards extends React.Component{

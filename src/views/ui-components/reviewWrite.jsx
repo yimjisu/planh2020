@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import ReactDOM, { render } from 'react-dom'
 import firebase from 'firebase';
 import { SalesSummary, Projects, Feeds, SocialCards } from '../../components/dashboard-components';
+import {useTranslation} from 'react-i18next';
 
 import
  {
@@ -73,15 +74,26 @@ const options = {
     }
 }
 
-const data = (rate) => {
+const Data = (rate) => {
+    const { t, i18n } = useTranslation();
+    //var label1 = t("Difficulty well set?");
     return {
     labels: [
+        t("Difficulty well set?"),
+        t("Was routine new?"),
+        t("Was it effective?"),
+        t("Post well written?"),
+        t("Suggestable?"),
+    ],
+   /*
+   labels: [
         "Difficulty well set?",
         "Was routine new?",
         "Was it effective?",
         "Post well written?",
         "Suggestable?",
-    ],
+    ], 
+    */ 
     datasets: [
         {
             label: "My Rating",
@@ -104,8 +116,9 @@ const data = (rate) => {
     }
 }
 
-const onClickHandler = (props) => {
+const OnClickHandler = (props) => {
     //props={this.props} refRoot={refRoot} comment={this.state.comment} suggestion={this.state.suggestion} editable={true}
+    const { t, i18n } = useTranslation();
     var ref_root = props.refRoot;
     var user = firebase.auth().currentUser;
     console.log(user);
@@ -119,7 +132,7 @@ const onClickHandler = (props) => {
     var comment = document.getElementById("text_comment").value;
     var suggestion = document.getElementById("text_suggestion").value;
     if(comment.length == 0 && suggestion.length == 0){
-        alert('Write review before submit');
+        alert(t('Write review before submit'));
         return;
     }
     //var name = document.getElementById("input-name").value;
@@ -179,10 +192,11 @@ const onClickHandler = (props) => {
     //close this review page
 };
 
-const onClickReportHandler = (rout_key, rev_key) => {
+const OnClickReportHandler = (rout_key, rev_key) => {
     var user = firebase.auth().currentUser;
+    const { t, i18n } = useTranslation();
     if(user == null){
-        alert('To report, login first!');
+        alert(t('To report, login first!'));
         return;
     }
     console.log('reporthandler');
@@ -198,14 +212,16 @@ const onClickDeleteHandler = (key, rootKey) => {
 }
 
 //need toggle?
+/*
 const onClickLikeHandler = (isComment,isLike,key, rootKey) => {
     var user = firebase.auth().currentUser;
+    const { t, i18n } = useTranslation();
     if(user == null){
         if(isLike){
-            alert('To leave a dislike, login first!');
+            alert(t('To leave a dislike, login first!'));
         }
         else{
-            alert('To leave a like, login first!');
+            alert(t('To leave a like, login first!'));
         }
         return;
     }
@@ -229,7 +245,7 @@ const onClickLikeHandler = (isComment,isLike,key, rootKey) => {
         ref.set(val+1);
     }
 }
-
+*/
 class ButtonToggle extends React.Component {
     constructor(props) {
       super(props);
@@ -240,17 +256,18 @@ class ButtonToggle extends React.Component {
         dislikePressed : false,
       }
       this.onClickLikeHandler = this.onClickLikeHandler.bind(this);
+      this.render1 = this.render1.bind(this);
     }
     
     onClickLikeHandler = (isLike) => {
-        
+        const { t, i18n } = useTranslation();
         var user = firebase.auth().currentUser;
         if(user == null){
             if(isLike){
-                alert('To leave a dislike, login first!');
+                alert(t('To leave a dislike, login first!'));
             }
             else{
-                alert('To leave a like, login first!');
+                alert(t('To leave a like, login first!'));
             }
             return;
         }
@@ -341,14 +358,18 @@ class ButtonToggle extends React.Component {
             }
         }
     }
+    render(){
+        return(<this.render1/>);
+    }
 
-    render() {
+    render1() {
+        const { t, i18n } = useTranslation();
         var like_bg = this.state.likePressed ? "blue" : "";
         var dislike_bg = this.state.dislikePressed ? "red" : "";
         return (
             <div>
-                <Button style={{backgroundColor: like_bg}} onClick={()=>this.onClickLikeHandler(true, this.props.rootKey)}>like {this.props.likeval}</Button>
-                <Button style={{backgroundColor: dislike_bg}} onClick={()=>this.onClickLikeHandler(false, this.props.rootKey)}>dislike {-1*this.props.dislikeval}</Button>
+                <Button style={{backgroundColor: like_bg}} onClick={()=>this.onClickLikeHandler(true, this.props.rootKey)}>{t('like')} {this.props.likeval}</Button>
+                <Button style={{backgroundColor: dislike_bg}} onClick={()=>this.onClickLikeHandler(false, this.props.rootKey)}>{t('dislike')} {-1*this.props.dislikeval}</Button>
             </div>
         );
     }
@@ -371,7 +392,7 @@ const ReviewDisptab = (props) => {
                 <div className="input-group-prepend">
                     <span className="input-group-text">
                         <ButtonToggle likeval={props.clike} dislikeval={props.cdislike} keyval={props.keyval} isComment={true} rootKey={props.rout_key}/>
-                        <Button onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>report</Button>
+                        <Button onClick={()=>OnClickReportHandler(props.rout_key,props.keyval)}>report</Button>
                     </span>
                 </div>
             </div>
@@ -387,7 +408,7 @@ const ReviewDisptab = (props) => {
                 <div className="input-group-prepend">
                     <span className="input-group-text">
                         <ButtonToggle likeval={props.slike} dislikeval={props.sdislike} keyval={props.keyval} isComment={false} rootKey={props.rout_key}/>
-                        <Button onClick={()=>onClickReportHandler(props.rout_key,props.keyval)}>report</Button>
+                        <Button onClick={()=>OnClickReportHandler(props.rout_key,props.keyval)}>report</Button>
                     </span>
                 </div>
             </div>
@@ -406,6 +427,7 @@ const Reviewtab = (props) => {
     const toggle = tab => {
         if(activeTab !== tab) setActiveTab(tab);
     }
+    const { t, i18n } = useTranslation();
     return (
       <div>
         <Nav tabs>
@@ -414,7 +436,7 @@ const Reviewtab = (props) => {
               className={classnames({ active: activeTab === '1' })}
               onClick={() => { toggle('1'); }}
             >
-              Comments
+              {t('Comments')}
             </NavLink>
           </NavItem>
           <NavItem>
@@ -422,7 +444,7 @@ const Reviewtab = (props) => {
               className={classnames({ active: activeTab === '2' })}
               onClick={() => { toggle('2'); }}
             >
-              Suggestions
+              {t('Suggestions')}
             </NavLink>
           </NavItem>
         </Nav>
@@ -431,7 +453,7 @@ const Reviewtab = (props) => {
             <Row>
                 <Col sm="12">
                 <div>
-                    <label for="comment">Write your comment: </label>
+                    <label for="comment">{t('Write your comment')}: </label>
                 </div>
                 {
                     props.editable ? (
@@ -439,7 +461,7 @@ const Reviewtab = (props) => {
                             <textarea className="form-control" id="text_comment" rows="5" style={{resize: 'none'}} defaultValue={props.comment}></textarea>
                             <div className="input-group-prepend">
                                 <span className="input-group-text" id="basic-addon1">
-                                    <a onClick={() => onClickHandler(props)}>Submit</a>
+                                    <a onClick={() => OnClickHandler(props)}>{t('Submit')}</a>
                                 </span>
                             </div>
                         </div>
@@ -457,7 +479,7 @@ const Reviewtab = (props) => {
             <Row>
                 <Col sm="12">
                 <div>
-                    <label for="suggestion">Write your suggestion: </label>
+                    <label for="suggestion">{t('Write your suggestion')}: </label>
                 </div>
                 {
                     props.editable ? (
@@ -465,7 +487,7 @@ const Reviewtab = (props) => {
                             <textarea className="form-control" id="text_suggestion" rows="5" style={{resize: 'none'}} defaultValue={props.suggestion}></textarea>
                             <div className="input-group-prepend">
                                 <span className="input-group-text" id="basic-addon1">
-                                    <a onClick={() => onClickHandler(props)}>Submit</a>
+                                    <a onClick={() => OnClickHandler(props)}>{t('Submit')}</a>
                                 </span> 
                             </div>
                         </div>
@@ -515,6 +537,7 @@ const Reviewtab = (props) => {
         console.log(temp_rating);
         this.reference = {};
         console.log(this.state);
+        this.render1 = this.render1.bind(this);
     }
     componentWillUnmount() {
 		this._isMounted = false;
@@ -545,9 +568,10 @@ const Reviewtab = (props) => {
         })
         */
     }
-    
-    render(){
+
+    render1(){
         var refRoot = firebase.database().ref().child('routine').child(this.props.match.params.key);
+        const { t, i18n } = useTranslation();
         return (
         <div>
             <Row>
@@ -559,7 +583,7 @@ const Reviewtab = (props) => {
             {/* --------------------------------------------------------------------------------*/}
             {/* Row*/}
             {/* --------------------------------------------------------------------------------*/}
-            <h5 className="mb-3">Write your own review</h5>
+            <h5 className="mb-3">{t('Write your own review')}</h5>
             <Card>
             <Row>
                 <Col xs="6" md="4">
@@ -567,8 +591,8 @@ const Reviewtab = (props) => {
                     {/* Card-1*/}
                     {/* --------------------------------------------------------------------------------*/}
                     <CardBody>
-                    <CardTitle>Rating</CardTitle>
-                    <Radar className="graph" id="radar-graph" data={data(this.state.rate)} options={options} ref={(reference) => {this.reference = reference}}/>
+                    <CardTitle>{t('Rating')}</CardTitle>
+                    <Radar className="graph" id="radar-graph" data={Data(this.state.rate)} options={options} ref={(reference) => {this.reference = reference}}/>
                     </CardBody>
                 </Col>
                 <Col xs="6" md="3">
@@ -587,32 +611,32 @@ const Reviewtab = (props) => {
                     
                     {/*style={{border: 3, float: 'left', height: 'auto', width: 'auto'}}?*/}
                     <div>
-                    <text className='slider-text pull-right'>Yes</text>
-                    <text className='slider-text pull-right mr-6'>No</text>
+                    <text className='slider-text pull-right'>{t('Yes')}</text>
+                    <text className='slider-text pull-right mr-6'>{t('No')}</text>
                    
                     </div>
                     <div className='slider'>
-                        <text className='slider-text'>Difficulty well set?</text>
+                        <text className='slider-text'>{t('Difficulty well set?')}</text>
                         <StepRangeSlider className='slider-slider' value={this.state.rate[0]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[0]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     <div className='slider'>
-                        <text className='slider-text'>Was routine new?</text>
+                        <text className='slider-text'>{t('Was routine new?')}</text>
                         <StepRangeSlider className='slider-slider' value={this.state.rate[1]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[1]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     <div className='slider'>
-                        <text className='slider-text'>Was it effective?</text>
+                        <text className='slider-text'>{t('Was it effective?')}</text>
                         <StepRangeSlider className='slider-slider' value={this.state.rate[2]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[2]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     <div className='slider'>
-                        <text className='slider-text'>Post well written?</text>
+                        <text className='slider-text'>{t('Post well written?')}</text>
                         <StepRangeSlider className='slider-slider' value={this.state.rate[3]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[3]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
                     <div className='slider'>
-                        <text className='slider-text'>Suggestable?</text>
+                        <text className='slider-text'>{t('Suggestable?')}</text>
                         <StepRangeSlider className='slider-slider' value={this.state.rate[4]} range={[{value: 1, step:1},{value: 5}]} onChange={value => {this.state.rate[4]=value; document.getElementById('input-rate').value = this.state.rate; document.getElementById('input-avgrate').value = this.state.rate.reduce(function(a, b){
                             return a + b;})/this.state.rate.length; let Chart = this.reference.chartInstance; Chart.update();}}/>
                     </div>
@@ -633,6 +657,10 @@ const Reviewtab = (props) => {
             </Row>
         </div>
     );
-}}
+    }
+    render(){
+        return(<this.render1/>);
+    }
+}
 
 export default ReviewWrite;
