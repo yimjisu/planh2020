@@ -185,12 +185,7 @@ class Header extends React.Component{
                         state: STATE.LOGOUT
                     })
                 }
-                var user = firebase.auth().currentUser;
-                if(user != null){
-                    var name = user.displayName;
-                    if(name == null) name = '';
-                    if(document.getElementById("user_para")) document.getElementById("user_para").innerHTML = 'Welcome! ' + name;
-                }
+                
                 var rootRef = firebase.database().ref().child('games');
                 rootRef.transaction(function(game){
                     if(game){
@@ -447,6 +442,7 @@ class Header extends React.Component{
     }
 
     login(e){
+        
         e.preventDefault();
         var userEmail = document.querySelector("#email_field");
         var userPass = document.querySelector("#password_field");
@@ -530,42 +526,50 @@ class Header extends React.Component{
     }
 
     loginBtn(){
+        const { t, i18n } = useTranslation();
         return(
             <Card>
                 <CardBody>
-                    <h2>Login</h2>
+                    <h2>{t('Login')}</h2>
                     <input id="email_field" type="email" placeholder="email..."/>
                     <input id="password_field" type="password" placeholder="password..."/>
-                    <Button className="button" onClick={this.login}>Sign In</Button>
-                    <Button className="button" onClick={this.createAccount} style={{marginLeft:'20px'}}>Sign Up</Button>
+                    <Button className="button" onClick={this.login}>{t('Sign In')}</Button>
+                    <Button className="button" onClick={this.createAccount} style={{marginLeft:'20px'}}>{t('Sign Up')}</Button>
                 </CardBody>
             </Card>
         );
     }
 
     createBtn(){
+        const { t, i18n } = useTranslation();
         return(
         <Card>
             <CardBody>
 
             
-        <h2>Create Account</h2>
+        <h2>{t('Create Account')}</h2>
         <input id="entry-displayname" type="text" placeholder="name..."/>
         <input id="entry-email" type="email" placeholder="email address..."/>
         <input id="entry-password" type="password" placeholder="password..."/>
-        <Button className="button" onClick={this.turnback}>Back</Button>
-        <Button className="button" onClick={this.submitCreateAccount} style={{marginLeft:'10px'}}>Sign Up</Button>
+        <Button className="button" onClick={this.turnback}>{t('Back')}</Button>
+        <Button className="button" onClick={this.submitCreateAccount} style={{marginLeft:'10px'}}>{t('Sign Up')}</Button>
         
         </CardBody>
         </Card>);
     }
 
     logoutBtn(){
+        const { t, i18n } = useTranslation();
+        var user = firebase.auth().currentUser;
+                if(user != null){
+                    var name = user.displayName;
+                    if(name == null) name = '';
+                }
         return(
             <div>
-            <div id="user_para">Welcome User</div>
+            <div id="user_para">{t('Welcome User')+name}</div>
             <DropdownItem onClick={this.logout}>
-            <i className="fa fa-power-off mr-1 ml-1" />LogOut
+            <i className="fa fa-power-off mr-1 ml-1" />{t('LogOut')}
         </DropdownItem>
         </div>
         )
