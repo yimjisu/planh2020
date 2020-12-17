@@ -106,7 +106,9 @@ const resources = {
       'queried_time3_1': 'Time:   less than ',
       'queried_time3_2': ' min',
       'queried_title1': 'Including [[',
-      'queried_title2': ']] in the title'
+      'queried_title2': ']] in the title',
+      'Tutorial' : 'Tutorial',
+      'href': 'https://hackmd.io/aB-apqXRSeSxIAni2mwHCw'
     }
   },
   ko: {
@@ -214,7 +216,9 @@ const resources = {
       'queried_time3_1': '시간:   ',
       'queried_time3_2': ' 분 이하',
       'queried_title1' : '[[',
-      'queried_title2': ']]을 포함하는 제목'
+      'queried_title2': ']]을 포함하는 제목',
+      'Tutorial' : '튜토리얼',
+      'href' : 'https://hackmd.io/PZpkE2ymRT6V7R6f7fxwjw'
     }
   }
 };
