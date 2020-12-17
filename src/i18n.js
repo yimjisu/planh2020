@@ -135,7 +135,14 @@ const resources = {
       'write_submit_text': 'Now your done! Submit Now',
       'write_submit_button': 'Submit',
       'Tutorial' : 'Tutorial',
-      'href': 'https://hackmd.io/aB-apqXRSeSxIAni2mwHCw'
+      'href': 'https://hackmd.io/aB-apqXRSeSxIAni2mwHCw',
+      'Login': 'Login',
+      'Sign In': 'Sign In',
+      'Sign Out': 'Sign Out',
+      'Sign Up': 'Sign Up',
+      'Create Account' : 'Create Account',
+      'Back':'Back',
+      'Welcome User':'Welcome '
     }
   },
   ko: {
@@ -272,7 +279,14 @@ const resources = {
       'write_submit_text': '작성이 완료되었다면 작성 버튼을 눌러주세요',
       'write_submit_button': '작성하기',
       'Tutorial' : '튜토리얼',
-      'href' : 'https://hackmd.io/PZpkE2ymRT6V7R6f7fxwjw'
+      'href' : 'https://hackmd.io/PZpkE2ymRT6V7R6f7fxwjw',
+      'Login': '로그인',
+      'Sign In': '로그인',
+      'Sign Out': '로그아웃',
+      'Sign Up': '계정만들기',
+      'Create Account': '계정 만들기',
+      'Back': '뒤로가기',
+      'Welcome User': '안녕하세요 '
     }
   }
 };
