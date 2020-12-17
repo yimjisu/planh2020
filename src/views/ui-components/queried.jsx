@@ -29,33 +29,43 @@ import abdominal from '../../assets/images/abdominal.png';
 import shoulder from '../../assets/images/shoulder.png';
 import back from '../../assets/images/back.png';
 import chest from '../../assets/images/chest.png';
+import { useTranslation } from 'react-i18next'
+
 class BadgeList extends React.Component{
     constructor(props) {
-        super(props)
+        super(props);
+        this.render1 = this.render1.bind(this);
     }
 
-    render () {
+    render1 () {
+        const { t, i18n } = useTranslation();
         return(
             <div class=''>
                 {this.props.query_tag.map((key, index) => {
                     return(
                         <Badge tag={key} className="mx-1" color="info" pill >
-                            <i className="mdi mdi-dots-horizontal" /> {key}
+                            <i className="mdi mdi-dots-horizontal" /> {t(key)}
                         </Badge>
                     )
                 })}
             </div>
         )
     }
+
+    render () {
+        return (<this.render1/>);
+    }
 }
 
 
 class BodyList extends React.Component{
     constructor(props) {
-        super(props)
+        super(props);
+        this.render1 = this.render1.bind(this);
     }
 
-    render () {
+    render1 () {
+        const { t, i18n } = useTranslation();
         return(
             <div class=''>
                 {this.props.query_tag.map((key, index) => {
@@ -69,17 +79,16 @@ class BodyList extends React.Component{
                         if(key == 'leg') bodyimg = leg;
                         return(
                         <Badge className="mx-1" tag={key} color="danger" pill>
-                            <img height="13px" src={bodyimg}/> {key}
+                            <img height="13px" src={bodyimg}/> {t(key)}
                         </Badge>
-                        )
-                        /*
-                        <Badge color="danger" tag={key} className="mx-1" pill >
-                            <i className="mdi mdi-dots-horizontal" /> {key}
-                        </Badge>*/
-                    
+                        )                    
                 })}
             </div>
         )
+    }
+
+    render () {
+        return ( <this.render1/>);
     }
 }
 
@@ -87,6 +96,7 @@ class BodyList extends React.Component{
 class Queried extends React.Component{
     constructor(props){
         super(props);
+        this.render1 = this.render1.bind(this);
         this._isMounted = false;
         this.state = {
             minminute: null,
@@ -356,40 +366,41 @@ class Queried extends React.Component{
     }
 
 
-    render () {
+    render1 () {
+        const { t, i18n } = useTranslation();
         return (
             <div>
-                <CardTitle>Routine Search Result</CardTitle>
-                <CardTitle>--------- Filtering ---------</CardTitle>
+                <CardTitle>{t('Routine Search Result')}</CardTitle>
+                <CardTitle>{t('Filtering')}</CardTitle>
                 <div className = 'd-flex'>
                 { this.state.title_query != null ?
-                    <ul className='d-flex'>{'Including [[' + this.state.title_query + ']] in the title'}</ul>
+                    <ul className='d-flex'>{t('queried_title1') + this.state.title_query + t('queried_title2')}</ul>
                 :
                     null
                 }
                 { this.state.minminute >= 1 && this.state.maxminute <= 9999 ?
-                    <ul className='d-flex'>{'Time:   ' + this.state.minminute + ' min to ' + this.state.maxminute + ' min'}</ul>
+                    <ul className='d-flex'>{t('queried_time1_1') + this.state.minminute + t('queried_time1_2') + this.state.maxminute + t('queried_time1_3')}</ul>
                 :
                     null
                 }
                 { this.state.minminute >= 1 && this.state.maxminute > 9999 ?
-                    <ul className='d-flex'>{'Time:   more than ' + this.state.minminute + ' min'}</ul>
+                    <ul className='d-flex'>{t('queried_time2_1') + this.state.minminute + t('queried_time2_2')}</ul>
                 :
                     null
                 }
                 { this.state.minminute < 1 && this.state.maxminute <= 9999 ?
-                    <ul className='d-flex'>{'Time:   less than ' + this.state.maxminute + ' min'}</ul>
+                    <ul className='d-flex'>{t('queried_time3_1') + this.state.maxminute + t('queried_time3_2')}</ul>
                 :
                     null
                 }
                 { this.state.level != null ?
-                    <ul className='d-flex ml-1'>{'Level:  ' + this.state.level}</ul>
+                    <ul className='d-flex ml-1'>{t('queried_level') + t(this.state.level)}</ul>
                 :
                     null
                 }
                 { this.state.tags.length > 0 ?
                     <div className='d-flex'>
-                        <ul className='ml-1'>{'Tags:'}</ul>
+                        <ul className='ml-1'>{t('queried_tag')}</ul>
                         <BadgeList color="info" query_tag={this.state.tags} />
                     </div>
                 :
@@ -397,14 +408,14 @@ class Queried extends React.Component{
                 }
                 { this.state.bodypart.length > 0 ?
                     <div className='d-flex'>
-                        <ul className='ml-1'>{'Bodypart:'}</ul>
+                        <ul className='ml-1'>{t('queried_bodypart')}</ul>
                         <BodyList color="warning" query_tag={this.state.bodypart} />
                     </div>
                 :
                     null
                 }
                 </div>
-                <CardTitle>---------- Result ----------</CardTitle>
+                <CardTitle>{t('Result')}</CardTitle>
                 <CardTitle></CardTitle>
                 { this.state.results.length > 0 ?
                     <div>
@@ -418,10 +429,14 @@ class Queried extends React.Component{
                         </Row>
                     </div>
                 :
-                    <CardTitle>Sorry, there were no matches for your search.</CardTitle>
+                    <CardTitle>{t('search_sorry')}</CardTitle>
                 }
             </div>
         )
+    }
+
+    render () {
+        return (<this.render1/>);
     }
 }
 

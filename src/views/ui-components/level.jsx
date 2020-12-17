@@ -22,12 +22,14 @@ import {
 
 import firebase from 'firebase';
 import { Projects } from '../../components/dashboard-components';
+import { useTranslation } from 'react-i18next'
 
 var STATE = {CHECKING: 0, QUERIED: 1};
 
 class LevelQueried extends React.Component{
     constructor(props){
         super(props);
+        this.render1 = this.render1.bind(this);
         this._isMounted = false;
         this.state = {
             results: [],
@@ -63,13 +65,14 @@ class LevelQueried extends React.Component{
         })
     }
 
-    render () {
+    render1 () {
+        const { t, n18 } = useTranslation ();
         if (this.state.results.length == 0){
             if (this.state.state == STATE.QUERIED){
                 return(
                     <div>
-                        <CardTitle>Sorry, there is no routines appropriate for your level.</CardTitle>
-                        <Button onClick={this.onClickRetry}>Retry</Button>
+                        <CardTitle>{t('level_sorry')}</CardTitle>
+                        <Button onClick={this.onClickRetry}>{t('Retry')}</Button>
                     </div>
                 )
             } else if (this.state.state == STATE.CHECKING) {
@@ -81,7 +84,7 @@ class LevelQueried extends React.Component{
             if (this.state.state == STATE.QUERIED){
                 return (
                     <div>
-                        <h5 className="mb-3">Routine recommendation for your level: {this.props.level}</h5>
+                        <h5 className="mb-3">{t('level_recom')}{this.props.level}</h5>
                         <Row>
                             {this.state.results.map((key, index) => {
                                 return(
@@ -90,7 +93,7 @@ class LevelQueried extends React.Component{
                                     </Col>
                                 )})}
                         </Row>
-                        <Button onClick={this.onClickRetry}>Retry</Button>
+                        <Button onClick={this.onClickRetry}>{t('Retry')}</Button>
                     </div>
                 )
             } else if (this.state.state == STATE.CHECKING) {
@@ -100,11 +103,16 @@ class LevelQueried extends React.Component{
             }
         }
     }
+
+    render () {
+        return(<this.render1/>);
+    }
 }
 
 class LevelCheck extends React.Component{
     constructor(props){
         super(props);
+        this.render1 = this.render1.bind(this);
         this.state={
             height: 160,
             weight: 50,
@@ -172,7 +180,8 @@ class LevelCheck extends React.Component{
         }
     }
 
-    render(){
+    render1(){
+        const { t, n18 } = useTranslation ();
         if (this.state.state == STATE.CHECKING) {
             return(
                 <Row>
@@ -181,34 +190,34 @@ class LevelCheck extends React.Component{
                             <CardBody>
                                 <table>
                                     <tr>
-                                        <td style={{width:"45%"}}><CardTitle>Height</CardTitle></td>
+                                        <td style={{width:"45%"}}><CardTitle>{t('Height')}</CardTitle></td>
                                         <td><Input type='number' value={this.state.height} onChange={this.handleChangeHeight} style={{textAlign: 'right', width:"100%"}} /></td>
                                         <td><CardTitle>cm</CardTitle></td>
                                     </tr>
                                     <tr>
-                                        <td><CardTitle>Weight</CardTitle></td>
+                                        <td><CardTitle>{t('Weight')}</CardTitle></td>
                                         <td><Input type='number' value={this.state.weight} onChange={this.handleChangeWeight} style={{textAlign: 'right', width:"100%"}} /></td>
                                         <td><CardTitle>kg</CardTitle></td>
                                     </tr>
                                 </table>
                                 <br/>
                                 <br/>
-                                <CardTitle>I do exercise...</CardTitle>
+                                <CardTitle>{t('level_exer')}</CardTitle>
                                 <div onChange={this.onChangeAweek}>
-                                    <Input type='radio' value="0" name="aweek" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>0~1 days a week</CardTitle>
-                                    <Input type='radio' value="1" name="aweek" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>2~3 days a week</CardTitle>
-                                    <Input type='radio' value="2" name="aweek" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>4~5 days a week</CardTitle>
+                                    <Input type='radio' value="0" name="aweek" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>{t('0~1 days a week')}</CardTitle>
+                                    <Input type='radio' value="1" name="aweek" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>{t('2~3 days a week')}</CardTitle>
+                                    <Input type='radio' value="2" name="aweek" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>{t('4 or more days a week')}</CardTitle>
                                 </div>
                                 <br/>
                                 <br/>
-                                <CardTitle>I can do Plank for...</CardTitle>
+                                <CardTitle>{t('level_plank')}</CardTitle>
                                 <div onChange={this.onChangePlank}>
-                                    <Input type='radio' value="0" name="plank" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>less than 1 min</CardTitle>
-                                    <Input type='radio' value="1" name="plank" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>1~2 minutes</CardTitle>
-                                    <Input type='radio' value="2" name="plank" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>more than 2 min</CardTitle>
+                                    <Input type='radio' value="0" name="plank" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>{t('less than 1 min')}</CardTitle>
+                                    <Input type='radio' value="1" name="plank" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>{t('1~2 minutes')}</CardTitle>
+                                    <Input type='radio' value="2" name="plank" style={{left:"10%"}} /><CardTitle style={{left:"10%"}}>{t('more than 2 min')}</CardTitle>
                                 </div>
                                 <br/>
-                                <Button style={{left:"70%", width:"30%"}} onClick={this.onClickSubmit}>Submit</Button>
+                                <Button style={{left:"70%", width:"30%"}} onClick={this.onClickSubmit}>{t('level_submit')}</Button>
                             </CardBody>
                         </Card>
                     </Col>
@@ -220,6 +229,10 @@ class LevelCheck extends React.Component{
             )
         }
 
+    }
+
+    render () {
+        return( <this.render1/>);
     }
 }
 

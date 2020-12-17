@@ -121,6 +121,7 @@ var STATE = {LOGIN: 0, LOGOUT: 1, CREATE: 2};
 class Header extends React.Component{
     constructor (props){
         super(props);
+        this.render1 = this.render1.bind(this);
         this._isMounted = false;
         this.loginBtn = this.loginBtn.bind(this);
         this.logoutBtn = this.logoutBtn.bind(this);
@@ -567,7 +568,8 @@ class Header extends React.Component{
         </div>
         )
     }
-    render() {
+    render1() {
+        const { t, i18n } = useTranslation();
         var text = this.state.text;
         var profilephoto = this.state.profilephoto;
         var btn = null;
@@ -645,39 +647,39 @@ class Header extends React.Component{
                                                     </button>
                                                 <br />
                                                 <div>   
-                                                    <CardTitle className="time-fnt">Time</CardTitle>
+                                                    <CardTitle className="time-fnt">{t('header_time')}</CardTitle>
                                                     <Input className="time-input" type="number" onChange={this.onChangeMinTime} />
-                                                    <CardText className="time-fnt2">min</CardText>
+                                                    <CardText className="time-fnt2">{t('header_min')}</CardText>
                                                     <CardText className="time-fnt3">to</CardText>
                                                     <Input className="time-input2" type="number" onChange={this.onChangeMaxTime} />
-                                                    <CardText className="time-fnt4">min</CardText>
+                                                    <CardText className="time-fnt4">{t('header_min')}</CardText>
                                                 </div>
                                                 <div>   
-                                                    <CardTitle className="level-fnt">Level</CardTitle>
-                                                    {this.state.level === "low" ? <Button className="low-btn-act" onClick={this.onClickLow}>Low</Button> : <Button className="low-btn" onClick={this.onClickLow}>Low</Button>}
-                                                    {this.state.level === "middle" ? <Button className="mid-btn-act" onClick={this.onClickMid}>Middle</Button> : <Button className="mid-btn" onClick={this.onClickMid}>Middle</Button>}
-                                                    {this.state.level === "high" ? <Button className="high-btn-act" onClick={this.onClickHigh}>High</Button> : <Button className="high-btn" onClick={this.onClickHigh}>High</Button>}
+                                                    <CardTitle className="level-fnt">{t('header_level')}</CardTitle>
+                                                    {this.state.level === "low" ? <Button className="low-btn-act" onClick={this.onClickLow}>{t('low')}</Button> : <Button className="low-btn" onClick={this.onClickLow}>{t('low')}</Button>}
+                                                    {this.state.level === "middle" ? <Button className="mid-btn-act" onClick={this.onClickMid}>{t('middle')}</Button> : <Button className="mid-btn" onClick={this.onClickMid}>{t('middle')}</Button>}
+                                                    {this.state.level === "high" ? <Button className="high-btn-act" onClick={this.onClickHigh}>{t('high')}</Button> : <Button className="high-btn" onClick={this.onClickHigh}>{t('high')}</Button>}
                                                 </div>
                                                 <div>   
-                                                    <CardTitle className="bodypart-fnt">Body Part</CardTitle>
-                                                    {this.state.shoulder ? <Button className="shoulder-btn-act" onClick={this.onClickShoulder}>Shoulder</Button> : <Button className="shoulder-btn" onClick={this.onClickShoulder}>Shoulder</Button>}
-                                                    {this.state.arms ? <Button className="arms-btn-act" onClick={this.onClickArms}>Arms</Button> : <Button className="arms-btn" onClick={this.onClickArms}>Arms</Button>}
-                                                    {this.state.back ? <Button className="back-btn-act" onClick={this.onClickBack}>Back</Button> : <Button className="back-btn" onClick={this.onClickBack}>Back</Button>}
-                                                    {this.state.abdominals ? <Button className="abdo-btn-act" onClick={this.onClickAbdominals}>Abdominal</Button> : <Button className="abdo-btn" onClick={this.onClickAbdominals}>Abdominal</Button>}
-                                                    {this.state.chest ? <Button className="chest-btn-act" onClick={this.onClickChest}>Chest</Button> : <Button className="chest-btn" onClick={this.onClickChest}>Chest</Button>}
-                                                    {this.state.legs ? <Button className="legs-btn-act" onClick={this.onClickLegs}>Legs</Button> : <Button className="legs-btn" onClick={this.onClickLegs}>Legs</Button>}
+                                                    <CardTitle className="bodypart-fnt">{t('header_bodypart')}</CardTitle>
+                                                    {this.state.shoulder ? <Button className="shoulder-btn-act" onClick={this.onClickShoulder}>{t('shoulder')}</Button> : <Button className="shoulder-btn" onClick={this.onClickShoulder}>{t('shoulder')}</Button>}
+                                                    {this.state.arms ? <Button className="arms-btn-act" onClick={this.onClickArms}>{t('arm')}</Button> : <Button className="arms-btn" onClick={this.onClickArms}>{t('arm')}</Button>}
+                                                    {this.state.back ? <Button className="back-btn-act" onClick={this.onClickBack}>{t('back')}</Button> : <Button className="back-btn" onClick={this.onClickBack}>{t('back')}</Button>}
+                                                    {this.state.abdominals ? <Button className="abdo-btn-act" onClick={this.onClickAbdominals}>{t('abdominal')}</Button> : <Button className="abdo-btn" onClick={this.onClickAbdominals}>{t('abdominal')}</Button>}
+                                                    {this.state.chest ? <Button className="chest-btn-act" onClick={this.onClickChest}>{t('chest')}</Button> : <Button className="chest-btn" onClick={this.onClickChest}>{t('chest')}</Button>}
+                                                    {this.state.legs ? <Button className="legs-btn-act" onClick={this.onClickLegs}>{t('leg')}</Button> : <Button className="legs-btn" onClick={this.onClickLegs}>{t('leg')}</Button>}
                                                 </div>
                                                 <div>   
-                                                    <CardTitle className="title-query-fnt">Title</CardTitle>
+                                                    <CardTitle className="title-query-fnt">{t('header_title')}</CardTitle>
                                                     <Form id="title-input">
-                                                        <Input className="title-query-input" type="text" onChange={this.onChangeTitleSearch} placeholder="Type here..."/>
+                                                        <Input className="title-query-input" type="text" onChange={this.onChangeTitleSearch} placeholder={t('Type here...')}/>
                                                     </Form>
                                                 </div>
                                                 <div>   
-                                                    <CardTitle className="tag-fnt">Tag</CardTitle>
+                                                    <CardTitle className="tag-fnt">{t('header_tag')}</CardTitle>
                                                     {this.state.query_tag.length >= 1 ? <BadgeList query_tag={this.state.query_tag} function={this.removeTag} /> : null}
                                                     <Form id="tag-input">
-                                                        <Input className="tag-input" type="text" onChange={this.onChangeSearch} placeholder="Type here..."/>
+                                                        <Input className="tag-input" type="text" onChange={this.onChangeSearch} placeholder={t('Type here...')}/>
                                                     </Form>
                                                     {this.state.recomm_tags.length >= 1 ? <RecommList recomm_tags={this.state.recomm_tags} function={this.pushTags}/> : null}
                                                 </div>
@@ -739,6 +741,10 @@ class Header extends React.Component{
                 </header>
             );
         }
+    }
+
+    render() {
+        return (<this.render1/>);
     }
 }
 export default Header;
