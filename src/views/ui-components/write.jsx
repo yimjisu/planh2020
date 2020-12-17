@@ -13,6 +13,7 @@ import {
     FormText
 } from 'reactstrap';
 import firebase from 'firebase';
+import {useTranslation} from 'react-i18next';
 
 
 class Alerts extends React.Component {
@@ -24,6 +25,7 @@ class Alerts extends React.Component {
         this.addAction = this.addAction.bind(this);
         this.handleCommonChange = this.handleCommonChange.bind(this);
         this.handleImageChange = this.handleImageChange.bind(this);
+        this.render1 = this.render1.bind(this);
         this.state = {
             commonState : {title:'', time:'', level:''},
 
@@ -142,7 +144,7 @@ class Alerts extends React.Component {
 
     handleWrite(e){
         e.preventDefault();
-
+        const { t, i18n } = useTranslation();
         var user = firebase.auth().currentUser;
         var title = document.getElementById('routineTitle').value;
         var level;
@@ -243,23 +245,25 @@ class Alerts extends React.Component {
         })
     };
     
-    render(){
-        
+
+    render1(){
         var time = this.state.time;
         var title = this.state.title;
         var level = this.state.level;
         var tagState = this.state.tagState;
         var actionState = this.state.actionState;
         var body = this.state.body;
+        const { t, i18n } = useTranslation();
     return (
+        
         <div>  
             <Form onSubmit={(e) => this.handleWrite(e)}>
                 <FormGroup>
-                    <Label for="title">Title of your Routine</Label>
-                    <Input type="text" name="title"  defaultValue={title} id="routineTitle" placeholder="Write the title of your Routine" onChange={(e) => this.handleCommonChange(e)}/>
+                    <Label for="title">{t('write_title')}</Label>
+                    <Input type="text" name="title"  defaultValue={title} id="routineTitle" placeholder={t('write_title_placeholder')} onChange={(e) => this.handleCommonChange(e)}/>
                 </FormGroup>
                 <FormGroup>
-                    <Label for="level">Level of difficulty</Label>
+                    <Label for="level">{t('write_level')}</Label>
                     <div className='d-flex'>
                     {['low', 'middle', 'high'].map((key, value) => {
                         return(
@@ -270,16 +274,16 @@ class Alerts extends React.Component {
                     </div>
                 </FormGroup>
                 <FormGroup>
-                    <Label for="time">Time needed for your routine</Label>
+                    <Label for="time">{t('write_time')}</Label>
                     <div className='d-flex'>
                     <Input type="number" name="time"  step='1' 
                     defaultValue={time} id="routineTime" 
-                    placeholder="Write in minutes"
+                    placeholder={t('write_time_placeholder')}
                     onChange={(e) => this.handleCommonChange(e)}/>
                     <p className='mt-2 mb-0'>min</p></div>
                 </FormGroup>
                 <FormGroup>
-                    <Label for="body">Body part used in your routine</Label>
+                    <Label for="body">{t('write_body')}</Label>
                     <div className='d-flex'>
                     {Object.entries(body).map(([key, value]) => {
                         return(
@@ -290,20 +294,20 @@ class Alerts extends React.Component {
                     </div>
                 </FormGroup>
                 <FormGroup>
-                <h4>Add your tag</h4>
+                <h4>{t('write_tag_main')}</h4>
                 {
                     tagState.map((val, idx) => {
                         const tagId = `tag-${idx}`;
                         return (
                             <div key={`tag-${idx}`}>
-                              <Label htmlFor={tagId}>{`Tag #${idx + 1}`}</Label>
+                              <Label htmlFor={tagId}>{t('write_tag')}{` #${idx + 1}`}</Label>
                               <Input
                                 type="text"
                                 name={tagId}
                                 data-idx={idx}
                                 id={tagId}
                                 className="tag"
-                                placeholder = "Enter tag name"
+                                placeholder = {t('write_tag_add')}
                                 defaultValue={val}
                                 onChange={(e) => this.handleTagChange(e)}
                               />
@@ -313,11 +317,11 @@ class Alerts extends React.Component {
                           );   
                     })
                 }
-                <Input type="button" value="Add a New Tag" onClick={() => this.addTag()}/>
+                <Input type="button" value={t('write_tag_add')} onClick={() => this.addTag()}/>
                 </FormGroup>
                 <br></br><br></br>
                 <FormGroup>
-                <h4>Write your Routine</h4>
+                <h4>{t('write_action_main')}</h4>
                 
                 {
                     actionState.map((val, idx) => {
@@ -329,27 +333,27 @@ class Alerts extends React.Component {
                         const videoId = `video-${idx}`;
                         return (
                             <div key={`action-${idx}`}>
-                              <Label htmlFor={actionId}>{`Name of action #${idx + 1}`}</Label>
+                              <Label htmlFor={actionId}>{t('write_action')}{` #${idx + 1}`}</Label>
                               <Input
                                 type="text"
                                 name="action"
                                 data-idx={idx}
                                 id={actionId}
-                                placeholder = "Enter the name of your action"
+                                placeholder = {t('write_action_placeholder')}
                                 defaultValue={val['action']}
                                 onChange={(e) => this.handleActionChange(e)}
                               />
-                                <Label htmlFor={infoId}>{`Specific steps of action #${idx + 1}`}</Label>
+                                <Label htmlFor={infoId}>{t('write_action_steps')}{` #${idx + 1}`}</Label>
                                 <Input
                                 type="textarea"
                                 rows={Math.round(6)}
                                 name="info"
                                 data-idx={idx}
                                 id={infoId}
-                                placeholder = "Describe the information needed to go through your action."
+                                placeholder = {t('write_action_steps_placeholder')}
                                 defaultValue={val['info']}
                                 />
-                                <Label htmlFor={timeId}>{`Time required for action #${idx + 1}`}</Label>
+                                <Label htmlFor={timeId}>{t('write_time')}{` #${idx + 1}`}</Label>
                                 <div className='d-flex'>
                                 <Input
                                     type="number"
@@ -357,7 +361,7 @@ class Alerts extends React.Component {
                                     step="1"
                                     data-idx={idx}
                                     id={timeId}
-                                    placeholder = "Write the time required for action"
+                                    placeholder = {t('write_time_placeholder')}
                                     defaultValue={val['time']}
                                 />
                                 <Input
@@ -371,23 +375,23 @@ class Alerts extends React.Component {
                                 <option>sec</option>
                                 <option>times</option></Input>
                                 </div>
-                                Upload an image to describe your action.
+                                {t('write_upload')}
                                 <Input
                                     type="file"
                                     name="image"
                                     data-idx={idx}
                                     id={imageId}
-                                    placeholder="Image file for explanation"
+                                    placeholder={t('write_upload_placeholder')}
                                     onChange={(e) => this.handleImageChange(e)}
                                 /> 
                                 <img src={val['imageUrl']} alt=""/>
-                                Video Url (Youtube)
+                                {t('write_video')}
                                 <Input
                                     type="text"
                                     name="video"
                                     data-idx={idx}
                                     id={videoId}
-                                    placeholder = "Type in url of the video you would like to upload starting with http"
+                                    placeholder = {t('write_video_placeholder')}
                                     defaultValue={val['videoUrl']}
 
                                 />
@@ -396,11 +400,11 @@ class Alerts extends React.Component {
                           );   
                     })
                 }
-                <Input type="button" value="Add a New Action" onClick={() => this.addAction()}/>
+                <Input type="button" value={t('write_action_add')} onClick={() => this.addAction()}/>
                 </FormGroup>
 
-                <h4>Now your done! Submit now</h4>
-                <Input type="submit" value="Submit" />
+                <h4>{t('write_submit_text')}</h4>
+                <Input type="submit" value={t('write_submit_button')} />
             </Form>
 
      
@@ -411,6 +415,10 @@ class Alerts extends React.Component {
             {/* --------------------------------------------------------------------------------*/}
         </div>
     );}
+
+    render(){
+        return(<this.render1/>);
+    } 
 }
 
 export default Alerts;
