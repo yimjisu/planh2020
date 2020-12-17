@@ -859,7 +859,8 @@ class AuthorReply extends React.Component{
                         <textarea className="form-control" id="text_reply" style={{resize: 'none'}} defaultValue={this.state.reply} readOnly></textarea>
                         <div className="input-group-prepend">
                         <span className="input-group-text" id="basic-addon1">
-                        <div className='linked' onClick = {this.writeReplyHandler}><i className='mdi mdi-tooltip-edit mr-1' />{t('Edit')}</div>
+                        <div className='linked' onClick = {this.writeReplyHandler}>
+                            <i className='mdi mdi-tooltip-edit mr-1' />{t('Edit')}</div>
                         <div class="pull-right">
                         <div className='linked' onClick = {this.deleteHandler}>
                             <i className='mdi mdi-delete ml-1' />{t('Delete')}</div>
@@ -1004,25 +1005,10 @@ class Review_Card extends React.Component{
         this.state = {
             img: 1
         }
-        /*
-        this.state = {
-            name : this.props.data.name,
-            rate : this.props.data.rate,
-            comment : this.props.data.comment,
-            clike : this.props.data.clike,
-            cdislike : this.props.data.cdislike,
-            suggestion : this.props.data.suggestion,
-            slike : this.props.data.slike,
-            sdislike : this.props.data.sdislike,
-            keyval : this.props.keyval,
-        }
-        */
         var temp_userid;
         if(firebase.auth().currentUser!=null){
             temp_userid = firebase.auth().currentUser.displayName;
         }
-        console.log(this.props.userid);
-        console.log(temp_userid);
         this.state = {
             author : this.props.author,
             name : this.props.data.name,
@@ -1038,6 +1024,7 @@ class Review_Card extends React.Component{
             //pins : this.props.pins,
             toggle : this.props.toggle,
             temp : false,
+            date : this.props.date
         };
        //this.onClickPinHandler = this.onClickPinHandler.bind(this);
        this.onClickDeleteHandler = this.onClickDeleteHandler.bind(this);
@@ -1127,12 +1114,6 @@ class Review_Card extends React.Component{
     }
     render1(){
         const { t, i18n } = useTranslation();
-        console.log("review_card render");
-        console.log(this.props.keyval);
-        //console.log(this.props.data.name);
-        console.log(this.state.userid);
-        console.log(this.state.author);
-        console.log(this.state);
         var temp_userid = '';
         if(firebase.auth().currentUser!=null){
             temp_userid = firebase.auth().currentUser.displayName;
@@ -1153,8 +1134,8 @@ class Review_Card extends React.Component{
             //pins : this.props.pins,
             toggle : this.props.toggle,
             temp : temp_2,
+            date : this.props.data.date
         };
-        console.log(temp_userid);
         var shoulddisp = true;
         if (this.props.sortop == 1 && this.state.comment.length==0 && !this.props.empty){
             shoulddisp = false;
@@ -1179,7 +1160,25 @@ class Review_Card extends React.Component{
                         <div className="mr-2">
                             <img src={this.image(this.state.name)} alt="user" className="rounded-circle" width="45" /></div>
                         <div className="">
-                            <h5 className="mb-0 font-16 font-medium">{this.state.name}</h5><span>2020-11-07</span></div>
+                            <h5 className="mb-0 font-16 font-medium">{this.state.name}</h5><span>{this.state.date}</span></div>
+                        { temp_userid == this.state.name ? (
+                            <div className = 'ml-2'>
+                        <div className='linked' disabled="true">
+                        <Link to={{ pathname : '/reviewWrite/'+this.props.rootKey+'/'+false,
+                        state : {
+                            rate : this.state.rate,
+                            comment : this.state.comment,
+                            suggestion : this.state.suggestion,
+                            is_edit : true,
+                            rev_key : this.state.keyval
+                        }
+                        }}>
+                        <i className='mdi mdi-tooltip-edit' />{t('Edit')}</Link></div>                                    
+                        <div className='linked' onClick={()=>{this.onClickDeleteHandler(this.props.keyval, this.props.rootKey)}}>
+                        <i className='mdi mdi-delete' />{t('Delete')}</div>
+                        </div>
+                        )  : <div></div>  
+                    }
                     </div>
                     </CardTitle>
                     <CardText>
@@ -1191,21 +1190,10 @@ class Review_Card extends React.Component{
                         <Col xs="6" md="8">
                             <CardBody>
                                     {   temp_userid == this.state.name ? (
-                                    <div class="pull-right">
+                                    <div>
                                         {(temp_userid == this.state.author) ? 
                                         <Pin_Button isAuthor = {true} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button> 
                                         : <Pin_Button isAuthor = {false} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button>}
-                                        <Button disabled="true"><Link to={{ pathname : '/reviewWrite/'+this.props.rootKey+'/'+false,
-                                        state : {
-                                            rate : this.state.rate,
-                                            comment : this.state.comment,
-                                            suggestion : this.state.suggestion,
-                                            is_edit : true,
-                                            rev_key : this.state.keyval
-                                        }
-                                        }}>
-                                        {t('Edit')}</Link></Button>                                    
-                                        <Button onClick={()=>{this.onClickDeleteHandler(this.props.keyval, this.props.rootKey)}}>{t('Delete')}</Button>
                                     </div>
                                     ) :  ((this.state.author == temp_userid) ? 
                                         <Pin_Button isAuthor = {true} toggle={this.state.toggle} keyval={this.props.keyval} rootKey = {this.props.rootKey}></Pin_Button> 
@@ -1409,6 +1397,7 @@ class Review_List extends React.Component{
                             console.log(temp);
                             var temp2 = {
                                 name : temp.name,
+                                date : temp.date,
                                 rate : temp.rate.split(','),
                                 comment : temp.comment.text,
                                 clike : temp.comment.like,
@@ -1427,6 +1416,7 @@ class Review_List extends React.Component{
                             let temp = data[1];
                             var temp2 = {
                                 name : temp.name,
+                                date : temp.date,
                                 rate : temp.rate.split(','),
                                 comment : temp.comment.text,
                                 clike : temp.comment.like,

@@ -163,10 +163,15 @@ const OnClickHandler = (props) => {
     console.log(total_avg_rating);
     console.log(rating_num);
     ref_avg.set(total_avg_rating/rating_num);
+    var today = new Date();
+    var month = today.getMonth() + 1;
+    var date = today.getFullYear()+'-'+month+'-'+today.getDate();
+    console.log(date);
     //need to get user name somehow
     var total = {
         name : name,
         rate : rate,
+        date : date,
         comment : {
             dislike : 0,
             like : 0,

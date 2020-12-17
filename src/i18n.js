@@ -133,7 +133,9 @@ const resources = {
       'write_video_placeholder': 'Type in url of the video you would like to upload starting with http',
       'write_action_add': 'Add a New Action',
       'write_submit_text': 'Now your done! Submit Now',
-      'write_submit_button': 'Submit'
+      'write_submit_button': 'Submit',
+      'Tutorial' : 'Tutorial',
+      'href': 'https://hackmd.io/aB-apqXRSeSxIAni2mwHCw'
     }
   },
   ko: {
@@ -268,7 +270,9 @@ const resources = {
       'write_video_placeholder': '유튜브 url을 적어주세요 (https로 시작하는 url을 적어주세요)',
       'write_action_add': '새로운 동작 추가',
       'write_submit_text': '작성이 완료되었다면 작성 버튼을 눌러주세요',
-      'write_submit_button': '작성하기'
+      'write_submit_button': '작성하기',
+      'Tutorial' : '튜토리얼',
+      'href' : 'https://hackmd.io/PZpkE2ymRT6V7R6f7fxwjw'
     }
   }
 };
